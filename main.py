@@ -14,9 +14,6 @@ from kivy.uix.popup import Popup
 from kivy.metrics import dp
 from kivy.core.window import Window
 
-# Optional: comfortable default window size for desktop testing
-Window.size = (400, 650)
-
 
 class RoundEntry:
     """Stores one round's added points and the totals right after it."""
@@ -31,6 +28,9 @@ class RoundEntry:
 class BeloteRoot(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(orientation="vertical", padding=dp(15), spacing=dp(10), **kwargs)
+        
+        # تأكد من أن التطبيق يملأ الشاشة كاملة
+        self.size_hint = (1, 1)
 
         self.us_total = 0
         self.them_total = 0
@@ -39,7 +39,7 @@ class BeloteRoot(BoxLayout):
         # ---------- Title ----------
         title = Label(
             text="Belote Score Counter",
-            font_size="24sp",
+            font_size="20sp",
             bold=True,
             size_hint=(1, None),
             height=dp(50),
@@ -50,14 +50,14 @@ class BeloteRoot(BoxLayout):
         totals_layout = GridLayout(cols=2, size_hint=(1, None), height=dp(90), spacing=dp(10))
 
         us_box = BoxLayout(orientation="vertical")
-        us_box.add_widget(Label(text="US", font_size="20sp", bold=True))
-        self.us_total_label = Label(text="0", font_size="32sp")
+        us_box.add_widget(Label(text="US", font_size="18sp", bold=True))
+        self.us_total_label = Label(text="0", font_size="28sp")
         us_box.add_widget(self.us_total_label)
         totals_layout.add_widget(us_box)
 
         them_box = BoxLayout(orientation="vertical")
-        them_box.add_widget(Label(text="THEM", font_size="20sp", bold=True))
-        self.them_total_label = Label(text="0", font_size="32sp")
+        them_box.add_widget(Label(text="THEM", font_size="18sp", bold=True))
+        self.them_total_label = Label(text="0", font_size="28sp")
         them_box.add_widget(self.them_total_label)
         totals_layout.add_widget(them_box)
 
@@ -70,14 +70,14 @@ class BeloteRoot(BoxLayout):
             hint_text="Us points",
             input_filter="int",
             multiline=False,
-            font_size="20sp",
+            font_size="18sp",
             halign="center",
         )
         self.them_input = TextInput(
             hint_text="Them points",
             input_filter="int",
             multiline=False,
-            font_size="20sp",
+            font_size="18sp",
             halign="center",
         )
         inputs_layout.add_widget(self.us_input)
@@ -106,7 +106,7 @@ class BeloteRoot(BoxLayout):
         # ---------- History label ----------
         history_title = Label(
             text="Round history",
-            font_size="18sp",
+            font_size="16sp",
             bold=True,
             size_hint=(1, None),
             height=dp(30),
@@ -213,7 +213,7 @@ class BeloteRoot(BoxLayout):
             text=row_text,
             size_hint_y=None,
             height=dp(28),
-            font_size="14sp",
+            font_size="12sp",
         )
         # Insert newest entries at the top of the list
         self.history_layout.add_widget(row_label, index=0)
@@ -228,6 +228,10 @@ class BeloteApp(App):
     def build(self):
         self.title = "Belote Score Counter"
         return BeloteRoot()
+    
+    def on_start(self):
+        # يجعل التطبيق يملأ الشاشة كاملة على الهاتف
+        Window.size = (Window.width, Window.height)
 
 
 if __name__ == "__main__":
