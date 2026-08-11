@@ -10,6 +10,8 @@ orientation = portrait
 fullscreen = 0
 android.accept_sdk_license = True
 p4a.branch = v2024.01.21
+android.api = 34
+android.minapi = 24
 
 # (list) Permissions
 android.permissions =
