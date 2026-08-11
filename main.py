@@ -15,7 +15,7 @@ from kivy.metrics import dp
 from kivy.core.window import Window
 
 # Optional: comfortable default window size for desktop testing
-Window.size = (400, 650)
+#Window.size = (400, 650)
 
 
 class RoundEntry:
