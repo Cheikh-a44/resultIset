@@ -5,16 +5,15 @@ package.domain = org.test
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 1.0
-requirements = python3==3.11.9,kivy
+requirements = python3,kivy
 orientation = portrait
 fullscreen = 0
 android.accept_sdk_license = True
-p4a.branch = v2024.01.21
-android.api = 34
-android.minapi = 24
-
-# (list) Permissions
-android.permissions =
+android.api = 33
+android.minapi = 21
+android.ndk = 25b
+android.manifest.extra = <meta-data android:name="android.max_aspect" android:value="2.1" />
+android.permissions = INTERNET
 
 [buildozer]
 log_level = 2
