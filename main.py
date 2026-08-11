@@ -13,9 +13,7 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.popup import Popup
 from kivy.metrics import dp
 from kivy.core.window import Window
-
-# Optional: comfortable default window size for desktop testing
-#Window.size = (400, 650)
+from kivy.graphics import RoundedRectangle, Color
 
 
 class RoundEntry:
@@ -26,6 +24,82 @@ class RoundEntry:
         self.them_added = them_added
         self.us_total = us_total
         self.them_total = them_total
+
+
+class RoundedTextInput(TextInput):
+    """TextInput with rounded corners"""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.background_color = (1, 1, 1, 1)
+        self.background_normal = ''
+        self.background_active = ''
+        self.padding = [dp(10), dp(10), dp(10), dp(10)]
+        self.hint_text_color = (0.5, 0.5, 0.5, 1)
+        self.foreground_color = (0, 0, 0, 1)
+        
+    def on_size(self, *args):
+        """Draw rounded corners"""
+        self.canvas.before.clear()
+        with self.canvas.before:
+            Color(1, 1, 1, 1)
+            RoundedRectangle(pos=self.pos, size=self.size, radius=[dp(15)])
+
+
+class ClickableLabel(Label):
+    """Label that can be clicked to change text"""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.edit_popup = None
+        
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos):
+            self.show_edit_popup()
+            return True
+        return super().on_touch_down(touch)
+    
+    def show_edit_popup(self):
+        """Show popup to edit label text"""
+        content = BoxLayout(orientation="vertical", spacing=dp(10), padding=dp(15))
+        
+        text_input = TextInput(
+            text=self.text,
+            multiline=False,
+            font_size="18sp",
+            size_hint=(1, None),
+            height=dp(50),
+            halign="center"
+        )
+        content.add_widget(text_input)
+        
+        buttons = BoxLayout(size_hint=(1, None), height=dp(45), spacing=dp(10))
+        save_btn = Button(text="Save", background_color=(0.2, 0.7, 0.3, 1))
+        cancel_btn = Button(text="Cancel", background_color=(0.8, 0.2, 0.2, 1))
+        buttons.add_widget(save_btn)
+        buttons.add_widget(cancel_btn)
+        content.add_widget(buttons)
+        
+        popup = Popup(
+            title="Edit Team Name",
+            content=content,
+            size_hint=(0.8, 0.4),
+            auto_dismiss=False
+        )
+        
+        def save_name(_instance):
+            new_name = text_input.text.strip()
+            if new_name:
+                self.text = new_name
+                if self.parent and hasattr(self.parent, 'update_team_names'):
+                    self.parent.update_team_names()
+            popup.dismiss()
+            
+        def cancel(_instance):
+            popup.dismiss()
+            
+        save_btn.bind(on_press=save_name)
+        cancel_btn.bind(on_press=cancel)
+        
+        popup.open()
 
 
 class BeloteRoot(BoxLayout):
@@ -46,34 +120,58 @@ class BeloteRoot(BoxLayout):
         )
         self.add_widget(title)
 
-        # ---------- Totals display ----------
-        totals_layout = GridLayout(cols=2, size_hint=(1, None), height=dp(90), spacing=dp(10))
+        # ---------- Totals display (larger and bold) ----------
+        totals_layout = GridLayout(cols=2, size_hint=(1, None), height=dp(120), spacing=dp(10))
 
         us_box = BoxLayout(orientation="vertical")
-        us_box.add_widget(Label(text="US", font_size="20sp", bold=True))
-        self.us_total_label = Label(text="0", font_size="32sp")
+        self.us_label = ClickableLabel(
+            text="US",
+            font_size="22sp",
+            bold=True,
+            size_hint=(1, None),
+            height=dp(35)
+        )
+        us_box.add_widget(self.us_label)
+        
+        self.us_total_label = Label(
+            text="0",
+            font_size="48sp",
+            bold=True
+        )
         us_box.add_widget(self.us_total_label)
         totals_layout.add_widget(us_box)
 
         them_box = BoxLayout(orientation="vertical")
-        them_box.add_widget(Label(text="THEM", font_size="20sp", bold=True))
-        self.them_total_label = Label(text="0", font_size="32sp")
+        self.them_label = ClickableLabel(
+            text="THEM",
+            font_size="22sp",
+            bold=True,
+            size_hint=(1, None),
+            height=dp(35)
+        )
+        them_box.add_widget(self.them_label)
+        
+        self.them_total_label = Label(
+            text="0",
+            font_size="48sp",
+            bold=True
+        )
         them_box.add_widget(self.them_total_label)
         totals_layout.add_widget(them_box)
 
         self.add_widget(totals_layout)
 
-        # ---------- Input fields ----------
+        # ---------- Input fields (rounded) ----------
         inputs_layout = GridLayout(cols=2, size_hint=(1, None), height=dp(60), spacing=dp(10))
 
-        self.us_input = TextInput(
+        self.us_input = RoundedTextInput(
             hint_text="Us points",
             input_filter="int",
             multiline=False,
             font_size="20sp",
             halign="center",
         )
-        self.them_input = TextInput(
+        self.them_input = RoundedTextInput(
             hint_text="Them points",
             input_filter="int",
             multiline=False,
@@ -119,6 +217,17 @@ class BeloteRoot(BoxLayout):
         self.history_layout.bind(minimum_height=self.history_layout.setter("height"))
         scroll.add_widget(self.history_layout)
         self.add_widget(scroll)
+
+    # ------------------------------------------------------------------
+    # Update team names
+    # ------------------------------------------------------------------
+    def update_team_names(self):
+        """Update all references to team names"""
+        # Update input hints
+        self.us_input.hint_text = f"{self.us_label.text} points"
+        self.them_input.hint_text = f"{self.them_label.text} points"
+        # Rebuild history with new names
+        self.rebuild_history_display()
 
     # ------------------------------------------------------------------
     # Actions
@@ -204,11 +313,8 @@ class BeloteRoot(BoxLayout):
         self.them_total_label.text = str(self.them_total)
 
     def add_history_row(self, entry, round_number):
-        row_text = (
-            f"Round {round_number}:  "
-            f"Us +{entry.us_added} (={entry.us_total})   |   "
-            f"Them +{entry.them_added} (={entry.them_total})"
-        )
+        """Display history as numbers only: Round X: +12 | +14"""
+        row_text = f"Round {round_number}:  +{entry.us_added}  |  +{entry.them_added}"
         row_label = Label(
             text=row_text,
             size_hint_y=None,
@@ -228,7 +334,6 @@ class BeloteApp(App):
     def build(self):
         self.title = "Belote Score Counter"
         return BeloteRoot()
-
 
 
 if __name__ == "__main__":
