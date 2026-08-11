@@ -14,8 +14,8 @@ from kivy.uix.popup import Popup
 from kivy.metrics import dp
 from kivy.core.window import Window
 
-# تم حذف هذا السطر لأن كان يسبب المشكلة
-# Window.size = (400, 650)
+# Optional: comfortable default window size for desktop testing
+Window.size = (400, 650)
 
 
 class RoundEntry:
@@ -228,6 +228,7 @@ class BeloteApp(App):
     def build(self):
         self.title = "Belote Score Counter"
         return BeloteRoot()
+
 
 
 if __name__ == "__main__":
