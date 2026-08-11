@@ -9,6 +9,7 @@ requirements = python3,kivy
 orientation = portrait
 fullscreen = 0
 android.accept_sdk_license = True
+p4a.branch = v2024.01.21
 
 # (list) Permissions
 android.permissions = 
