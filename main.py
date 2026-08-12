@@ -699,7 +699,7 @@ class BeloteRoot(BoxLayout):
                 text=str(entry.us_added),
                 size_hint_y=None,
                 height=dp(25),
-                font_size="16sp",
+                font_size="18sp",
                 halign="left",
                 color=(1, 1, 1, 1)
             )
