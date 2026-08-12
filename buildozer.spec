@@ -1,5 +1,6 @@
 [app]
 title = Belote Score Counter
+icon.filename = %(source.dir)s/file_000000001010820abe3b9f66c2017180.png
 package.name = belotescore
 package.domain = org.test
 source.dir = .
