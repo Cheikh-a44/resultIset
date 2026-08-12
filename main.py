@@ -407,6 +407,22 @@ class BeloteRoot(BoxLayout):
         scroll.add_widget(self.history_layout)
 
         self.add_widget(scroll)
+# app info 
+        app_info = Label(
+    text="By Cheikh_A\nVersion 1.0",
+    font_size="11sp",
+    color=(1, 1, 1, 0.45),
+    halign="center",
+    valign="middle",
+    size_hint=(1, None),
+    height=dp(38)
+)
+
+app_info.bind(
+    size=app_info.setter("text_size")
+)
+
+self.add_widget(app_info)
 
     # =====================================================
     # Create Input
