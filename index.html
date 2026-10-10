@@ -3,298 +3,212 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ESSAV Admin</title>
+  <title>Admin — ESAV</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f5f9;
-      color: #1e293b;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f4f6f8;
+      color: #222;
       padding: 20px;
+      min-height: 100vh;
     }
-    .container { max-width: 950px; margin: 0 auto; }
-    header {
-      background: linear-gradient(135deg, #003F6B, #0077B6);
-      color: white;
-      padding: 20px 24px;
-      border-radius: 12px;
-      margin-bottom: 24px;
+    .container { max-width: 1000px; margin: 0 auto; }
+    h1 { color: #0a7ea4; margin-bottom: 20px; font-size: 24px; }
+
+    /* ---- Login ---- */
+    .login-box {
+      max-width: 400px;
+      margin: 80px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
-    header h1 { font-size: 22px; font-weight: 700; }
-    header span { font-size: 13px; opacity: 0.85; }
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .card h2 {
-      font-size: 16px;
-      color: #0077B6;
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid #e0f2fe;
-    }
-    .form-row {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-    .form-group { flex: 1; min-width: 180px; }
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #475569;
-    }
-    select, input {
+    .login-box h1 { text-align: center; }
+    .login-box input {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 10px;
       font-size: 14px;
       outline: none;
+      transition: border-color 0.2s;
     }
-    select:focus, input:focus { border-color: #0077B6; }
-    button {
-      background: #0077B6;
-      color: white;
+    .login-box input:focus { border-color: #0a7ea4; }
+    .login-box button {
+      width: 100%;
+      padding: 13px;
+      background: #0a7ea4;
+      color: #fff;
       border: none;
-      padding: 11px 24px;
-      border-radius: 8px;
-      font-size: 14px;
+      border-radius: 10px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
+      transition: opacity 0.2s;
     }
-    button:hover { background: #005a8a; }
-    button.danger {
-      background: #dc2626;
-      padding: 6px 12px;
-      font-size: 12px;
+    .login-box button:hover { opacity: 0.9; }
+    .login-box button:disabled { opacity: 0.5; cursor: not-allowed; }
+    #errorMsg {
+      color: #dc3545;
+      font-size: 13px;
+      margin-top: 10px;
+      text-align: center;
+      min-height: 18px;
     }
-    button.danger:hover { background: #b91c1c; }
-    .files-list { max-height: 420px; overflow-y: auto; }
-    .file-item {
+
+    /* ---- Dashboard ---- */
+    .header-bar {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 12px;
-      border-bottom: 1px solid #f1f5f9;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
       gap: 10px;
     }
-    .file-item:last-child { border-bottom: none; }
-    .file-info { flex: 1; }
-    .file-name { font-weight: 600; font-size: 14px; }
-    .file-meta { font-size: 12px; color: #64748b; margin-top: 2px; }
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      margin-right: 6px;
-    }
-    .badge.cours { background: #dbeafe; color: #1d4ed8; }
-    .badge.td { background: #dcfce7; color: #15803d; }
-    .badge.devoirs { background: #fef9c3; color: #a16207; }
-    .badge.examens { background: #fee2e2; color: #b91c1c; }
-    .empty { text-align: center; padding: 40px; color: #94a3b8; }
-    .status {
-      padding: 10px 16px;
+    .header-bar h1 { margin: 0; }
+    .btn-logout {
+      padding: 9px 16px;
+      background: #dc3545;
+      color: #fff;
+      border: none;
       border-radius: 8px;
-      margin-bottom: 16px;
-      font-size: 14px;
-      display: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
     }
-    .status.success { background: #dcfce7; color: #15803d; display: block; }
-    .status.error { background: #fee2e2; color: #b91c1c; display: block; }
-    #gemAspectGroup { display: none; }
+    .btn-logout:hover { opacity: 0.9; }
+
+    .stats {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .stat-box {
+      background: #fff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      min-width: 140px;
+    }
+    .stat-box .num {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0a7ea4;
+    }
+    .stat-box .lbl {
+      font-size: 12px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .submission-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      border-left: 4px solid #ffc107;
+    }
+    .submission-card h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: #222;
+      word-break: break-word;
+    }
+    .submission-meta {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 4px;
+      line-height: 1.5;
+    }
+    .submission-meta strong { color: #333; }
+    .submission-meta a { color: #0a7ea4; text-decoration: none; }
+    .submission-meta a:hover { text-decoration: underline; }
+
+    .submission-actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+    }
+    .btn-approve, .btn-reject {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: opacity 0.2s;
+    }
+    .btn-approve { background: #28a745; color: #fff; }
+    .btn-reject  { background: #dc3545; color: #fff; }
+    .btn-approve:hover, .btn-reject:hover { opacity: 0.9; }
+    .btn-approve:disabled, .btn-reject:disabled {
+      opacity: 0.5; cursor: not-allowed;
+    }
+
+    .empty {
+      text-align: center;
+      color: #888;
+      padding: 60px 20px;
+      font-size: 15px;
+      background: #fff;
+      border-radius: 14px;
+    }
+    .empty .icon { font-size: 48px; margin-bottom: 12px; }
+
+    #appSection { display: none; }
+    #loginSection { display: block; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>ESSAV Admin</h1>
-      <span>Gestion des fichiers académiques</span>
-    </header>
 
-    <div id="status" class="status"></div>
-
-    <div class="card">
-      <h2>Ajouter un fichier</h2>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Matière</label>
-          <select id="subject">
-            <optgroup label="S1">
-              <option value="Math">Mathématiques</option>
-              <option value="Physique">Physique</option>
-              <option value="Chimie">Chimie</option>
-              <option value="Anglais">Anglais</option>
-              <option value="Francais">Français</option>
-              <option value="Biologie">Biologie</option>
-              <option value="Microbiologie">Microbiologie</option>
-              <option value="Genetique">Génétique</option>
-              <option value="Informatique">Informatique</option>
-              <option value="Statistique">Statistique</option>
-            </optgroup>
-
-            <optgroup label="S2">
-              <option value="Francais2">Français 2</option>
-              <option value="Anglais2">Anglais 2</option>
-              <option value="GEM">GEM (S2 - Aspects)</option>
-              <option value="GAB">GAB</option>
-              <option value="PPV">PPV</option>
-              <option value="TIC">TIC</option>
-              <option value="STA">STA</option>
-              <option value="PSA">PSA</option>
-            </optgroup>
-
-            <optgroup label="S3 - PPV">
-              <option value="Francais3">Français 3</option>
-              <option value="EconomieGestion">Économie et Gestion</option>
-              <option value="Agronomie">Agronomie</option>
-              <option value="Horticulture">Horticulture</option>
-              <option value="Pesticides">Pesticides</option>
-              <option value="Entomologie">Entomologie</option>
-              <option value="ScienceSols">Science des Sols</option>
-              <option value="SciencePlantes">Science des Plantes</option>
-            </optgroup>
-
-            <optgroup label="S3 - GAB">
-              <option value="Francais3">Français 3</option>
-              <option value="EconomieGestion">Économie et Gestion</option>
-              <option value="ResistanceMateriaux">Résistance de matériaux</option>
-              <option value="EnergieRenouvelable">Énergie renouvelable</option>
-              <option value="Environnement">Environnement</option>
-              <option value="Topographie">Topographie</option>
-              <option value="DAO">DAO</option>
-              <option value="MecaniqueFluides">Mécanique de fluides</option>
-              <option value="ChimieEau">Chimie de l'eau</option>
-            </optgroup>
-
-            <optgroup label="S3 - GEM">
-              <option value="Automatique">Automatique</option>
-              <option value="Automatisme">Automatisme</option>
-              <option value="ProcedeFabrication">Procédé de fabrication mécanique</option>
-              <option value="Electronique">Électronique</option>
-              <option value="Francais3">Français 3</option>
-              <option value="EconomieGestion">Économie et Gestion</option>
-              <option value="DessinIndustriel">Dessin industriel</option>
-              <option value="ResistanceMateriauxGEM">Résistance de matériaux (GEM)</option>
-              <option value="SchemasCablage">Schémas et câblage électrique</option>
-            </optgroup>
-
-            <optgroup label="S4 - PPV">
-              <option value="Vulgarisation">Vulgarisation</option>
-              <option value="TechniquePropagation">Technique de propagation</option>
-              <option value="TechniqueIrrigation">Technique d'irrigation</option>
-              <option value="Ecophysiologie">Ecophysiologie végétale</option>
-              <option value="BiochimieStructurale">Biochimie structurale</option>
-              <option value="FertiliteSol">Fertilité du sol</option>
-              <option value="MethodesDiagnostic">Méthodes de diagnostic</option>
-              <option value="Malherbologie">Malherbologie</option>
-              <option value="BesoinEau">Besoin en eau</option>
-            </optgroup>
-
-            <optgroup label="S4 - GEM">
-              <option value="Vulgarisation">Vulgarisation</option>
-              <option value="SciencesMateriaux">Sciences de matériaux</option>
-              <option value="TechnologieConstruction">Technologie de construction mécanique</option>
-              <option value="Metrologie">Métrologie capteur instrumentation</option>
-              <option value="Refrigeration">Réfrigération climatisation ventilation</option>
-              <option value="Electrotechnique">Électrotechnique</option>
-              <option value="MoteurCombustion">Moteur à combustion interne</option>
-            </optgroup>
-
-            <optgroup label="S5 - PPV">
-              <option value="DroitSanteSecurite">Droit Santé et sécurité au travail</option>
-              <option value="TechniqueGestionEntrepreneuriat">Technique de gestion et entreprenariat</option>
-              <option value="SystemeProduction">Système de Production</option>
-              <option value="Arboriculture">Arboriculture</option>
-              <option value="ConduiteCalibrage">Conduite et Calibrage</option>
-              <option value="Phytopathologie1">Phytopathologie 1</option>
-              <option value="GestionConservationSolEau">Gestion et conservation du sol et de l'eau</option>
-              <option value="EnnemisCultures">Ennemis des cultures et lutte intégrée</option>
-              <option value="PaysageCulturesOrnementales">Intro au paysage et cultures ornementales</option>
-            </optgroup>
-
-            <optgroup label="S6 - PPV">
-              <option value="RedactionRapports">Rédaction et édition des rapports</option>
-              <option value="AmeliorationGenetique">Amélioration génétique des plantes et biotechnologie</option>
-              <option value="Agroenvironnement">Agroenvironnement et agriculture de précision</option>
-              <option value="Phytopathologie2">Phytopathologie 2</option>
-              <option value="AdaptationClimat">Adaptation au changement climatique et agriculture durable</option>
-              <option value="AmenagementPaysager">Aménagement paysager et poste récolte</option>
-            </optgroup>
-          </select>
-        </div>
-
-        <div class="form-group" id="gemAspectGroup">
-          <label>Aspect GEM (S2 seulement)</label>
-          <select id="gemAspect">
-            <option value="Dessin">Dessin</option>
-            <option value="Electricite">Électricité</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Type</label>
-          <select id="fileType">
-            <option value="Cours">Cours</option>
-            <option value="TD">TD</option>
-            <option value="Devoirs">Devoirs</option>
-            <option value="Examens">Examens</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>Nom du fichier</label>
-          <input type="text" id="fileName" placeholder="Ex: Cours 1 - Introduction.pdf">
-        </div>
-        <div class="form-group">
-          <label>Lien Google Drive</label>
-          <input type="text" id="fileUrl" placeholder="https://drive.google.com/file/d/...">
-        </div>
-      </div>
-
-      <button onclick="addFile()">Ajouter le fichier</button>
+  <!-- ============================================================ -->
+  <!--  Login                                                       -->
+  <!-- ============================================================ -->
+  <div id="loginSection">
+    <div class="login-box">
+      <h1>🔒 Admin</h1>
+      <input type="email" id="email" placeholder="Email" autocomplete="email">
+      <input type="password" id="password" placeholder="Mot de passe" autocomplete="current-password">
+      <button id="loginBtn">Se connecter</button>
+      <div id="errorMsg"></div>
     </div>
+  </div>
 
-    <div class="card">
-      <h2>Fichiers existants</h2>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Filtrer par matière</label>
-          <select id="filterSubject" onchange="loadFiles()">
-            <option value="">-- Toutes --</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Filtrer par type</label>
-          <select id="filterType" onchange="loadFiles()">
-            <option value="">-- Tous --</option>
-            <option value="Cours">Cours</option>
-            <option value="TD">TD</option>
-            <option value="Devoirs">Devoirs</option>
-            <option value="Examens">Examens</option>
-          </select>
-        </div>
+  <!-- ============================================================ -->
+  <!--  Dashboard                                                   -->
+  <!-- ============================================================ -->
+  <div id="appSection">
+    <div class="container">
+      <div class="header-bar">
+        <h1>📋 Contributions en attente</h1>
+        <button class="btn-logout" id="logoutBtn">Déconnexion</button>
       </div>
-      <div class="files-list" id="filesList">
+
+      <div class="stats" id="stats"></div>
+
+      <div id="listContainer">
         <div class="empty">Chargement...</div>
       </div>
     </div>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, onValue, remove, set, push }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    // ================================================================
+    //  ⚠️ نفس إعدادات main.js
+    // ================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyDnrW6WnmbEFpbWzlW9IGglxAafajt2Kyo",
       authDomain: "iset-b9974.firebaseapp.com",
@@ -305,234 +219,213 @@
       appId: "1:1054170284751:web:8f02232478430d5ae2adba"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
 
-    const subjectNames = {
-      Math: 'Mathématiques',
-      Physique: 'Physique',
-      Chimie: 'Chimie',
-      Anglais: 'Anglais',
-      Francais: 'Français',
-      Biologie: 'Biologie',
-      Microbiologie: 'Microbiologie',
-      Genetique: 'Génétique',
-      Informatique: 'Informatique',
-      Statistique: 'Statistique',
-      Francais2: 'Français 2',
-      Anglais2: 'Anglais 2',
-      GEM: 'GEM',
-      GAB: 'GAB',
-      PPV: 'PPV',
-      TIC: 'TIC',
-      STA: 'STA',
-      PSA: 'PSA',
-      Francais3: 'Français 3',
-      EconomieGestion: 'Économie et Gestion',
-      Agronomie: 'Agronomie',
-      Horticulture: 'Horticulture',
-      Pesticides: 'Pesticides',
-      Entomologie: 'Entomologie',
-      ScienceSols: 'Science des Sols',
-      SciencePlantes: 'Science des Plantes',
-      Vulgarisation: 'Vulgarisation',
-      TechniquePropagation: 'Technique de propagation',
-      TechniqueIrrigation: "Technique d'irrigation",
-      Ecophysiologie: 'Ecophysiologie végétale',
-      BiochimieStructurale: 'Biochimie structurale',
-      FertiliteSol: 'Fertilité du sol',
-      MethodesDiagnostic: 'Méthodes de diagnostic',
-      Malherbologie: 'Malherbologie',
-      BesoinEau: 'Besoin en eau',
-      ResistanceMateriaux: 'Résistance de matériaux',
-      EnergieRenouvelable: 'Énergie renouvelable',
-      Environnement: 'Environnement',
-      Topographie: 'Topographie',
-      DAO: 'DAO',
-      MecaniqueFluides: 'Mécanique de fluides',
-      ChimieEau: "Chimie de l'eau",
-      Automatique: 'Automatique',
-      Automatisme: 'Automatisme',
-      ProcedeFabrication: 'Procédé de fabrication mécanique',
-      Electronique: 'Électronique',
-      DessinIndustriel: 'Dessin industriel',
-      ResistanceMateriauxGEM: 'Résistance de matériaux (GEM)',
-      SchemasCablage: 'Schémas et câblage électrique',
-      SciencesMateriaux: 'Sciences de matériaux',
-      TechnologieConstruction: 'Technologie de construction mécanique',
-      Metrologie: 'Métrologie capteur instrumentation',
-      Refrigeration: 'Réfrigération climatisation ventilation',
-      Electrotechnique: 'Électrotechnique',
-      MoteurCombustion: 'Moteur à combustion interne',
-      // S5
-      DroitSanteSecurite: 'Droit Santé et sécurité au travail',
-      TechniqueGestionEntrepreneuriat: 'Technique de gestion et entreprenariat',
-      SystemeProduction: 'Système de Production',
-      Arboriculture: 'Arboriculture',
-      ConduiteCalibrage: 'Conduite et Calibrage',
-      Phytopathologie1: 'Phytopathologie 1',
-      GestionConservationSolEau: "Gestion et conservation du sol et de l'eau",
-      EnnemisCultures: 'Ennemis des cultures et lutte intégrée',
-      PaysageCulturesOrnementales: 'Intro au paysage et cultures ornementales',
-      // S6
-      RedactionRapports: 'Rédaction et édition des rapports',
-      AmeliorationGenetique: 'Amélioration génétique des plantes et biotechnologie',
-      Agroenvironnement: 'Agroenvironnement et agriculture de précision',
-      Phytopathologie2: 'Phytopathologie 2',
-      AdaptationClimat: 'Adaptation au changement climatique et agriculture durable',
-      AmenagementPaysager: 'Aménagement paysager et poste récolte'
-    };
+    // ================================================================
+    //  عناصر الواجهة
+    // ================================================================
+    const loginSection = document.getElementById('loginSection');
+    const appSection = document.getElementById('appSection');
+    const emailEl = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    const listContainer = document.getElementById('listContainer');
+    const statsEl = document.getElementById('stats');
 
-    document.getElementById('subject').addEventListener('change', function () {
-      document.getElementById('gemAspectGroup').style.display =
-        this.value === 'GEM' ? 'block' : 'none';
+    let unsubscribe = null;
+
+    // ================================================================
+    //  المصادقة
+    // ================================================================
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loginSection.style.display = 'none';
+        appSection.style.display = 'block';
+        startListening();
+      } else {
+        loginSection.style.display = 'block';
+        appSection.style.display = 'none';
+        if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+      }
     });
 
-    function showStatus(msg, type) {
-      var el = document.getElementById('status');
-      el.textContent = msg;
-      el.className = 'status ' + type;
-      setTimeout(function () { el.className = 'status'; }, 4000);
-    }
+    loginBtn.addEventListener('click', doLogin);
+    emailEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
+    passwordEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
 
-    function getPath(subject, type, gemAspect) {
-      if (subject === 'GEM' && gemAspect) {
-        return 'files/GEM/' + gemAspect + '/' + type;
-      }
-      return 'files/' + subject + '/' + type;
-    }
-
-    async function addFile() {
-      var subject = document.getElementById('subject').value;
-      var type = document.getElementById('fileType').value;
-      var name = document.getElementById('fileName').value.trim();
-      var url = document.getElementById('fileUrl').value.trim();
-      var gemAspect = document.getElementById('gemAspect').value;
-
-      if (!name || !url) {
-        showStatus('Veuillez remplir le nom et le lien', 'error');
+    async function doLogin() {
+      errorMsg.textContent = '';
+      const email = emailEl.value.trim();
+      const pwd = passwordEl.value;
+      if (!email || !pwd) {
+        errorMsg.textContent = 'Email et mot de passe requis';
         return;
       }
-
-      var path = getPath(subject, type, gemAspect);
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Connexion...';
       try {
-        await db.ref(path).push({ name: name, url: url });
-        showStatus('Fichier ajouté avec succès !', 'success');
-        document.getElementById('fileName').value = '';
-        document.getElementById('fileUrl').value = '';
-        loadFiles();
-      } catch (e) {
-        showStatus('Erreur : ' + e.message, 'error');
+        await signInWithEmailAndPassword(auth, email, pwd);
+      } catch (err) {
+        console.error(err);
+        let msg = 'Erreur de connexion';
+        if (err.code === 'auth/invalid-credential' ||
+            err.code === 'auth/wrong-password' ||
+            err.code === 'auth/user-not-found') {
+          msg = 'Email ou mot de passe incorrect';
+        } else if (err.code === 'auth/invalid-email') {
+          msg = 'Email invalide';
+        } else if (err.code === 'auth/too-many-requests') {
+          msg = 'Trop de tentatives. Réessayez plus tard.';
+        }
+        errorMsg.textContent = '❌ ' + msg;
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Se connecter';
       }
     }
 
-    async function loadFiles() {
-      var list = document.getElementById('filesList');
-      list.innerHTML = '<div class="empty">Chargement...</div>';
+    logoutBtn.addEventListener('click', () => {
+      if (confirm('Se déconnecter ?')) signOut(auth);
+    });
 
-      var filterSubject = document.getElementById('filterSubject').value;
-      var filterType = document.getElementById('filterType').value;
+    // ================================================================
+    //  قائمة الطلبات
+    // ================================================================
+    function startListening() {
+      const pendingRef = ref(db, 'pending_submissions');
+      unsubscribe = onValue(pendingRef, (snapshot) => {
+        const data = snapshot.val() || {};
+        const items = Object.entries(data).sort(
+          (a, b) => (b[1].submittedAt || 0) - (a[1].submittedAt || 0)
+        );
 
-      try {
-        var snapshot = await db.ref('files').once('value');
-        var data = snapshot.val() || {};
-        var files = [];
+        // Stats
+        statsEl.innerHTML =
+          '<div class="stat-box"><div class="num">' + items.length +
+          '</div><div class="lbl">En attente</div></div>';
 
-        for (var subjectKey in data) {
-          if (subjectKey === 'GEM') {
-            var gemData = data[subjectKey] || {};
-            for (var aspect in gemData) {
-              var aspectData = gemData[aspect] || {};
-              for (var type in aspectData) {
-                var typeData = aspectData[type] || {};
-                for (var key in typeData) {
-                  var file = typeData[key];
-                  files.push({
-                    subject: 'GEM',
-                    gemAspect: aspect,
-                    type: type,
-                    name: file.name,
-                    url: file.url,
-                    path: 'files/GEM/' + aspect + '/' + type + '/' + key
-                  });
-                }
-              }
-            }
-          } else {
-            var subjectData = data[subjectKey] || {};
-            for (var type2 in subjectData) {
-              var typeData2 = subjectData[type2] || {};
-              for (var key2 in typeData2) {
-                var file2 = typeData2[key2];
-                files.push({
-                  subject: subjectKey,
-                  gemAspect: '',
-                  type: type2,
-                  name: file2.name,
-                  url: file2.url,
-                  path: 'files/' + subjectKey + '/' + type2 + '/' + key2
-                });
-              }
-            }
-          }
-        }
-
-        // تعبئة الفلتر بكل المواد
-        var filterSel = document.getElementById('filterSubject');
-        if (filterSel.options.length <= 1) {
-          var allSubjects = Object.keys(subjectNames).sort();
-          allSubjects.forEach(function (s) {
-            var opt = document.createElement('option');
-            opt.value = s;
-            opt.textContent = subjectNames[s] || s;
-            filterSel.appendChild(opt);
-          });
-        }
-
-        if (filterSubject) {
-          files = files.filter(function (f) { return f.subject === filterSubject; });
-        }
-        if (filterType) {
-          files = files.filter(function (f) { return f.type === filterType; });
-        }
-
-        if (files.length === 0) {
-          list.innerHTML = '<div class="empty">Aucun fichier trouvé</div>';
+        if (items.length === 0) {
+          listContainer.innerHTML =
+            '<div class="empty"><div class="icon">✅</div>' +
+            'Aucune contribution en attente.</div>';
           return;
         }
 
-        var html = '';
-        files.forEach(function (f) {
-          var displaySubject = subjectNames[f.subject] || f.subject;
-          html += '<div class="file-item">' +
-            '<div class="file-info">' +
-              '<div class="file-name">' + f.name + '</div>' +
-              '<div class="file-meta">' +
-                '<span class="badge ' + f.type.toLowerCase() + '">' + f.type + '</span>' +
-                displaySubject + (f.gemAspect ? ' / ' + f.gemAspect : '') +
-              '</div>' +
-            '</div>' +
-            '<button class="danger" onclick="deleteFile(\'' + f.path + '\')">Supprimer</button>' +
-          '</div>';
+        listContainer.innerHTML = '';
+        items.forEach(([id, item]) => {
+          const card = document.createElement('div');
+          card.className = 'submission-card';
+
+          const sizeTxt = item.size
+            ? (item.size / 1024 / 1024).toFixed(2) + ' MB'
+            : '—';
+
+          // بناء المسار المتوقع للنشر
+          const targetPath = item.gemAspect
+            ? 'GEM / ' + item.gemAspect
+            : (item.subject || '—');
+
+          card.innerHTML = `
+            <h3>📄 ${escapeHtml(item.name || '—')}</h3>
+            <div class="submission-meta"><strong>Matière :</strong> ${escapeHtml(item.subjectDisplay || item.subject || '—')}</div>
+            <div class="submission-meta"><strong>Niveau :</strong> ${escapeHtml(item.level || '—')}${item.dept ? ' · ' + escapeHtml(item.dept) : ''}</div>
+            ${item.gemAspect ? '<div class="submission-meta"><strong>Aspect GEM :</strong> ' + escapeHtml(item.gemAspect) + '</div>' : ''}
+            <div class="submission-meta"><strong>Type :</strong> ${escapeHtml(item.type || '—')}</div>
+            <div class="submission-meta"><strong>Taille :</strong> ${sizeTxt}</div>
+            <div class="submission-meta"><strong>Par :</strong> ${escapeHtml(item.submittedBy || 'Anonyme')}</div>
+            <div class="submission-meta"><strong>Publié vers :</strong> <code>files/${escapeHtml(targetPath)}/${escapeHtml(item.type || '')}</code></div>
+            <div class="submission-meta"><strong>Fichier :</strong> <a href="${escapeAttr(item.url)}" target="_blank" rel="noopener">📄 Ouvrir</a></div>
+            <div class="submission-actions">
+              <button class="btn-approve" data-id="${id}">✅ Approuver</button>
+              <button class="btn-reject" data-id="${id}">❌ Rejeter</button>
+            </div>
+          `;
+          listContainer.appendChild(card);
         });
-        list.innerHTML = html;
-      } catch (e) {
-        list.innerHTML = '<div class="empty">Erreur : ' + e.message + '</div>';
-      }
+
+        // ربط الأزرار
+        listContainer.querySelectorAll('.btn-approve').forEach(btn => {
+          btn.addEventListener('click', () => approve(btn.dataset.id, data[btn.dataset.id], btn));
+        });
+        listContainer.querySelectorAll('.btn-reject').forEach(btn => {
+          btn.addEventListener('click', () => reject(btn.dataset.id, btn));
+        });
+      });
     }
 
-    async function deleteFile(path) {
-      if (!confirm('Supprimer ce fichier ?')) return;
+    // ================================================================
+    //  الموافقة — نشر الملف في files/
+    // ================================================================
+    async function approve(id, item, btn) {
+      if (!item) return;
+      if (!confirm(`Approuver "${item.name}" ?\n\nSera publié dans : files/${item.gemAspect ? 'GEM/' + item.gemAspect : item.subject}/${item.type}`)) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Publication...';
+
       try {
-        await db.ref(path).remove();
-        showStatus('Fichier supprimé', 'success');
-        loadFiles();
-      } catch (e) {
-        showStatus('Erreur : ' + e.message, 'error');
+        // 1) تحديد المسار — يطابق بنية main.js
+        //    - GEM: files/GEM/{aspect}/{type}
+        //    - عادي: files/{subject}/{type}
+        let basePath;
+        if (item.gemAspect) {
+          basePath = `files/GEM/${item.gemAspect}/${item.type}`;
+        } else {
+          basePath = `files/${item.subject}/${item.type}`;
+        }
+
+        // 2) إضافة الملف
+        const newFileRef = push(ref(db, basePath));
+        await set(newFileRef, {
+          name: item.name,
+          url: item.url
+        });
+
+        // 3) حذف الطلب من pending
+        await remove(ref(db, `pending_submissions/${id}`));
+
+        // (الملف يبقى في Google Drive — لا حاجة للحذف)
+      } catch (err) {
+        console.error(err);
+        alert('❌ Erreur lors de la publication : ' + err.message);
+        btn.disabled = false;
+        btn.textContent = '✅ Approuver';
       }
     }
 
-    loadFiles();
+    // ================================================================
+    //  الرفض — حذف الطلب فقط
+    // ================================================================
+    async function reject(id, btn) {
+      if (!confirm('Rejeter cette contribution ?\n\n(Le fichier restera dans Google Drive, vous pourrez le supprimer manuellement.)')) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Suppression...';
+
+      try {
+        await remove(ref(db, `pending_submissions/${id}`));
+        // الملف يبقى في Drive — يمكن حذفه يدوياً من مجلد ESAV_Submissions
+      } catch (err) {
+        console.error(err);
+        alert('❌ Erreur : ' + err.message);
+        btn.disabled = false;
+        btn.textContent = '❌ Rejeter';
+      }
+    }
+
+    // ================================================================
+    //  Helpers
+    // ================================================================
+    function escapeHtml(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+    function escapeAttr(s) { return escapeHtml(s); }
   </script>
 </body>
-                </html>
+</html>
