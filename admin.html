@@ -291,13 +291,15 @@ document.getElementById("loginPassword").addEventListener("keypress", e => {
 });
 logoutBtn.addEventListener("click", async () => { await signOut(auth); });
 
+let uiInitialized = false;
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     userEmailEl.textContent = user.email;
     loginSection.style.display = "none";
     appSection.style.display = "block";
     await loadStructures();
-    initUI();
+    if (!uiInitialized) { uiInitialized = true; initUI(); }
+    else refreshAll();
   } else {
     loginSection.style.display = "flex";
     appSection.style.display = "none";
@@ -356,6 +358,7 @@ function selectDept(dept) {
 function updateSemesterDropdown() {
   const sel = document.getElementById("semSelect");
   const sems = DEPT_SEMESTERS[currentDept] || [];
+  if (!sems.includes(currentSem)) currentSem = sems[0] || currentSem;
   sel.innerHTML = sems.map(s =>
     `<option value="${s}" ${s === currentSem ? "selected" : ""}>${s}</option>`
   ).join("");
@@ -385,7 +388,7 @@ function displayModules() {
       </div>
       <div class="module-subjects">
         ${(m.subjects || []).map(s =>
-          `<span class="subject-tag">${esc(displaySubjectName(s))} (${getCredits(s)} cr)</span>`
+          `<span class="subject-tag">${esc(displaySubjectName(s))} (${getCredits(s)} cr)${isStage(s) ? " 🎓" : ""}</span>`
         ).join("")}
       </div>
     </div>
@@ -502,14 +505,23 @@ function updateSubjectDropdown() {
   const type = document.getElementById("importType").value;
   const grp  = document.getElementById("subjectGroup");
   const sel  = document.getElementById("subjectSelect");
-  if (type === "Stage") { grp.style.display = "none"; return; }
   grp.style.display = "flex";
+
   let subs = getSubjectsForDeptSem(currentDept, currentSem);
-  if (type === "TP") {
+
+  if (type === "Stage") {
+    // Afficher uniquement les matières de stage du semestre (ex: Stage, Stage_fin_etudes)
+    subs = subs.filter(s => isStage(s));
+    if (subs.length === 0) {
+      sel.innerHTML = '<option value="">Aucune matière de stage dans ce semestre</option>';
+      return;
+    }
+  } else if (type === "TP") {
     subs = subs.filter(s => hasTP(s) && !isStage(s));
   } else {
     subs = subs.filter(s => !isStage(s));
   }
+
   if (subs.length === 0) {
     sel.innerHTML = '<option value="">Aucune matière disponible pour ce type</option>';
     return;
@@ -524,17 +536,22 @@ function updateSubjectDropdown() {
 // ============================================================
 async function importExcel() {
   const type    = document.getElementById("importType").value;
-  const subject = type === "Stage" ? "Stage" : document.getElementById("subjectSelect").value;
+  const subject = document.getElementById("subjectSelect").value;
   const file    = document.getElementById("fileInput").files[0];
 
   if (!file) { showMsg("importMsg", "Sélectionnez un fichier", "error"); return; }
-  if (type !== "Stage" && !subject) { showMsg("importMsg", "Sélectionnez une matière", "error"); return; }
+  if (!subject) {
+    showMsg("importMsg", type === "Stage"
+      ? "Aucune matière de stage définie dans les modules de ce semestre"
+      : "Sélectionnez une matière", "error");
+    return;
+  }
   if (type === "TP" && !hasTP(subject)) {
     showMsg("importMsg", `❌ "${displaySubjectName(subject)}" n'a pas de TP`, "error");
     return;
   }
   if (type !== "Stage" && isStage(subject)) {
-    showMsg("importMsg", "❌ Stage n'accepte que le type 'Stage'", "error");
+    showMsg("importMsg", "❌ Les matières de stage n'acceptent que le type 'Stage'", "error");
     return;
   }
 
@@ -808,12 +825,15 @@ async function loadResults() {
           <td>-</td>
         </tr>`;
       } else {
+        const missingHtml = (s.missing || []).map(m =>
+          esc(displaySubjectName(m.subject)) + " ← <strong>" + esc(m.missing.join(", ")) + "</strong>"
+        ).join("<br>");
         html += `<tr class="incomplete">
           <td>${esc(s.id)}</td>
           <td>${esc(s.name || "-")}</td>
           <td>Incomplet</td>
           <td>-</td>
-          <td title="${esc((s.missing || []).map(m => m.subject + ": " + m.missing.join(", ")).join(" | "))}">Données manquantes</td>
+          <td style="text-align:left; font-size:11px; color:#c0392b;">${missingHtml || "Données manquantes"}</td>
         </tr>`;
       }
     }
@@ -842,7 +862,8 @@ async function loadImportedSubjects() {
     for (const sid in data) {
       for (const k in data[sid]) {
         const e = data[sid][k];
-        if (e.subject && e.type && !isStage(e.subject)) {
+        // Les matières de stage sont maintenant affichées aussi
+        if (e.subject && e.type) {
           const key = `${e.subject}||${e.type}`;
           if (!map[key]) map[key] = { subject: e.subject, type: e.type, count: 0 };
           map[key].count++;
