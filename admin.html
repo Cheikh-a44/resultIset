@@ -10,88 +10,52 @@
   body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f5f5f5; padding: 20px; }
   h1 { text-align: center; color: #2c5f2d; margin-bottom: 20px; }
 
-  /* Login */
-  #loginSection {
-    display: flex; align-items: center; justify-content: center;
-    min-height: 100vh; padding: 20px;
-  }
-  .login-box {
-    background: white; padding: 40px 30px; border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; width: 100%;
-    text-align: center; border-top: 4px solid #2c5f2d;
-  }
+  #loginSection { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  .login-box { background: white; padding: 40px 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; width: 100%; text-align: center; border-top: 4px solid #2c5f2d; }
   .login-box h1 { font-size: 22px; margin-bottom: 8px; }
   .login-box p { color: #666; font-size: 13px; margin-bottom: 24px; }
-  .login-box input {
-    width: 100%; padding: 12px 14px; border: 1.5px solid #ddd;
-    border-radius: 6px; font-size: 14px; margin-bottom: 12px;
-    font-family: inherit; outline: none;
-  }
+  .login-box input { width: 100%; padding: 12px 14px; border: 1.5px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 12px; font-family: inherit; outline: none; }
   .login-box input:focus { border-color: #2c5f2d; }
-  .login-box button {
-    width: 100%; padding: 12px; background: #2c5f2d; color: white;
-    border: none; border-radius: 6px; font-size: 15px;
-    font-weight: bold; cursor: pointer;
-  }
+  .login-box button { width: 100%; padding: 12px; background: #2c5f2d; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
   .login-box button:hover { background: #1e4420; }
   .login-box button:disabled { opacity: 0.6; cursor: not-allowed; }
   .login-error { color: #c0392b; font-size: 13px; margin-top: 10px; min-height: 18px; }
 
-  /* App */
   #appSection { display: none; }
-
-  .user-bar {
-    max-width: 1200px; margin: 0 auto 20px;
-    display: flex; justify-content: space-between; align-items: center;
-    background: white; padding: 12px 20px; border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-  }
+  .user-bar { max-width: 1200px; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: center; background: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
   .user-bar .email { color: #2c5f2d; font-weight: bold; font-size: 14px; }
-  .logout-btn {
-    padding: 6px 14px; background: #c0392b; color: white;
-    border: none; border-radius: 5px; cursor: pointer; font-size: 13px;
-  }
+  .logout-btn { padding: 6px 14px; background: #c0392b; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; }
 
-  /* Tabs */
   .tabs { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
-  .tab {
-    padding: 10px 25px; background: #ddd; border: none; border-radius: 25px;
-    cursor: pointer; font-size: 15px; font-weight: bold; transition: all 0.3s;
-  }
+  .tab { padding: 10px 25px; background: #ddd; border: none; border-radius: 25px; cursor: pointer; font-size: 15px; font-weight: bold; transition: all 0.3s; }
   .tab:hover { background: #bbb; }
   .tab.active { background: #2c5f2d; color: white; }
 
-  /* Cards */
   .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
   .card h3 { color: #2c5f2d; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e8f5e9; }
   .card h4 { margin: 15px 0 10px 0; color: #555; }
 
-  /* Forms */
   .form-group { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
   .form-group label { font-weight: bold; width: 120px; color: #555; }
-  select, input[type="text"], input[type="file"], textarea {
-    padding: 8px 12px; border: 1px solid #ccc; border-radius: 5px;
-    font-size: 14px; flex: 1; min-width: 200px; font-family: inherit;
-  }
+  select, input[type="text"], input[type="file"], textarea { padding: 8px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; flex: 1; min-width: 200px; font-family: inherit; }
   textarea { width: 100%; resize: vertical; }
 
-  /* Buttons */
   .btn { padding: 8px 20px; background: #555; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; margin: 5px; }
   .btn:hover { background: #333; }
   .btn-success { background: #2c5f2d; }
   .btn-success:hover { background: #1e4420; }
   .btn-danger { background: #c0392b; }
   .btn-danger:hover { background: #a93226; }
+  .btn-warning { background: #e67e22; }
+  .btn-warning:hover { background: #d35400; }
   .btn-sm { padding: 5px 12px; font-size: 12px; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* Messages */
   .msg { padding: 10px; border-radius: 5px; margin-top: 10px; display: none; }
   .msg.success { background: #d4edda; color: #155724; display: block; }
   .msg.error { background: #f8d7da; color: #721c24; display: block; }
   .msg.info { background: #d1ecf1; color: #0c5460; display: block; }
 
-  /* Tables */
   table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
   th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
   th { background: #e8f5e9; font-weight: bold; }
@@ -100,28 +64,20 @@
   .status-valid { color: #27ae60; font-weight: bold; }
   .status-invalid { color: #e74c3c; font-weight: bold; }
 
-  /* Module items */
   .module-item { background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
   .module-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid #ddd; }
   .module-subjects { display: flex; flex-wrap: wrap; gap: 8px; }
   .subject-tag { background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
 
-  /* Grid */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   @media (max-width: 800px) { .grid-2 { grid-template-columns: 1fr; } }
 
   .stats-box { background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 13px; }
-
-  .loading { text-align: center; padding: 30px; color: #888; }
-  .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid #e8f5e9; border-top-color: #2c5f2d; border-radius: 50%; animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
-<!-- ============================== -->
-<!-- SECTION LOGIN                  -->
-<!-- ============================== -->
+<!-- LOGIN -->
 <div id="loginSection">
   <div class="login-box">
     <h1>ISET Rosso</h1>
@@ -133,11 +89,8 @@
   </div>
 </div>
 
-<!-- ============================== -->
-<!-- SECTION APP                    -->
-<!-- ============================== -->
+<!-- APP -->
 <div id="appSection">
-
   <div class="user-bar">
     <span class="email">👤 <span id="userEmail">-</span></span>
     <button class="logout-btn" id="logoutBtn">Déconnexion</button>
@@ -145,7 +98,6 @@
 
   <h1>Coordinateur ISET Rosso</h1>
 
-  <!-- Department Tabs -->
   <div class="tabs" id="deptTabs">
     <button class="tab" data-dept="PPV">PPV</button>
     <button class="tab" data-dept="TC">TC</button>
@@ -155,7 +107,6 @@
     <button class="tab" data-dept="STA">STA</button>
   </div>
 
-  <!-- Semester Selection -->
   <div class="card">
     <div class="form-group">
       <label>Semestre:</label>
@@ -165,7 +116,6 @@
   </div>
 
   <div class="grid-2">
-    <!-- Import Section -->
     <div class="card">
       <h3>Importer des notes</h3>
       <div class="form-group">
@@ -190,7 +140,6 @@
       <div id="importMsg" class="msg"></div>
     </div>
 
-    <!-- Module Management -->
     <div class="card">
       <h3>Gestion des modules</h3>
       <div class="form-group">
@@ -199,17 +148,18 @@
       </div>
       <div class="form-group">
         <label>Nom:</label>
-        <input type="text" id="moduleName" placeholder="Ex: Module 31">
+        <input type="text" id="moduleName" placeholder="Ex: Langue et économie">
       </div>
       <div class="form-group">
         <label>Matières:</label>
-        <input type="text" id="moduleSubjects" placeholder="Matiere1;Matiere2;Matiere3">
+        <input type="text" id="moduleSubjects" placeholder="Matiere1;Matiere2">
       </div>
       <div class="form-group">
         <label>Crédits:</label>
-        <input type="text" id="moduleCredits" placeholder="3;4;3">
+        <input type="text" id="moduleCredits" placeholder="3;4 (optionnel)">
       </div>
       <button class="btn btn-success" id="addModuleBtn">Ajouter/Modifier</button>
+      <button class="btn btn-warning" id="loadPPVBtn">⚡ Charger tous les modules PPV</button>
       <div id="moduleMsg" class="msg"></div>
       <h4>Modules existants</h4>
       <div id="modulesList"></div>
@@ -217,7 +167,6 @@
   </div>
 
   <div class="grid-2">
-    <!-- Results Section -->
     <div class="card">
       <h3>Résultats des étudiants</h3>
       <button class="btn" id="refreshResultsBtn">Actualiser</button>
@@ -227,7 +176,6 @@
       <div id="resultsTable"></div>
     </div>
 
-    <!-- Manage Imported Subjects -->
     <div class="card">
       <h3>Matières importées</h3>
       <button class="btn" id="refreshSubjectsBtn">Actualiser</button>
@@ -237,14 +185,12 @@
   </div>
 
   <div class="grid-2">
-    <!-- Reset Semester -->
     <div class="card">
       <h3>Réinitialisation</h3>
       <button class="btn btn-danger" id="resetBtn">Supprimer toutes les données du semestre</button>
       <div id="resetMsg" class="msg"></div>
     </div>
 
-    <!-- Announcements -->
     <div class="card">
       <h3>Annonce</h3>
       <textarea id="annonceText" rows="3" placeholder="Texte de l'annonce..."></textarea>
@@ -253,12 +199,10 @@
       <div id="annonceMsg" class="msg"></div>
     </div>
   </div>
-
 </div>
 
-<!-- ============================== -->
-<!-- SCRIPT                         -->
-<!-- ============================== -->
+<script src="firebase-config.js"></script>
+<script src="credits.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
@@ -266,28 +210,23 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
 import { getDatabase, ref, get, set, update, remove, child, push }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-import { firebaseConfig, DEPT_SEMESTERS, DEFAULT_NO_TP, displaySubjectName }
-  from "./firebase-config.js";
-
-// ==================================================
-// INIT FIREBASE
-// ==================================================
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(window.FIREBASE_CONFIG);
 const auth = getAuth(app);
 const db = getDatabase(app);
 
-// ==================================================
-// STATE
-// ==================================================
+const DEPT_SEMESTERS = window.DEPT_SEMESTERS;
+const CREDITS_DATA = window.CREDITS_DATA;
+const NO_TP_SUBJECTS_INIT = window.NO_TP_SUBJECTS || [];
+const STAGE_SUBJECTS = window.STAGE_SUBJECTS || ["Stage"];
+
 let currentDept = "PPV";
 let currentSem  = "S3";
 let modulesStructure = {};
-let creditsStructure = {};
-let noTPSubjects = [...DEFAULT_NO_TP];
+let noTPSubjects = [...NO_TP_SUBJECTS_INIT];
 
-// ==================================================
+// ============================================================
 // HELPERS
-// ==================================================
+// ============================================================
 function showMsg(id, text, type = "success") {
   const el = document.getElementById(id);
   if (!el) return;
@@ -295,21 +234,20 @@ function showMsg(id, text, type = "success") {
   el.className = `msg ${type}`;
   setTimeout(() => { if (el) el.className = "msg"; }, 4000);
 }
-
-function hasTP(subject) {
-  return !noTPSubjects.includes(subject);
+function hasTP(subject) { return !noTPSubjects.includes(subject); }
+function isStage(subject) { return STAGE_SUBJECTS.includes(subject); }
+function displaySubjectName(subject) {
+  if (!subject) return "";
+  return subject.replace(/_/g, " ").replace(/I_/g, "I.").replace(/et_/g, "et ");
 }
-
-function isStage(subject) {
-  return subject === "Stage" || subject === "Stage_fin_etude";
-}
-
 function esc(s) {
   return String(s ?? "").replace(/[&<>"']/g, c => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   }[c]));
 }
-
+function getCredits(subject) {
+  return CREDITS_DATA[currentDept]?.[currentSem]?.[subject] ?? 3;
+}
 function getSubjectsForDeptSem(dept, sem) {
   const mods = modulesStructure[dept]?.[sem] || {};
   const subs = [];
@@ -321,9 +259,9 @@ function getSubjectsForDeptSem(dept, sem) {
   return subs;
 }
 
-// ==================================================
-// AUTHENTICATION
-// ==================================================
+// ============================================================
+// AUTH
+// ============================================================
 const loginSection = document.getElementById("loginSection");
 const appSection   = document.getElementById("appSection");
 const loginBtn     = document.getElementById("loginBtn");
@@ -335,11 +273,9 @@ loginBtn.addEventListener("click", async () => {
   const email = document.getElementById("loginEmail").value.trim();
   const pass  = document.getElementById("loginPassword").value;
   if (!email || !pass) { loginError.textContent = "Email et mot de passe requis"; return; }
-
   loginBtn.disabled = true;
   loginBtn.textContent = "Connexion...";
   loginError.textContent = "";
-
   try {
     await signInWithEmailAndPassword(auth, email, pass);
   } catch (e) {
@@ -350,14 +286,10 @@ loginBtn.addEventListener("click", async () => {
     loginBtn.textContent = "Se connecter";
   }
 });
-
-document.getElementById("loginPassword").addEventListener("keypress", (e) => {
+document.getElementById("loginPassword").addEventListener("keypress", e => {
   if (e.key === "Enter") loginBtn.click();
 });
-
-logoutBtn.addEventListener("click", async () => {
-  await signOut(auth);
-});
+logoutBtn.addEventListener("click", async () => { await signOut(auth); });
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -365,71 +297,49 @@ onAuthStateChanged(auth, async (user) => {
     loginSection.style.display = "none";
     appSection.style.display = "block";
     await loadStructures();
-    await initUI();
+    initUI();
   } else {
     loginSection.style.display = "flex";
     appSection.style.display = "none";
   }
 });
 
-// ==================================================
+// ============================================================
 // LOAD STRUCTURES
-// ==================================================
+// ============================================================
 async function loadStructures() {
-  // Structure
   const structSnap = await get(child(ref(db), "structure"));
   modulesStructure = structSnap.exists() ? structSnap.val() : {};
-
-  // Credits
-  creditsStructure = {};
-  for (const dept in modulesStructure) {
-    creditsStructure[dept] = {};
-    for (const sem in modulesStructure[dept]) {
-      creditsStructure[dept][sem] = {};
-      for (const mk in modulesStructure[dept][sem]) {
-        const m = modulesStructure[dept][sem][mk];
-        if (m.subjectCredits) Object.assign(creditsStructure[dept][sem], m.subjectCredits);
-        for (const s of m.subjects || []) {
-          if (!creditsStructure[dept][sem][s]) creditsStructure[dept][sem][s] = 3;
-        }
-      }
-    }
-  }
-
-  // No-TP
   const noTPSnap = await get(child(ref(db), "no_tp_subjects"));
   if (noTPSnap.exists()) {
-    noTPSubjects = [...new Set([...DEFAULT_NO_TP, ...noTPSnap.val()])];
+    noTPSubjects = [...new Set([...NO_TP_SUBJECTS_INIT, ...noTPSnap.val()])];
   }
 }
 
-// ==================================================
+// ============================================================
 // UI INIT
-// ==================================================
+// ============================================================
 function initUI() {
-  // Set default dept
   document.querySelectorAll(".tab").forEach(t => {
     t.classList.toggle("active", t.dataset.dept === currentDept);
     t.addEventListener("click", () => selectDept(t.dataset.dept));
   });
-
   updateSemesterDropdown();
   document.getElementById("semSelect").addEventListener("change", () => {
     currentSem = document.getElementById("semSelect").value;
     refreshAll();
   });
-
   document.getElementById("loadBtn").addEventListener("click", refreshAll);
   document.getElementById("importType").addEventListener("change", updateSubjectDropdown);
   document.getElementById("importBtn").addEventListener("click", importExcel);
   document.getElementById("addModuleBtn").addEventListener("click", addModule);
+  document.getElementById("loadPPVBtn").addEventListener("click", loadAllPPVModules);
   document.getElementById("refreshResultsBtn").addEventListener("click", loadResults);
   document.getElementById("refreshSubjectsBtn").addEventListener("click", loadImportedSubjects);
   document.getElementById("exportBtn").addEventListener("click", exportExcel);
   document.getElementById("resetBtn").addEventListener("click", resetSemester);
   document.getElementById("publishBtn").addEventListener("click", publishAnnonce);
   document.getElementById("deleteAnnounceBtn").addEventListener("click", deleteAnnonce);
-
   refreshAll();
   loadAnnonce();
 }
@@ -443,7 +353,6 @@ function selectDept(dept) {
   currentSem = document.getElementById("semSelect").value;
   refreshAll();
 }
-
 function updateSemesterDropdown() {
   const sel = document.getElementById("semSelect");
   const sems = DEPT_SEMESTERS[currentDept] || [];
@@ -451,7 +360,6 @@ function updateSemesterDropdown() {
     `<option value="${s}" ${s === currentSem ? "selected" : ""}>${s}</option>`
   ).join("");
 }
-
 function refreshAll() {
   displayModules();
   updateSubjectDropdown();
@@ -459,9 +367,9 @@ function refreshAll() {
   loadImportedSubjects();
 }
 
-// ==================================================
+// ============================================================
 // MODULES
-// ==================================================
+// ============================================================
 function displayModules() {
   const cont = document.getElementById("modulesList");
   const mods = modulesStructure[currentDept]?.[currentSem] || {};
@@ -476,11 +384,12 @@ function displayModules() {
         <button class="btn btn-danger btn-sm" data-del-mod="${esc(key)}">Supprimer</button>
       </div>
       <div class="module-subjects">
-        ${(m.subjects || []).map(s => `<span class="subject-tag">${esc(displaySubjectName(s))}</span>`).join("")}
+        ${(m.subjects || []).map(s =>
+          `<span class="subject-tag">${esc(displaySubjectName(s))} (${getCredits(s)} cr)</span>`
+        ).join("")}
       </div>
     </div>
   `).join("");
-
   cont.querySelectorAll("[data-del-mod]").forEach(btn => {
     btn.addEventListener("click", () => deleteModule(btn.dataset.delMod));
   });
@@ -491,28 +400,21 @@ async function addModule() {
   const name   = document.getElementById("moduleName").value.trim();
   const subStr = document.getElementById("moduleSubjects").value.trim();
   const credStr= document.getElementById("moduleCredits").value.trim();
-
   if (!key || !name) { showMsg("moduleMsg", "Code et nom requis", "error"); return; }
-
   const subjects = subStr ? subStr.split(";").map(s => s.trim()).filter(Boolean) : [];
   const creditsList = credStr ? credStr.split(";").map(c => parseFloat(c.trim())) : [];
-
   const credits = {};
-  subjects.forEach((s, i) => credits[s] = creditsList[i] || 3);
-
+  subjects.forEach((s, i) => { credits[s] = creditsList[i] || getCredits(s); });
   const moduleData = { name, subjects, subjectCredits: credits };
-
   try {
     await set(ref(db, `structure/${currentDept}/${currentSem}/${key}`), moduleData);
     showMsg("moduleMsg", `Module ${key} enregistré`, "success");
-    document.getElementById("moduleCode").value = "";
-    document.getElementById("moduleName").value = "";
-    document.getElementById("moduleSubjects").value = "";
-    document.getElementById("moduleCredits").value = "";
+    ["moduleCode","moduleName","moduleSubjects","moduleCredits"].forEach(id =>
+      document.getElementById(id).value = ""
+    );
     await loadStructures();
     refreshAll();
   } catch (e) {
-    console.error(e);
     showMsg("moduleMsg", "Erreur: " + e.message, "error");
   }
 }
@@ -529,26 +431,97 @@ async function deleteModule(key) {
   }
 }
 
-// ==================================================
+// ============================================================
+// ⚡ LOAD ALL PPV MODULES (S3 → S6)
+// ============================================================
+async function loadAllPPVModules() {
+  if (!confirm("Charger TOUS les modules PPV (S3→S6) dans Firebase ?\n\nCela va ÉCRASER les modules existants de PPV.")) return;
+  if (!confirm("Confirmer une dernière fois ?")) return;
+
+  const PPV_DATA = {
+    S3: {
+      M31: { name: "Langue et économie", subjects: ["Francais", "Introduction_economie_gestion"] },
+      M32: { name: "Principes d'agronomie", subjects: ["Principes_generaux_agronomie", "Principes_generaux_horticulture"] },
+      M33: { name: "Phytoprotection 1", subjects: ["Entomologie_Nematologie_ravageurs", "Agro_pesticides_phytopharmacie"] },
+      M34: { name: "Sciences du sol et des plantes", subjects: ["Introduction_science_du_sol", "Introduction_sciences_des_plantes"] }
+    },
+    S4: {
+      M41: { name: "Vulgarisation", subjects: ["Techniques_communication_vulgarisation"] },
+      M42: { name: "Production végétale 1", subjects: ["Technique_propagation_production_semences", "Besoin_en_eau_des_cultures"] },
+      M43: { name: "Ecophysiologie et Nutrition des plantes", subjects: ["Ecophysiologie_vegetale_Biochimie", "Fertilite_sols_Nutrition_plantes"] },
+      M44: { name: "Méthodes de diagnostic", subjects: ["Methodes_diagnostic_phytoprotection", "Malherbologie"] },
+      M45: { name: "Stage en milieu de travail", subjects: ["Stage"] }
+    },
+    S5: {
+      M51: { name: "Entrepreneuriat", subjects: ["Droit_Sante_Securite_environnement", "Techniques_gestion_entreprenariat"] },
+      M52: { name: "Systèmes de production", subjects: ["Production_vegetale_2", "Arboriculture", "Conduite_calibration_equipements_agricoles"] },
+      M53: { name: "Phytopathologie 1", subjects: ["Phytopathologie_1", "Projet"] },
+      M54: { name: "Optionnel", subjects: ["Gestion_conservation_sol_eau", "Ennemis_cultures_lutte_integree", "Introduction_paysage_cultures_ornementales"] }
+    },
+    S6: {
+      M61: { name: "Rédaction des rapports", subjects: ["Redaction_edition_rapports"] },
+      M62: { name: "Agronomie avancée", subjects: ["Amelioration_genetique_biotechnologie", "Agroenvironnement_agriculture_precision"] },
+      M63: { name: "Projet de fin d'études", subjects: ["Stage_fin_etudes"] },
+      M64: { name: "Optionnel", subjects: ["Adaptation_changement_climatique", "Phytopathologie_2", "Amenagement_paysager_poste_recolte"] }
+    }
+  };
+
+  document.getElementById("loadPPVBtn").disabled = true;
+  showMsg("moduleMsg", "Chargement en cours...", "info");
+
+  try {
+    for (const sem in PPV_DATA) {
+      for (const code in PPV_DATA[sem]) {
+        const mod = PPV_DATA[sem][code];
+        const credits = {};
+        mod.subjects.forEach(s => {
+          credits[s] = CREDITS_DATA.PPV[sem]?.[s] ?? 3;
+        });
+        await set(ref(db, `structure/PPV/${sem}/${code}`), {
+          name: mod.name,
+          subjects: mod.subjects,
+          subjectCredits: credits
+        });
+      }
+    }
+    showMsg("moduleMsg", "✅ Tous les modules PPV chargés (S3→S6)", "success");
+    await loadStructures();
+    refreshAll();
+  } catch (e) {
+    console.error(e);
+    showMsg("moduleMsg", "Erreur: " + e.message, "error");
+  } finally {
+    document.getElementById("loadPPVBtn").disabled = false;
+  }
+}
+
+// ============================================================
 // SUBJECT DROPDOWN
-// ==================================================
+// ============================================================
 function updateSubjectDropdown() {
   const type = document.getElementById("importType").value;
   const grp  = document.getElementById("subjectGroup");
   const sel  = document.getElementById("subjectSelect");
-
   if (type === "Stage") { grp.style.display = "none"; return; }
   grp.style.display = "flex";
-
-  const subs = getSubjectsForDeptSem(currentDept, currentSem);
-  sel.innerHTML = subs.length
-    ? subs.map(s => `<option value="${esc(s)}">${esc(displaySubjectName(s))}</option>`).join("")
-    : '<option value="">Aucune matière</option>';
+  let subs = getSubjectsForDeptSem(currentDept, currentSem);
+  if (type === "TP") {
+    subs = subs.filter(s => hasTP(s) && !isStage(s));
+  } else {
+    subs = subs.filter(s => !isStage(s));
+  }
+  if (subs.length === 0) {
+    sel.innerHTML = '<option value="">Aucune matière disponible pour ce type</option>';
+    return;
+  }
+  sel.innerHTML = subs.map(s =>
+    `<option value="${esc(s)}">${esc(displaySubjectName(s))}</option>`
+  ).join("");
 }
 
-// ==================================================
+// ============================================================
 // IMPORT EXCEL
-// ==================================================
+// ============================================================
 async function importExcel() {
   const type    = document.getElementById("importType").value;
   const subject = type === "Stage" ? "Stage" : document.getElementById("subjectSelect").value;
@@ -556,14 +529,21 @@ async function importExcel() {
 
   if (!file) { showMsg("importMsg", "Sélectionnez un fichier", "error"); return; }
   if (type !== "Stage" && !subject) { showMsg("importMsg", "Sélectionnez une matière", "error"); return; }
+  if (type === "TP" && !hasTP(subject)) {
+    showMsg("importMsg", `❌ "${displaySubjectName(subject)}" n'a pas de TP`, "error");
+    return;
+  }
+  if (type !== "Stage" && isStage(subject)) {
+    showMsg("importMsg", "❌ Stage n'accepte que le type 'Stage'", "error");
+    return;
+  }
 
   document.getElementById("importBtn").disabled = true;
   showMsg("importMsg", "Lecture du fichier...", "info");
 
   try {
     const rows = await readExcel(file);
-    if (!rows.length) { showMsg("importMsg", "Aucune donnée dans le fichier", "error"); return; }
-
+    if (!rows.length) { showMsg("importMsg", "Aucune donnée", "error"); return; }
     let created = 0, updated = 0;
     const total = rows.length;
     const isStageImport = (type === "Stage" || isStage(subject));
@@ -572,7 +552,6 @@ async function importExcel() {
       const row = rows[i];
       if (!row.numero || row.note === null) continue;
       showMsg("importMsg", `Envoi ${i+1}/${total}...`, "info");
-
       try {
         const r = isStageImport
           ? await saveStageNote(row.numero, row.nom, subject, row.note)
@@ -580,7 +559,6 @@ async function importExcel() {
         if (r === "updated") updated++; else created++;
       } catch (e) { console.error("Row error:", row, e); }
     }
-
     showMsg("importMsg", `✅ ${created} ajoutées, ${updated} mises à jour`, "success");
     document.getElementById("fileInput").value = "";
     loadResults();
@@ -602,7 +580,6 @@ function readExcel(file) {
         const sheet = wb.Sheets[wb.SheetNames[0]];
         const json = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
         if (json.length < 2) return resolve([]);
-
         const rows = [];
         for (let i = 1; i < json.length; i++) {
           const r = json[i];
@@ -622,13 +599,12 @@ function readExcel(file) {
   });
 }
 
-// ==================================================
+// ============================================================
 // NOTE OPERATIONS
-// ==================================================
+// ============================================================
 async function upsertNote(numero, nom, subject, type, note) {
   const path = `results/${currentDept}/${currentSem}/${numero}`;
   const snap = await get(ref(db, path));
-
   if (snap.exists()) {
     const data = snap.val();
     for (const k in data) {
@@ -646,134 +622,32 @@ async function upsertNote(numero, nom, subject, type, note) {
 async function saveStageNote(numero, nom, subject, note) {
   const path = `results/${currentDept}/${currentSem}/${numero}`;
   const snap = await get(ref(db, path));
-
-  const updates = {};
-  let foundCC = null, foundExam = null;
-
   if (snap.exists()) {
     const data = snap.val();
     for (const k in data) {
       const e = data[k];
-      if (e.subject === subject) {
-        if (e.type === "Controle continu") foundCC = k;
-        if (e.type === "Examen") foundExam = k;
+      if (e.subject === subject && e.type === "Stage") {
+        await update(ref(db, `${path}/${k}`), { name: nom || e.name || "", grade: note });
+        return "updated";
       }
     }
   }
-
-  if (foundCC && foundExam) {
-    await update(ref(db, `${path}/${foundCC}`), { name: nom || "", grade: note });
-    await update(ref(db, `${path}/${foundExam}`), { name: nom || "", grade: note });
-    return "updated";
-  }
-
-  await push(ref(db, path), { name: nom || "", subject, type: "Controle continu", grade: note });
-  await push(ref(db, path), { name: nom || "", subject, type: "Examen", grade: note });
+  await push(ref(db, path), { name: nom || "", subject, type: "Stage", grade: note });
   return "created";
 }
 
-// ==================================================
-// RESULTS
-// ==================================================
-async function loadResults() {
-  showMsg("resultsMsg", "Chargement...", "info");
-  try {
-    const snap = await get(ref(db, `results/${currentDept}/${currentSem}`));
-    if (!snap.exists()) {
-      document.getElementById("resultsTable").innerHTML = "";
-      document.getElementById("statsBox").style.display = "none";
-      showMsg("resultsMsg", "Aucun résultat", "error");
-      return;
-    }
-
-    const data = snap.val();
-    const required = getSubjectsForDeptSem(currentDept, currentSem);
-
-    const results = [];
-    let totalAvg = 0, completeCount = 0, validatedCount = 0;
-
-    for (const sid in data) {
-      const studentData = data[sid];
-      const notes = {};
-      let name = "";
-
-      for (const k in studentData) {
-        const e = studentData[k];
-        if (e.name && !name) name = e.name;
-        if (e.subject) {
-          if (!notes[e.subject]) notes[e.subject] = {};
-          notes[e.subject][e.type] = e.grade;
-        }
-      }
-
-      const check = checkCompleteness(notes, required);
-      if (check.complete && required.length > 0) {
-        const calc = calculateResults(notes, currentDept, currentSem);
-        if (calc) {
-          completeCount++;
-          totalAvg += calc.overallAvg;
-          if (calc.semesterStatus === "Validé") validatedCount++;
-          results.push({ id: sid, name, complete: true, calc });
-        }
-      } else {
-        results.push({ id: sid, name, complete: false, missing: check.missing });
-      }
-    }
-
-    results.sort((a, b) => String(a.id).localeCompare(String(b.id)));
-
-    // Stats
-    const statsBox = document.getElementById("statsBox");
-    if (results.length) {
-      const avg = completeCount ? (totalAvg / completeCount).toFixed(2) : 0;
-      const rate = completeCount ? ((validatedCount / completeCount) * 100).toFixed(1) : 0;
-      statsBox.style.display = "block";
-      statsBox.innerHTML = `<strong>Stats:</strong> Total: ${results.length} | Complets: ${completeCount} | Validés: ${validatedCount} | Moy: ${avg} | Réussite: ${rate}%`;
-    } else {
-      statsBox.style.display = "none";
-    }
-
-    // Table
-    let html = `<table><thead><tr>
-      <th>Numéro</th><th>Nom</th><th>Moyenne</th><th>Statut</th><th>Info</th>
-    </tr></thead><tbody>`;
-
-    for (const s of results) {
-      if (s.complete) {
-        const cls = s.calc.semesterStatus === "Validé" ? "status-valid" : "status-invalid";
-        html += `<tr>
-          <td>${esc(s.id)}</td>
-          <td>${esc(s.name || "-")}</td>
-          <td><strong>${s.calc.overallAvg}</strong></td>
-          <td class="${cls}">${s.calc.semesterStatus}</td>
-          <td>-</td>
-        </tr>`;
-      } else {
-        html += `<tr class="incomplete">
-          <td>${esc(s.id)}</td>
-          <td>${esc(s.name || "-")}</td>
-          <td>Incomplet</td>
-          <td>-</td>
-          <td title="${esc((s.missing || []).join(", "))}">Données manquantes</td>
-        </tr>`;
-      }
-    }
-    html += "</tbody></table>";
-    document.getElementById("resultsTable").innerHTML = html;
-    showMsg("resultsMsg", `${results.length} étudiants chargés`, "success");
-  } catch (e) {
-    console.error(e);
-    showMsg("resultsMsg", "Erreur: " + e.message, "error");
-  }
-}
-
+// ============================================================
+// CALCULATIONS
+// ============================================================
 function checkCompleteness(notes, required) {
   const missing = [];
   for (const s of required) {
     const n = notes[s] || {};
     const m = [];
     if (isStage(s)) {
-      if (n["Examen"] === undefined && n["Controle continu"] === undefined) m.push("Note de stage");
+      if (n["Stage"] === undefined && n["Examen"] === undefined && n["Controle continu"] === undefined) {
+        m.push("Note de stage");
+      }
     } else {
       if (n["Examen"] === undefined && n["Rattrapage"] === undefined) m.push("Examen");
       if (n["Controle continu"] === undefined && n["Contrôle continu"] === undefined) m.push("CC");
@@ -794,21 +668,18 @@ function calculateResults(notes, dept, sem) {
 
   for (const s of allSubjects) {
     const n = notes[s] || {};
-    const exam = n["Examen"] ?? 0;
-    const cc   = n["Controle continu"] ?? n["Contrôle continu"] ?? 0;
-    const tp   = n["TP"] ?? 0;
-    const ratt = n["Rattrapage"];
-
     if (isStage(s)) {
       subjectAvg[s] = n["Stage"] ?? n["Examen"] ?? n["Controle continu"] ?? 0;
       subjectSR[s] = false;
       continue;
     }
-
+    const exam = n["Examen"] ?? 0;
+    const cc   = n["Controle continu"] ?? n["Contrôle continu"] ?? 0;
+    const tp   = n["TP"] ?? 0;
+    const ratt = n["Rattrapage"];
     const useSR = ratt !== undefined && ratt > exam;
     subjectSR[s] = useSR;
     const finalGrade = useSR ? ratt : exam;
-
     if (hasTP(s)) {
       subjectAvg[s] = (tp + cc * 2 + finalGrade * 3) / 6;
     } else {
@@ -816,28 +687,25 @@ function calculateResults(notes, dept, sem) {
     }
   }
 
-  // Module averages
   const moduleAvg = {};
   for (const mk in mods) {
     let w = 0, c = 0;
     for (const s of mods[mk].subjects || []) {
-      const cr = creditsStructure[dept]?.[sem]?.[s] || 3;
+      const cr = CREDITS_DATA[dept]?.[sem]?.[s] ?? 3;
       w += (subjectAvg[s] || 0) * cr;
       c += cr;
     }
     moduleAvg[mk] = c > 0 ? w / c : 0;
   }
 
-  // Overall
   let w = 0, c = 0;
   for (const s of allSubjects) {
-    const cr = creditsStructure[dept]?.[sem]?.[s] || 3;
+    const cr = CREDITS_DATA[dept]?.[sem]?.[s] ?? 3;
     w += (subjectAvg[s] || 0) * cr;
     c += cr;
   }
   const overallAvg = c > 0 ? w / c : 0;
 
-  // Subject status
   const subjectStatus = {};
   for (const mk in mods) {
     for (const s of mods[mk].subjects || []) {
@@ -847,13 +715,12 @@ function calculateResults(notes, dept, sem) {
     }
   }
 
-  // Module status
   const moduleStatus = {};
   const moduleCredits = {};
   for (const mk in mods) {
     let allC = true, earned = 0;
     for (const s of mods[mk].subjects || []) {
-      const cr = creditsStructure[dept]?.[sem]?.[s] || 3;
+      const cr = CREDITS_DATA[dept]?.[sem]?.[s] ?? 3;
       if (subjectStatus[s] === "C") earned += cr;
       else allC = false;
     }
@@ -868,13 +735,100 @@ function calculateResults(notes, dept, sem) {
   return {
     overallAvg: Math.round(overallAvg * 100) / 100,
     semesterStatus, moduleAvg, moduleStatus, moduleCredits,
-    subjectAvg, subjectStatus, hasSR, modules: mods,
+    subjectAvg, subjectStatus, hasSR, modules: mods
   };
 }
 
-// ==================================================
+// ============================================================
+// RESULTS
+// ============================================================
+async function loadResults() {
+  showMsg("resultsMsg", "Chargement...", "info");
+  try {
+    const snap = await get(ref(db, `results/${currentDept}/${currentSem}`));
+    if (!snap.exists()) {
+      document.getElementById("resultsTable").innerHTML = "";
+      document.getElementById("statsBox").style.display = "none";
+      showMsg("resultsMsg", "Aucun résultat", "error");
+      return;
+    }
+    const data = snap.val();
+    const required = getSubjectsForDeptSem(currentDept, currentSem);
+    const results = [];
+    let totalAvg = 0, completeCount = 0, validatedCount = 0;
+
+    for (const sid in data) {
+      const studentData = data[sid];
+      const notes = {};
+      let name = "";
+      for (const k in studentData) {
+        const e = studentData[k];
+        if (e.name && !name) name = e.name;
+        if (e.subject) {
+          if (!notes[e.subject]) notes[e.subject] = {};
+          notes[e.subject][e.type] = e.grade;
+        }
+      }
+      const check = checkCompleteness(notes, required);
+      if (check.complete && required.length > 0) {
+        const calc = calculateResults(notes, currentDept, currentSem);
+        if (calc) {
+          completeCount++;
+          totalAvg += calc.overallAvg;
+          if (calc.semesterStatus === "Validé") validatedCount++;
+          results.push({ id: sid, name, complete: true, calc });
+        }
+      } else {
+        results.push({ id: sid, name, complete: false, missing: check.missing });
+      }
+    }
+    results.sort((a, b) => String(a.id).localeCompare(String(b.id)));
+
+    const statsBox = document.getElementById("statsBox");
+    if (results.length) {
+      const avg = completeCount ? (totalAvg / completeCount).toFixed(2) : 0;
+      const rate = completeCount ? ((validatedCount / completeCount) * 100).toFixed(1) : 0;
+      statsBox.style.display = "block";
+      statsBox.innerHTML = `<strong>Stats:</strong> Total: ${results.length} | Complets: ${completeCount} | Validés: ${validatedCount} | Moy: ${avg} | Réussite: ${rate}%`;
+    } else {
+      statsBox.style.display = "none";
+    }
+
+    let html = `<table><thead><tr>
+      <th>Numéro</th><th>Nom</th><th>Moyenne</th><th>Statut</th><th>Info</th>
+    </tr></thead><tbody>`;
+    for (const s of results) {
+      if (s.complete) {
+        const cls = s.calc.semesterStatus === "Validé" ? "status-valid" : "status-invalid";
+        html += `<tr>
+          <td>${esc(s.id)}</td>
+          <td>${esc(s.name || "-")}</td>
+          <td><strong>${s.calc.overallAvg}</strong></td>
+          <td class="${cls}">${s.calc.semesterStatus}</td>
+          <td>-</td>
+        </tr>`;
+      } else {
+        html += `<tr class="incomplete">
+          <td>${esc(s.id)}</td>
+          <td>${esc(s.name || "-")}</td>
+          <td>Incomplet</td>
+          <td>-</td>
+          <td title="${esc((s.missing || []).map(m => m.subject + ": " + m.missing.join(", ")).join(" | "))}">Données manquantes</td>
+        </tr>`;
+      }
+    }
+    html += "</tbody></table>";
+    document.getElementById("resultsTable").innerHTML = html;
+    showMsg("resultsMsg", `${results.length} étudiants chargés`, "success");
+  } catch (e) {
+    console.error(e);
+    showMsg("resultsMsg", "Erreur: " + e.message, "error");
+  }
+}
+
+// ============================================================
 // IMPORTED SUBJECTS
-// ==================================================
+// ============================================================
 async function loadImportedSubjects() {
   try {
     const snap = await get(ref(db, `results/${currentDept}/${currentSem}`));
@@ -885,28 +839,24 @@ async function loadImportedSubjects() {
     }
     const data = snap.val();
     const map = {};
-
     for (const sid in data) {
       for (const k in data[sid]) {
         const e = data[sid][k];
-        if (e.subject && e.type && e.subject !== "Stage") {
+        if (e.subject && e.type && !isStage(e.subject)) {
           const key = `${e.subject}||${e.type}`;
           if (!map[key]) map[key] = { subject: e.subject, type: e.type, count: 0 };
           map[key].count++;
         }
       }
     }
-
     const arr = Object.values(map).sort((a, b) =>
       a.subject.localeCompare(b.subject) || a.type.localeCompare(b.type)
     );
-
     if (!arr.length) {
       document.getElementById("subjectsTable").innerHTML = "";
       showMsg("subjectsMsg", "Aucune matière", "error");
       return;
     }
-
     let html = `<table><thead><tr>
       <th>Matière</th><th>Type</th><th>Étudiants</th><th>Action</th>
     </tr></thead><tbody>`;
@@ -921,13 +871,11 @@ async function loadImportedSubjects() {
     }
     html += "</tbody></table>";
     document.getElementById("subjectsTable").innerHTML = html;
-
     document.querySelectorAll("[data-del-sub]").forEach(b => {
       b.addEventListener("click", () =>
         deleteImportedSubject(b.dataset.delSub, b.dataset.delType)
       );
     });
-
     showMsg("subjectsMsg", `${arr.length} matières trouvées`, "success");
   } catch (e) {
     showMsg("subjectsMsg", "Erreur: " + e.message, "error");
@@ -936,12 +884,10 @@ async function loadImportedSubjects() {
 
 async function deleteImportedSubject(subject, type) {
   if (!confirm(`Supprimer ${displaySubjectName(subject)} (${type}) pour TOUS les étudiants ?`)) return;
-
   try {
     const snap = await get(ref(db, `results/${currentDept}/${currentSem}`));
     if (!snap.exists()) return;
     const data = snap.val();
-
     let count = 0;
     const promises = [];
     for (const sid in data) {
@@ -962,13 +908,12 @@ async function deleteImportedSubject(subject, type) {
   }
 }
 
-// ==================================================
-// RESET SEMESTER
-// ==================================================
+// ============================================================
+// RESET
+// ============================================================
 async function resetSemester() {
-  if (!confirm(`⚠️ Supprimer TOUTES les données de ${currentDept} ${currentSem} ?\n\nAction irréversible !`)) return;
-  if (!confirm(`Vraiment sûr ? Cette action supprimera tout définitivement.`)) return;
-
+  if (!confirm(`⚠️ Supprimer TOUTES les données de ${currentDept} ${currentSem} ?`)) return;
+  if (!confirm("Vraiment sûr ?")) return;
   try {
     await remove(ref(db, `results/${currentDept}/${currentSem}`));
     showMsg("resetMsg", "Semestre réinitialisé", "success");
@@ -979,16 +924,15 @@ async function resetSemester() {
   }
 }
 
-// ==================================================
-// EXPORT EXCEL
-// ==================================================
+// ============================================================
+// EXPORT
+// ============================================================
 async function exportExcel() {
   try {
     const snap = await get(ref(db, `results/${currentDept}/${currentSem}`));
     if (!snap.exists()) { alert("Aucune donnée à exporter"); return; }
     const data = snap.val();
     const required = getSubjectsForDeptSem(currentDept, currentSem);
-
     const rows = [["Numero", "Nom", "Moyenne", "Statut"]];
     for (const sid in data) {
       const studentData = data[sid];
@@ -1008,7 +952,6 @@ async function exportExcel() {
         if (calc) rows.push([sid, name, calc.overallAvg, calc.semesterStatus]);
       }
     }
-
     const ws = XLSX.utils.aoa_to_sheet(rows);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, `${currentDept}_${currentSem}`);
@@ -1018,9 +961,9 @@ async function exportExcel() {
   }
 }
 
-// ==================================================
+// ============================================================
 // ANNOUNCEMENTS
-// ==================================================
+// ============================================================
 async function publishAnnonce() {
   const texte = document.getElementById("annonceText").value.trim();
   if (!texte) { showMsg("annonceMsg", "Texte requis", "error"); return; }
@@ -1028,14 +971,13 @@ async function publishAnnonce() {
     await set(ref(db, "annonces/active"), {
       texte,
       expiration: Date.now() + 7 * 24 * 3600 * 1000,
-      date: new Date().toISOString(),
+      date: new Date().toISOString()
     });
     showMsg("annonceMsg", "Annonce publiée", "success");
   } catch (e) {
     showMsg("annonceMsg", "Erreur: " + e.message, "error");
   }
 }
-
 async function deleteAnnonce() {
   if (!confirm("Supprimer l'annonce ?")) return;
   try {
@@ -1046,7 +988,6 @@ async function deleteAnnonce() {
     showMsg("annonceMsg", "Erreur: " + e.message, "error");
   }
 }
-
 async function loadAnnonce() {
   try {
     const snap = await get(ref(db, "annonces/active"));
@@ -1056,7 +997,6 @@ async function loadAnnonce() {
     }
   } catch (e) { console.error(e); }
 }
-
 </script>
 </body>
 </html>
