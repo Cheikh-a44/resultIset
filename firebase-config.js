@@ -1,11 +1,13 @@
 window.FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDnrW6WnmbEFpbWzlW9IGglxAafajt2Kyo",
-  authDomain: "iset-b9974.firebaseapp.com",
-  databaseURL: "https://iset-b9974-default-rtdb.firebaseio.com",
-  projectId: "iset-b9974",
-  storageBucket: "iset-b9974.firebasestorage.app",
-  messagingSenderId: "1054170284751",
-  appId: "1:1054170284751:web:8f02232478430d5ae2adba"
+  apiKey: "AIzaSyCFLrCudiYYNpiXyzOaa0hGZ9yilbajzkQ",
+  authDomain: "my-esav-project.firebaseapp.com",
+  databaseURL: "https://my-esav-project-default-rtdb.firebaseio.com",
+  projectId: "my-esav-project",
+  storageBucket: "my-esav-project.firebasestorage.app",
+  messagingSenderId: "318167369001",
+  appId: "1:318167369001:web:fd4038c011bb751ed1e338",
+  measurementId: "G-74TKHQHTF4"
 };
+
 
 console.log("✅ firebase-config.js chargé");
