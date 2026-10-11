@@ -825,15 +825,12 @@ async function loadResults() {
           <td>-</td>
         </tr>`;
       } else {
-        const missingHtml = (s.missing || []).map(m =>
-          esc(displaySubjectName(m.subject)) + " ← <strong>" + esc(m.missing.join(", ")) + "</strong>"
-        ).join("<br>");
         html += `<tr class="incomplete">
           <td>${esc(s.id)}</td>
           <td>${esc(s.name || "-")}</td>
           <td>Incomplet</td>
           <td>-</td>
-          <td style="text-align:left; font-size:11px; color:#c0392b;">${missingHtml || "Données manquantes"}</td>
+          <td title="${esc((s.missing || []).map(m => m.subject + ": " + m.missing.join(", ")).join(" | "))}">Données manquantes</td>
         </tr>`;
       }
     }
