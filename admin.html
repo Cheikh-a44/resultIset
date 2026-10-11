@@ -231,6 +231,16 @@
     <div id="renameMsg" class="msg"></div>
   </div>
 
+  <div class="card">
+    <h3>Générer credits.js</h3>
+    <p style="font-size:13px; color:#666; margin-bottom:12px;">
+      Lit tous les modules enregistrés (tous les départements et semestres) et télécharge un fichier <strong>credits.js</strong> complet.
+      Les crédits déjà présents sont conservés ; les nouvelles matières reçoivent 3 crédits (ou la valeur saisie dans « Crédits »). Modifiez ensuite les valeurs à la main si besoin.
+    </p>
+    <button class="btn btn-success" id="genCreditsBtn">⬇️ Télécharger credits.js</button>
+    <div id="creditsMsg" class="msg"></div>
+  </div>
+
   <div class="grid-2">
     <div class="card">
       <h3>Réinitialisation</h3>
@@ -386,6 +396,7 @@ function initUI() {
   document.getElementById("refreshResultsBtn").addEventListener("click", loadResults);
   document.getElementById("refreshSubjectsBtn").addEventListener("click", loadImportedSubjects);
   document.getElementById("renameBtn").addEventListener("click", renameSubject);
+  document.getElementById("genCreditsBtn").addEventListener("click", generateCreditsFile);
   document.getElementById("exportBtn").addEventListener("click", exportExcel);
   document.getElementById("resetBtn").addEventListener("click", resetSemester);
   document.getElementById("publishBtn").addEventListener("click", publishAnnonce);
@@ -1024,6 +1035,107 @@ async function renameSubject() {
     showMsg("renameMsg", "Erreur: " + e.message, "error");
   } finally {
     document.getElementById("renameBtn").disabled = false;
+  }
+}
+
+// ============================================================
+// GENERATE credits.js
+// ============================================================
+function buildCreditsJs(structure, creditsData, noTp, stageSubs, deptSems) {
+  const q = s => JSON.stringify(String(s));
+  const out = [];
+  let total = 0, fresh = 0;
+
+  out.push("// ============================================================");
+  out.push("// credits.js — généré depuis l'espace coordinateur");
+  out.push("// Vous pouvez modifier les crédits à la main.");
+  out.push("// ============================================================");
+  out.push("");
+  out.push("window.CREDITS_DATA = {");
+
+  for (const dept of Object.keys(deptSems)) {
+    out.push(`  ${dept}: {`);
+    for (const sem of deptSems[dept]) {
+      out.push(`    ${sem}: {`);
+      const mods = structure?.[dept]?.[sem] || {};
+      const seen = new Set();
+
+      for (const mk of Object.keys(mods)) {
+        const m = mods[mk] || {};
+        const subs = (m.subjects || []).filter(s => !seen.has(s));
+        if (!subs.length) continue;
+        const label = String(m.name || "").replace(/[\r\n]+/g, " ");
+        out.push(`      // ${mk}${label ? " — " + label : ""}`);
+        for (const s of subs) {
+          seen.add(s);
+          const existing = creditsData?.[dept]?.[sem]?.[s];
+          const fromDb = m.subjectCredits?.[s];
+          let cr = Number(existing ?? fromDb ?? 3);
+          if (!isFinite(cr)) cr = 3;
+          if (existing === undefined && fromDb === undefined) fresh++;
+          total++;
+          out.push(`      ${q(s)}: ${cr},`);
+        }
+      }
+
+      // matières déjà présentes dans l'ancien credits.js mais absentes des modules : on les garde
+      const extra = Object.keys(creditsData?.[dept]?.[sem] || {}).filter(s => !seen.has(s));
+      if (extra.length) {
+        out.push("      // Autres matières (déjà dans l'ancien fichier)");
+        for (const s of extra) {
+          out.push(`      ${q(s)}: ${Number(creditsData[dept][sem][s])},`);
+          total++;
+        }
+      }
+      out.push("    },");
+    }
+    out.push("  },");
+  }
+  out.push("};");
+  out.push("");
+  out.push("window.NO_TP_SUBJECTS = " + JSON.stringify(noTp, null, 2) + ";");
+  out.push("");
+  out.push("window.STAGE_SUBJECTS = " + JSON.stringify(stageSubs, null, 2) + ";");
+  out.push("");
+  out.push("window.DEPT_SEMESTERS = " + JSON.stringify(deptSems, null, 2) + ";");
+  out.push("");
+  out.push("// Vérification (console)");
+  out.push("(function () {");
+  out.push('  console.log("✅ credits.js chargé");');
+  out.push("  for (const dept in window.CREDITS_DATA) {");
+  out.push("    for (const sem in window.CREDITS_DATA[dept]) {");
+  out.push("      const subs = window.CREDITS_DATA[dept][sem];");
+  out.push("      if (!Object.keys(subs).length) continue;");
+  out.push("      const sum = Object.values(subs).reduce((x, y) => x + y, 0);");
+  out.push("      console.log(`  ${dept} ${sem}: ${sum} crédits`);");
+  out.push("    }");
+  out.push("  }");
+  out.push("})();");
+  out.push("");
+
+  return { text: out.join("\n"), total, fresh };
+}
+
+async function generateCreditsFile() {
+  showMsg("creditsMsg", "Lecture des modules...", "info");
+  try {
+    await loadStructures();
+    const { text, total, fresh } = buildCreditsJs(
+      modulesStructure, CREDITS_DATA, noTPSubjects, STAGE_SUBJECTS, DEPT_SEMESTERS
+    );
+    const blob = new Blob([text], { type: "text/javascript;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "credits.js";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    showMsg("creditsMsg", `✅ credits.js téléchargé : ${total} matières (${fresh} nouvelles à 3 crédits par défaut)`, "success");
+  } catch (e) {
+    console.error(e);
+    showMsg("creditsMsg", "Erreur: " + e.message, "error");
   }
 }
 
