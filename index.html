@@ -218,7 +218,7 @@ async function loadStructures() {
 
     const noTPSnap = await get(child(ref(db), "no_tp_subjects"));
     if (noTPSnap.exists()) {
-      noTPSubjects = [...new Set([...NO_TP_SUBJECTS_INIT, ...noTPSnap.val()])];
+      noTPSubjects = [...new Set([...NO_TP_SUBJECTS_INIT, ...Object.values(noTPSnap.val())])];
     }
   } catch (e) {
     console.error("Error loading structures:", e);
