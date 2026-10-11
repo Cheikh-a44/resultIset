@@ -1,0 +1,369 @@
+:root {
+  --primary: #2c5f2d;
+  --primary-dark: #1e4420;
+  --primary-light: #e8f5e9;
+  --secondary: #4a7c59;
+  --light: #f5f7fa;
+  --white: #ffffff;
+  --text: #333333;
+  --text-light: #666666;
+  --shadow: 0 4px 12px rgba(0,0,0,0.1);
+  --radius: 10px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--light);
+  color: var(--text);
+  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--white);
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+}
+
+header p {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.main-content {
+  flex: 1 0 auto;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.annonce-container {
+  margin-bottom: 0.8rem;
+  padding: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.annonce-bloc {
+  background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+  border-left: 6px solid #ffc107;
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  box-shadow: var(--shadow);
+}
+
+.annonce-texte {
+  flex: 1;
+  font-size: 0.9rem;
+  color: #856404;
+}
+
+.annonce-icone {
+  font-size: 1.3rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.annonce-date {
+  font-size: 0.7rem;
+  color: #856404;
+  margin-top: 0.2rem;
+}
+
+.section-title {
+  padding: 1rem 0 0.8rem;
+  font-size: 1.3rem;
+  color: var(--primary);
+  text-align: center;
+}
+
+.dept-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.dept-btn {
+  padding: 0.5rem 1.2rem;
+  border: 2px solid var(--primary-light);
+  border-radius: 20px;
+  background: white;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.dept-btn:hover,
+.dept-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.search-box {
+  display: flex;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--primary-light);
+  border-radius: var(--radius) 0 0 var(--radius);
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.search-box input:focus {
+  border-color: var(--primary);
+}
+
+.search-box button {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  padding: 0 1.2rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  cursor: pointer;
+  font-size: 1rem;
+  min-width: 50px;
+}
+
+.search-box button:hover {
+  background: var(--primary-dark);
+}
+
+.result-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow);
+}
+
+.student-header {
+  text-align: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid var(--primary-light);
+}
+
+.student-header h3 {
+  font-size: 1.2rem;
+  color: var(--text);
+}
+
+.student-header p {
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-light);
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-light);
+}
+
+.loading i {
+  font-size: 2rem;
+  animation: spin 1s linear infinite;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #dc3545;
+}
+
+.error-state button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.pdf-link {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius);
+  font-weight: bold;
+  margin-top: 0.8rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.pdf-link:hover {
+  background: #218838;
+}
+
+.neutral-message {
+  text-align: center;
+  margin-top: 0.8rem;
+  padding: 0.6rem;
+  background: #e9ecef;
+  color: #6c757d;
+  border-radius: var(--radius);
+}
+
+.releve-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+  font-size: 12px;
+}
+
+.releve-table th {
+  border: 1px solid #000;
+  padding: 6px 4px;
+  text-align: center;
+  background: #e8f4e8;
+  font-weight: bold;
+}
+
+.releve-table td {
+  border: 1px solid #000;
+  padding: 4px 4px;
+  text-align: center;
+}
+
+.releve-table .student-info-row td {
+  border: 1px solid #000;
+  padding: 6px 4px;
+}
+
+.releve-table .student-info-row td:first-child {
+  text-align: center;
+  font-weight: bold;
+}
+
+.releve-table .student-info-row td:nth-child(2) {
+  text-align: left;
+  font-weight: bold;
+}
+
+.releve-table .module-row {
+  background: #d4edda;
+  font-weight: bold;
+}
+
+.releve-table .module-row td {
+  border: none;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  padding: 4px 4px;
+}
+
+.releve-table .module-row td:first-child {
+  border-left: 1px solid #000;
+}
+
+.releve-table .module-row td:last-child {
+  border-right: 1px solid #000;
+}
+
+.releve-table .subject-row td {
+  border: 1px solid #000;
+  padding: 3px 4px;
+}
+
+.releve-table .subject-row td:first-child {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.releve-table .moyenne-row td {
+  border: none !important;
+  padding: 8px 4px 4px 4px;
+  background: transparent;
+}
+
+.status-C, .status-V {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.status-NC, .status-NV {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.footer {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  background: var(--light);
+  border-top: 1px solid #ddd;
+  margin-top: 2rem;
+}
+
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.6rem;
+  }
+  
+  .releve-table {
+    font-size: 9px;
+  }
+  
+  .search-box button {
+    padding: 0 1rem;
+  }
+  
+  .dept-btn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
