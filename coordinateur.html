@@ -140,7 +140,6 @@
     <div class="form-group">
       <label>Semestre:</label>
       <select id="semSelect"></select>
-      <button class="btn btn-success" id="loadBtn">Charger</button>
     </div>
   </div>
 
@@ -168,31 +167,6 @@
       <button class="btn btn-success" id="importBtn">Importer</button>
       <div id="importMsg" class="msg"></div>
     </div>
-
-    <div class="card">
-      <h3>Gestion des modules</h3>
-      <div class="form-group">
-        <label>Code:</label>
-        <input type="text" id="moduleCode" placeholder="Ex: M31">
-      </div>
-      <div class="form-group">
-        <label>Nom:</label>
-        <input type="text" id="moduleName" placeholder="Ex: Langue et économie">
-      </div>
-      <div class="form-group">
-        <label>Matières:</label>
-        <input type="text" id="moduleSubjects" placeholder="Matiere1;Matiere2">
-      </div>
-      <div class="form-group">
-        <label>Crédits:</label>
-        <input type="text" id="moduleCredits" placeholder="3;4 (optionnel)">
-      </div>
-      <button class="btn btn-success" id="addModuleBtn">Ajouter/Modifier</button>
-      <button class="btn btn-warning" id="loadPPVBtn">⚡ Charger tous les modules PPV</button>
-      <div id="moduleMsg" class="msg"></div>
-      <h4>Modules existants</h4>
-      <div id="modulesList"></div>
-    </div>
   </div>
 
   <div class="grid-2">
@@ -211,23 +185,6 @@
       <div id="subjectsMsg" class="msg"></div>
       <div id="subjectsTable"></div>
     </div>
-  </div>
-
-  <div class="card">
-    <h3>Corriger le nom d'une matière</h3>
-    <p style="font-size:13px; color:#666; margin-bottom:12px;">
-      Remplace l'ancien nom d'une matière importée par le nom du module, pour tous les étudiants du semestre (TP, CC, Examen... inclus).
-    </p>
-    <div class="form-group">
-      <label>Ancien nom:</label>
-      <select id="renameOld"></select>
-    </div>
-    <div class="form-group">
-      <label>Nouveau nom:</label>
-      <select id="renameNew"></select>
-    </div>
-    <button class="btn btn-warning" id="renameBtn">Renommer</button>
-    <div id="renameMsg" class="msg"></div>
   </div>
 
   <div class="grid-2">
@@ -377,14 +334,10 @@ function initUI() {
     currentSem = document.getElementById("semSelect").value;
     refreshAll();
   });
-  document.getElementById("loadBtn").addEventListener("click", refreshAll);
   document.getElementById("importType").addEventListener("change", updateSubjectDropdown);
   document.getElementById("importBtn").addEventListener("click", importExcel);
-  document.getElementById("addModuleBtn").addEventListener("click", addModule);
-  document.getElementById("loadPPVBtn").addEventListener("click", loadAllPPVModules);
   document.getElementById("refreshResultsBtn").addEventListener("click", loadResults);
   document.getElementById("refreshSubjectsBtn").addEventListener("click", loadImportedSubjects);
-  document.getElementById("renameBtn").addEventListener("click", renameSubject);
   document.getElementById("exportBtn").addEventListener("click", exportExcel);
   document.getElementById("resetBtn").addEventListener("click", resetSemester);
   document.getElementById("publishBtn").addEventListener("click", publishAnnonce);
@@ -422,6 +375,7 @@ function refreshAll() {
 // ============================================================
 function displayModules() {
   const cont = document.getElementById("modulesList");
+  if (!cont) return;
   const mods = modulesStructure[currentDept]?.[currentSem] || {};
   if (!Object.keys(mods).length) {
     cont.innerHTML = '<p style="color:#888;">Aucun module défini pour ce semestre</p>';
