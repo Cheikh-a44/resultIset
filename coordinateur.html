@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESAVweb — Espace Coordinateur</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2f4a;
+    --navy-dark: #0f1e30;
+    --burgundy: #6b2c3e;
+    --gold: #b8973a;
+    --gold-light: #d4b96a;
+    --parchment: #f4efe4;
+    --cream: #faf7f0;
+    --ink: #2a2a2a;
+    --muted: #5c5c5c;
+    --border: #c9b99a;
+    --shadow: 0 4px 18px rgba(26, 47, 74, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'EB Garamond', Georgia, serif;
+    background: var(--parchment);
+    color: var(--ink);
+    padding: 24px 16px;
+    line-height: 1.55;
+    overflow-x: hidden;
+    background-image:
+      linear-gradient(rgba(184,151,58,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(184,151,58,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    text-align: center;
+    color: var(--navy);
+    font-size: 2.1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  h1::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 10px auto 0;
+  }
+
+  /* ---------- Login ---------- */
+  #loginSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: radial-gradient(ellipse at 70% 20%, rgba(26,47,74,0.08), transparent 50%),
+                radial-gradient(ellipse at 20% 80%, rgba(107,44,62,0.07), transparent 45%);
+  }
+  .login-box {
+    background: var(--cream);
+    padding: 42px 34px;
+    border: 2px solid var(--border);
+    box-shadow: var(--shadow), inset 0 0 0 1px rgba(184,151,58,0.15);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+  }
+  .login-box::before {
+    content: "";
+    position: absolute;
+    top: 6px; left: 6px; right: 6px; bottom: 6px;
+    border: 1px solid rgba(184,151,58,0.25);
+    pointer-events: none;
+  }
+  .login-box h1 { font-size: 1.9rem; margin-bottom: 4px; }
+  .login-box p {
+    color: var(--muted);
+    font-size: 15px;
+    font-style: italic;
+    margin-bottom: 26px;
+    letter-spacing: 0.03em;
+  }
+  .login-box input {
+    width: 100%;
+    padding: 11px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    font-size: 15px;
+    margin-bottom: 12px;
+    font-family: inherit;
+    background: white;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .login-box input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 2px rgba(26,47,74,0.12);
+  }
+  .login-box button {
+    width: 100%;
+    padding: 12px;
+    background: var(--navy);
+    color: var(--cream);
+    border: none;
+    border-radius: 2px;
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 0.25s;
+  }
+  .login-box button:hover { background: var(--navy-dark); }
+  .login-box button:disabled { opacity: 0.55; cursor: not-allowed; }
+  .login-error {
+    color: var(--burgundy);
+    font-size: 14px;
+    margin-top: 12px;
+    min-height: 18px;
+  }
+
+  /* ---------- App ---------- */
+  #appSection { display: none; max-width: 1180px; margin: 0 auto; }
+
+  .user-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: var(--cream);
+    padding: 12px 22px;
+    border: 1.5px solid var(--border);
+    margin-bottom: 28px;
+    box-shadow: var(--shadow);
+  }
+  .user-bar .email {
+    color: var(--navy);
+    font-weight: 600;
+    font-size: 15px;
+    word-break: break-all;
+  }
+  .logout-btn {
+    padding: 7px 18px;
+    background: var(--burgundy);
+    color: white;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: background 0.25s;
+  }
+  .logout-btn:hover { background: #4a1f2c; }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 26px;
+  }
+  .tab {
+    padding: 8px 22px;
+    background: var(--cream);
+    color: var(--navy);
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .tab:hover {
+    border-color: var(--gold);
+    color: var(--navy-dark);
+  }
+  .tab.active {
+    background: var(--navy);
+    color: var(--cream);
+    border-color: var(--navy);
+  }
+
+  .card {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    padding: 22px 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 4px; left: 4px; right: 4px; bottom: 4px;
+    border: 1px solid rgba(184,151,58,0.18);
+    pointer-events: none;
+  }
+  .card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(184,151,58,0.35);
+    letter-spacing: 0.03em;
+  }
+  .card h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    margin: 18px 0 10px;
+    color: var(--navy);
+  }
+
+  .form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .form-group label {
+    font-weight: 600;
+    width: 110px;
+    color: var(--navy);
+    font-size: 15px;
+  }
+  select, input[type="text"], input[type="file"], textarea {
+    padding: 9px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 2px;
+    font-size: 15px;
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    font-family: inherit;
+    background: white;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  @media (min-width: 500px) {
+    select, input[type="text"], input[type="file"] { min-width: 200px; width: auto; }
+  }
+  select:focus, input[type="text"]:focus, textarea:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 2px rgba(26,47,74,0.1);
+  }
+  textarea { width: 100%; resize: vertical; }
+
+  .btn {
+    padding: 8px 20px;
+    background: var(--navy);
+    color: var(--cream);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 4px;
+    transition: background 0.25s;
+  }
+  .btn:hover { background: var(--navy-dark); }
+  .btn-success { background: #2d5a3d; }
+  .btn-success:hover { background: #1e3d29; }
+  .btn-danger { background: var(--burgundy); }
+  .btn-danger:hover { background: #4a1f2c; }
+  .btn-warning { background: var(--gold); color: var(--navy-dark); }
+  .btn-warning:hover { background: #9a7a28; color: white; }
+  .btn-sm { padding: 4px 12px; font-size: 12px; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .msg {
+    padding: 10px 14px;
+    border-radius: 2px;
+    margin-top: 10px;
+    display: none;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+  }
+  .msg.success {
+    background: rgba(45,90,61,0.1);
+    color: #1e3d29;
+    border-left-color: #2d5a3d;
+    display: block;
+  }
+  .msg.error {
+    background: rgba(107,44,62,0.1);
+    color: var(--burgundy);
+    border-left-color: var(--burgundy);
+    display: block;
+  }
+  .msg.info {
+    background: rgba(184,151,58,0.12);
+    color: #6b5420;
+    border-left-color: var(--gold);
+    display: block;
+  }
+
+  #resultsTable, #subjectsTable { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14px;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: center;
+  }
+  th {
+    background: rgba(26,47,74,0.07);
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.03em;
+  }
+  td:first-child { text-align: left; }
+  .incomplete { background: rgba(0,0,0,0.02); color: var(--muted); }
+  .status-valid { color: #1e3d29; font-weight: 700; }
+  .status-invalid { color: var(--burgundy); font-weight: 700; }
+
+  .module-item {
+    background: rgba(26,47,74,0.04);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .module-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(201,185,154,0.5);
+  }
+  .module-subjects { display: flex; flex-wrap: wrap; gap: 6px; }
+  .subject-tag {
+    background: white;
+    padding: 3px 11px;
+    border-radius: 2px;
+    font-size: 13px;
+    border: 1px solid var(--border);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 800px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  .stats-box {
+    background: rgba(26,47,74,0.07);
+    padding: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .footer-note {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginSection">
+  <div class="login-box">
+    <h1>ESAVweb</h1>
+    <p>Espace Coordinateur</p>
+    <input type="email" id="loginEmail" placeholder="Email" autocomplete="username">
+    <input type="password" id="loginPassword" placeholder="Mot de passe" autocomplete="current-password">
+    <button id="loginBtn">Se connecter</button>
+    <div id="loginError" class="login-error"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appSection">
+  <div class="user-bar">
+    <span class="email">👤 <span id="userEmail">-</span></span>
+    <button class="logout-btn" id="logoutBtn">Déconnexion</button>
+  </div>
+
+  <h1>ESAVweb</h1>
+  <p style="text-align:center; color:var(--muted); font-style:italic; margin-bottom:22px; font-size:15px;">
+    Espace Coordinateur — Gestion des notes et modules
+  </p>
+
+  <div class="tabs" id="deptTabs">
+    <button class="tab" data-dept="PPV">PPV</button>
+    <button class="tab" data-dept="TC">TC</button>
+    <button class="tab" data-dept="GAB">GAB</button>
+    <button class="tab" data-dept="GEM">GEM</button>
+    <button class="tab" data-dept="PSA">PSA</button>
+    <button class="tab" data-dept="STA">STA</button>
+  </div>
+
+  <div class="card">
+    <div class="form-group">
+      <label>Semestre :</label>
+      <select id="semSelect"></select>
+      <button class="btn btn-success" id="loadBtn">Charger</button>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Importer des notes</h3>
+      <div class="form-group">
+        <label>Type :</label>
+        <select id="importType">
+          <option value="Examen">Examen</option>
+          <option value="Controle continu">Controle continu</option>
+          <option value="Rattrapage">Rattrapage</option>
+          <option value="TP">TP</option>
+          <option value="Stage">Stage</option>
+        </select>
+      </div>
+      <div class="form-group" id="subjectGroup">
+        <label>Matière :</label>
+        <select id="subjectSelect"></select>
+      </div>
+      <div class="form-group">
+        <label>Fichier :</label>
+        <input type="file" id="fileInput" accept=".xlsx,.xls">
+      </div>
+      <button class="btn btn-success" id="importBtn">Importer</button>
+      <div id="importMsg" class="msg"></div>
+    </div>
+
+    <div class="card">
+      <h3>Gestion des modules</h3>
+      <div class="form-group">
+        <label>Code :</label>
+        <input type="text" id="moduleCode" placeholder="Ex: M31">
+      </div>
+      <div class="form-group">
+        <label>Nom :</label>
+        <input type="text" id="moduleName" placeholder="Ex: Langue et économie">
+      </div>
+      <div class="form-group">
+        <label>Matières :</label>
+        <input type="text" id="moduleSubjects" placeholder="Matiere1;Matiere2">
+      </div>
+      <div class="form-group">
+        <label>Crédits :</label>
+        <input type="text" id="moduleCredits" placeholder="3;4 (optionnel)">
+      </div>
+      <button class="btn btn-success" id="addModuleBtn">Ajouter / Modifier</button>
+      <button class="btn btn-warning" id="loadPPVBtn">Charger tous les modules PPV</button>
+      <div id="moduleMsg" class="msg"></div>
+      <h4>Modules existants</h4>
+      <div id="modulesList"></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Résultats des étudiants</h3>
+      <button class="btn" id="refreshResultsBtn">Actualiser</button>
+      <button class="btn btn-success" id="exportBtn">Exporter Excel</button>
+      <div id="statsBox" class="stats-box" style="display:none;"></div>
+      <div id="resultsMsg" class="msg"></div>
+      <div id="resultsTable"></div>
+    </div>
+
+    <div class="card">
+      <h3>Matières importées</h3>
+      <button class="btn" id="refreshSubjectsBtn">Actualiser</button>
+      <div id="subjectsMsg" class="msg"></div>
+      <div id="subjectsTable"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Corriger le nom d'une matière</h3>
+    <p style="font-size:14px; color:var(--muted); margin-bottom:12px; font-style:italic;">
+      Remplace l'ancien nom d'une matière importée par le nom du module, pour tous les étudiants du semestre (TP, CC, Examen... inclus).
+    </p>
+    <div class="form-group">
+      <label>Ancien nom :</label>
+      <select id="renameOld"></select>
+    </div>
+    <div class="form-group">
+      <label>Nouveau nom :</label>
+      <select id="renameNew"></select>
+    </div>
+    <button class="btn btn-warning" id="renameBtn">Renommer</button>
+    <div id="renameMsg" class="msg"></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Réinitialisation</h3>
+      <button class="btn btn-danger" id="resetBtn">Supprimer toutes les données du semestre</button>
+      <div id="resetMsg" class="msg"></div>
+    </div>
+
+    <div class="card">
+      <h3>Annonce</h3>
+      <textarea id="annonceText" rows="3" placeholder="Texte de l'annonce..."></textarea>
+      <button class="btn btn-success" id="publishBtn">Publier</button>
+      <button class="btn btn-danger" id="deleteAnnounceBtn">Supprimer</button>
+      <div id="annonceMsg" class="msg"></div>
+    </div>
+  </div>
+
+  <p class="footer-note">ESAVweb — Espace Coordinateur · Usage interne</p>
+</div>
+
+<script src="firebase-config.js"></script>
+<script src="credits.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getDatabase, ref, get, set, update, remove, child, push }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const app = initializeApp(window.FIREBASE_CONFIG);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+const DEPT_SEMESTERS = window.DEPT_SEMESTERS;
+const CREDITS_DATA = window.CREDITS_DATA;
+const NO_TP_SUBJECTS_INIT = window.NO_TP_SUBJECTS || [];
+const STAGE_SUBJECTS = window.STAGE_SUBJECTS || ["Stage"];
+
+let currentDept = "PPV";
+let currentSem  = "S3";
+let modulesStructure = {};
+let noTPSubjects = [...NO_TP_SUBJECTS_INIT];
+
+// ============================================================
+// HELPERS
+// ============================================================
+function showMsg(id, text, type = "success", ms = 4000) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = `msg ${type}`;
+  setTimeout(() => { if (el) el.className = "msg"; }, ms);
+}
+function hasTP(subject) { return !noTPSubjects.includes(subject); }
+function isStage(subject) { return STAGE_SUBJECTS.includes(subject); }
+function displaySubjectName(subject) {
+  if (!subject) return "";
+  return subject.replace(/_/g, " ").replace(/I_/g, "I.").replace(/et_/g, "et ");
+}
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function getCredits(subject) {
+  return CREDITS_DATA[currentDept]?.[currentSem]?.[subject] ?? 3;
+}
+function getSubjectsForDeptSem(dept, sem) {
+  const mods = modulesStructure[dept]?.[sem] || {};
+  const subs = [];
+  for (const k in mods) {
+    for (const s of mods[k].subjects || []) {
+      if (!subs.includes(s)) subs.push(s);
+    }
+  }
+  return subs;
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+const loginSection = document.getElementById("loginSection");
+const appSection   = document.getElementById("appSection");
+const loginBtn     = document.getElementById("loginBtn");
+const loginError   = document.getElementById("loginError");
+const logoutBtn    = document.getElementById("logoutBtn");
+const userEmailEl  = document.getElementById("userEmail");
+
+loginBtn.addEventListener("click", async () => {
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass  = document.getElementById("loginPassword").value;
+  if (!email || !pass) { loginError.textContent = "Email et mot de passe requis"; return; }
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Connexion...";
+  loginError.textContent = "";
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch (e) {
+    loginError.textContent = "Identifiants invalides";
+    console.error(e);
+  } finally {
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Se connecter";
+  }
+});
+document.getElementById("loginPassword").addEventListener("keypress", e => {
+  if (e.key === "Enter") loginBtn.click();
+});
+logoutBtn.addEventListener("click", async () => { await signOut(auth); });
+
+let uiInitialized = false;
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    userEmailEl.textContent = user.email;
+    loginSection.style.display = "none";
+    appSection.style.display = "block";
+    await loadStructures();
+    if (!uiInitialized) { uiInitialized = true; initUI(); }
+    else refreshAll();
+  } else {
+    loginSection.style.display = "flex";
+    appSection.style.display = "none";
+  }
+});
+
+// ============================================================
+// LOAD STRUCTURES
+// ============================================================
+async function loadStructures() {
+  const structSnap = await get(child(ref(db), "structure"));
+  modulesStructure = structSnap.exists() ? structSnap.val() : {};
+  const noTPSnap = await get(child(ref(db), "no_tp_subjects"));
+  if (noTPSnap.exists()) {
+    noTPSubjects = [...new Set([...NO_TP_SUBJECTS_INIT, ...Object.values(noTPSnap.val())])];
+  }
+}
+
+// ============================================================
+// UI INIT
+// ============================================================
+function initUI() {
+  document.querySelectorAll(".tab").forEach(t => {
+    t.classList.toggle("active", t.dataset.dept === currentDept);
+    t.addEventListener("click", () => selectDept(t.dataset.dept));
+  });
+  updateSemesterDropdown();
+  document.getElementById("semSelect").addEventListener("change", () => {
+    currentSem = document.getElementById("semSelect").value;
+    refreshAll();
+  });
+  document.getElementById("loadBtn").addEventListener("click", refreshAll);
+  document.getElementById("importType").addEventListener("change", updateSubjectDropdown);
+  document.getElementById("importBtn").addEventListener("click", importExcel);
+  document.getElementById("addModuleBtn").addEventListener("click", addModule);
+  document.getElementById("loadPPVBtn").addEventListener("click", loadAllPPVModules);
+  document.getElementById("refreshResultsBtn").addEventListener("click", loadResults);
+  document.getElementById("refreshSubjectsBtn").addEventListener("click", loadImportedSubjects);
+  document.getElementById("renameBtn").addEventListener("click", renameSubject);
+  document.getElementById("exportBtn").addEventListener("click", exportExcel);
+  document.getElementById("resetBtn").addEventListener("click", resetSemester);
+  document.getElementById("publishBtn").addEventListener("click", publishAnnonce);
+  document.getElementById("deleteAnnounceBtn").addEventListener("click", deleteAnnonce);
+  refreshAll();
+  loadAnnonce();
+}
+
+function selectDept(dept) {
+  currentDept = dept;
+  document.querySelectorAll(".tab").forEach(t =>
+    t.classList.toggle("active", t.dataset.dept === dept)
+  );
+  updateSemesterDropdown();
+  currentSem = document.getElementById("semSelect").value;
+  refreshAll();
+}
+function updateSemesterDropdown() {
+  const sel = document.getElementById("semSelect");
+  const sems = DEPT_SEMESTERS[currentDept] || [];
+  if (!sems.includes(currentSem)) currentSem = sems[0] || currentSem;
+  sel.innerHTML = sems.map(s =>
+    `<option value="${s}" ${s === currentSem ? "selected" : ""}>${s}</option>`
+  ).join("");
+}
+function refreshAll() {
+  displayModules();
+  updateSubjectDropdown();
+  loadResults();
+  loadImportedSubjects();
+}
+
+// ============================================================
+// MODULES
+// ============================================================
+function displayModules() {
+  const cont = document.getElementById("modulesList");
+  const mods = modulesStructure[currentDept]?.[currentSem] || {};
+  if (!Object.keys(mods).length) {
+    cont.innerHTML = '<p style="color:#888;">Aucun module défini pour ce semestre</p>';
+    return;
+  }
+  cont.innerHTML = Object.entries(mods).map(([key, m]) => `
+    <div class="module-item">
+      <div class="module-header">
+        <strong>${esc(key)}: ${esc(m.name || key)}</strong>
+        <button class="btn btn-danger btn-sm" data-del-mod="${esc(key)}">Supprimer</button>
+      </div>
+      <div class="module-subjects">
+        ${(m.subjects || []).map(s =>
+          `<span class="subject-tag">${esc(displaySubjectName(s))} (${getCredits(s)} cr)${isStage(s) ? " 🎓" : ""}</span>`
+        ).join("")}
+      </div>
+    </div>
+  `).join("");
+  cont.querySelectorAll("[data-del-mod]").forEach(btn => {
+    btn.addEventListener("click", () => deleteModule(btn.dataset.delMod));
+  });
+}
+
+async function addModule() {
+  const key    = document.getElementById("moduleCode").value.trim();
+  const name   = document.getElementById("moduleName").value.trim();
+  const subStr = document.getElementById("moduleSubjects").value.trim();
+  const credStr= document.getElementById("moduleCredits").value.trim();
+  if (!key || !name) { showMsg("moduleMsg", "Code et nom requis", "error"); return; }
+  const subjects = subStr ? subStr.split(";").map(s => s.trim()).filter(Boolean) : [];
+  const creditsList = credStr ? credStr.split(";").map(c => parseFloat(c.trim())) : [];
+  const credits = {};
+  subjects.forEach((s, i) => { credits[s] = creditsList[i] || getCredits(s); });
+  const moduleData = { name, subjects, subjectCredits: credits };
+  try {
+    await set(ref(db, `structure/${currentDept}/${currentSem}/${key}`), moduleData);
+    showMsg("moduleMsg", `Module ${key} enregistré`, "success");
+    ["moduleCode","moduleName","moduleSubjects","moduleCredits"].forEach(id =>
+      document.getElementById(id).value = ""
+    );
+    await loadStructures();
+    refreshAll();
+  } catch (e) {
+    showMsg("moduleMsg", "Erreur: " + e.message, "error");
+  }
+}
+
+async function deleteModule(key) {
+  if (!confirm(`Supprimer le module ${key} ?`)) return;
+  try {
+    await remove(ref(db, `structure/${currentDept}/${currentSem}/${key}`));
+    showMsg("moduleMsg", "Module supprimé", "success");
+    await loadStructures();
+    refreshAll();
+  } catch (e) {
+    showMsg("moduleMsg", "Erreur: " + e.message, "error");
+  }
+}
+
+// ============================================================
+// LOAD ALL PPV MODULES (S3 → S6)
+// ============================================================
+async function loadAllPPVModules() {
+  if (!confirm("Charger TOUS les modules PPV (S3→S6) dans Firebase ?\n\nCela va ÉCRASER les modules existants de PPV.")) return;
+  if (!confirm("Confirmer une dernière fois ?")) return;
+
+  const PPV_DATA = {
+    S3: {
+      M31: { name: "Langue et économie", subjects: ["Francais", "Introduction_economie_gestion"] },
+      M32: { name: "Principes d'agronomie", subjects: ["Principes_generaux_agronomie", "Principes_generaux_horticulture"] },
+      M33: { name: "Phytoprotection 1", subjects: ["Entomologie_Nematologie_ravageurs", "Agro_pesticides_phytopharmacie"] },
+      M34: { name: "Sciences du sol et des plantes", subjects: ["Introduction_science_du_sol", "Introduction_sciences_des_plantes"] }
+    },
+    S4: {
+      M41: { name: "Vulgarisation", subjects: ["Techniques_communication_vulgarisation"] },
+      M42: { name: "Production végétale 1", subjects: ["Technique_propagation_production_semences", "Besoin_en_eau_des_cultures"] },
+      M43: { name: "Ecophysiologie et Nutrition des plantes", subjects: ["Ecophysiologie_vegetale_Biochimie", "Fertilite_sols_Nutrition_plantes"] },
+      M44: { name: "Méthodes de diagnostic", subjects: ["Methodes_diagnostic_phytoprotection", "Malherbologie"] },
+      M45: { name: "Stage en milieu de travail", subjects: ["Stage"] }
+    },
+    S5: {
+      M51: { name: "Entrepreneuriat", subjects: ["Droit_Sante_Securite_environnement", "Techniques_gestion_entreprenariat"] },
+      M52: { name: "Systèmes de production", subjects: ["Production_vegetale_2", "Arboriculture", "Conduite_calibration_equipements_agricoles"] },
+      M53: { name: "Phytopathologie 1", subjects: ["Phytopathologie_1", "Projet"] },
+      M54: { name: "Optionnel", subjects: ["Gestion_conservation_sol_eau", "Ennemis_cultures_lutte_integree", "Introduction_paysage_cultures_ornementales"] }
+    },
+    S6: {
+      M61: { name: "Rédaction des rapports", subjects: ["Redaction_edition_rapports"] },
+      M62: { name: "Agronomie avancée", subjects: ["Amelioration_genetique_biotechnologie", "Agroenvironnement_agriculture_precision"] },
+      M63: { name: "Projet de fin d'études", subjects: ["Stage_fin_etudes"] },
+      M64: { name: "Optionnel", subjects: ["Adaptation_changement_climatique", "Phytopathologie_2", "Amenagement_paysager_poste_recolte"] }
+    }
+  };
+
+  document.getElementById("loadPPVBtn").disabled = true;
+  showMsg("moduleMsg", "Chargement en cours...", "info");
+
+  try {
+    for (const sem in PPV_DATA) {
+      for (const code in PPV_DATA[sem]) {
+        const mod = PPV_DATA[sem][code];
+        const credits = {};
+        mod.subjects.forEach(s => {
+          credits[s] = CREDITS_DATA.PPV[sem]?.[s] ?? 3;
+        });
+        await set(ref(db, `structure/PPV/${sem}/${code}`), {
+          name: mod.name,
+          subjects: mod.subjects,
+          subjectCredits: credits
+        });
+      }
+    }
+    showMsg("moduleMsg", "✅ Tous les modules PPV chargés (S3→S6)", "success");
+    await loadStructures();
+    refreshAll();
+  } catch (e) {
+    console.error(e);
+    showMsg("moduleMsg", "Erreur: " + e.message, "error");
+  } finally {
+    document.getElementById("loadPPVBtn").disabled = false;
+  }
+}
+
+// ============================================================
+// SUBJECT DROPDOWN
+// ============================================================
+function updateSubjectDropdown() {
+  const type = document.getElementById("importType").value;
+  const grp  = document.getElementById("subjectGroup");
+  const sel  = document.getElementById("subjectSelect");
+  grp.style.display = "flex";
+
+  let subs = getSubjectsForDeptSem(currentDept, currentSem);
+
+  if (type === "Stage") {
+    subs = subs.filter(s => isStage(s));
+    if (subs.length === 0) {
+      sel.innerHTML = '<option value="">Aucune matière de stage dans ce semestre</option>';
+      return;
+    }
+  } else if (type === "TP") {
+    subs = subs.filter(s => hasTP(s) && !isStage(s));
+  } else {
+    subs = subs.filter(s => !isStage(s));
+  }
+
+  if (subs.length === 0) {
+    sel.innerHTML = '<option value="">Aucune matière disponible pour ce type</option>';
+    return;
+  }
+  sel.innerHTML = subs.map(s =>
+    `<option value="${esc(s)}">${esc(displaySubjectName(s))}</option>`
+  ).join("");
+}
+
+// ============================================================
+// IMPORT EXCEL
+// ============================================================
+async function importExcel() {
+  const type    = document.getElementById("importType").value;
+  const subject = document.getElementById("subjectSelect").value;
+  const file    = document.getElementById("fileInput").files[0];
+
+  if (!file) { showMsg("importMsg", "Sélectionnez un fichier", "error"); return; }
+  if (!subject) {
+    showMsg("importMsg", type === "Stage"
+      ? "Aucune matière de stage définie dans les modules de ce semestre"
+      : "Sélectionnez une matière", "error");
+    return;
+  }
+  if (type === "TP" && !hasTP(subject)) {
+    showMsg("importMsg", `❌ "${displaySubjectName(subject)}" n'a pas de TP`, "error");
+    return;
+  }
+  if (type !== "Stage" && isStage(subject)) {
+    showMsg("importMsg", "❌ Les matières de stage n'acceptent que le type 'Stage'", "error");
+    return;
+  }
+
+  document.getElementById("importBtn").disabled = true;
+  showMsg("importMsg", "Lecture du fichier...", "info");
+
+  try {
+    const rows = await readExcel(file);
+    if (!rows.length) { showMsg("importMsg", "Aucune donnée", "error"); return; }
+    let created = 0, updated = 0;
+    const total = rows.length;
+    const isStageImport = (type === "Stage" || isStage(subject));
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      if (!row.numero || row.note === null) continue;
+      showMsg("importMsg", `Envoi ${i+1}/${total}...`, "info");
+      try {
+        const r = isStageImport
+          ? await saveStageNote(row.numero, row.nom, subject, row.note)
+          : await upsertNote(row.numero, row.nom, subject, type, row.note);
+        if (r === "updated") updated++; else created++;
+      } catch (e) { console.error("Row error:", row, e); }
+    }
+    showMsg("importMsg", `✅ ${created} ajoutées, ${updated} mises à jour`, "success");
+    document.getElementById("fileInput").value = "";
+    loadResults();
+    loadImportedSubjects();
+  } catch (e) {
+    console.error(e);
+    showMsg("importMsg", "Erreur: " + e.message, "error");
+  } finally {
+    document.getElementById("importBtn").disabled = false;
+  }
+}
+
+function readExcel(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const wb = XLSX.read(e.target.result, { type: "array" });
+        const sheet = wb.Sheets[wb.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+        if (json.length < 2) return resolve([]);
+        const rows = [];
+        for (let i = 1; i < json.length; i++) {
+          const r = json[i];
+          if (!r || r.length < 3) continue;
+          const numero = String(r[0] ?? "").trim();
+          const nom    = String(r[1] ?? "").trim();
+          const noteRaw= String(r[2] ?? "").replace(",", ".");
+          const note   = parseFloat(noteRaw);
+          if (!numero) continue;
+          rows.push({ numero, nom, note: isNaN(note) ? null : note });
+        }
+        resolve(rows);
+      } catch (err) { reject(err); }
+    };
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+// ============================================================
+// NOTE OPERATIONS
+// ============================================================
+async function upsertNote(numero, nom, subject, type, note) {
+  const path = `results/${currentDept}/${currentSem}/${numero}`;
+  const snap = await get(ref(db, path));
+  if (snap.exists()) {
+    const data = snap.val();
+    for (const k in data) {
+      const e = data[k];
+      if (e.subject === subject && e.type === type) {
+        await update(ref(db, `${path}/${k}`), { name: nom || e.name || "", grade: note });
+        return "updated";
+      }
+    }
+  }
+  await push(ref(db, path), { name: nom || "", subject, type, grade: note });
+  return "created";
+}
+
+async function saveStageNote(numero, nom, subject, note) {
+  const path = `results/${currentDept}/${currentSem}/${numero}`;
+  const snap = await get(ref(db, path));
+  if (snap.exists()) {
+    const data = snap.val();
+    for (const k in data) {
+      const e = data[k];
+      if (e.subject === subject && e.type === "Stage") {
+        await update(ref(db, `${path}/${k}`), { name: nom || e.name || "", grade: note });
+        return "updated";
+      }
+    }
+  }
+  await push(ref(db, path), { name: nom || "", subject, type: "Stage", grade: note });
+  return "created";
+}
+
+// ============================================================
+// CALCULATIONS
+// ============================================================
+function checkCompleteness(notes, required) {
+  const missing = [];
+  for (const s of required) {
+    const n = notes[s] || {};
+    const m = [];
+    if (isStage(s)) {
+      if (n["Stage"] === undefined && n["Examen"] === undefined && n["Controle continu"] === undefined) {
+        m.push("Note de stage");
+      }
+    } else {
+      if (n["Examen"] === undefined && n["Rattrapage"] === undefined) m.push("Examen");
+      if (n["Controle continu"] === undefined && n["Contrôle continu"] === undefined) m.push("CC");
+      if (hasTP(s) && n["TP"] === undefined) m.push("TP");
+    }
+    if (m.length) missing.push({ subject: s, missing: m });
+  }
+  return { complete: missing.length === 0, missing };
+}
+
+function calculateResults(notes, dept, sem) {
+  const mods = modulesStructure[dept]?.[sem] || {};
+  const allSubjects = getSubjectsForDeptSem(dept, sem);
+  if (!allSubjects.length) return null;
+
+  const subjectAvg = {};
+  const subjectSR = {};
+
+  for (const s of allSubjects) {
+    const n = notes[s] || {};
+    if (isStage(s)) {
+      subjectAvg[s] = n["Stage"] ?? n["Examen"] ?? n["Controle continu"] ?? 0;
+      subjectSR[s] = false;
+      continue;
+    }
+    const exam = n["Examen"] ?? 0;
+    const cc   = n["Controle continu"] ?? n["Contrôle continu"] ?? 0;
+    const tp   = n["TP"] ?? 0;
+    const ratt = n["Rattrapage"];
+    const useSR = ratt !== undefined && ratt > exam;
+    subjectSR[s] = useSR;
+    const finalGrade = useSR ? ratt : exam;
+    if (hasTP(s)) {
+      subjectAvg[s] = (tp + cc * 2 + finalGrade * 3) / 6;
+    } else {
+      subjectAvg[s] = (cc * 2 + finalGrade * 3) / 5;
+    }
+  }
+
+  const moduleAvg = {};
+  for (const mk in mods) {
+    let w = 0, c = 0;
+    for (const s of mods[mk].subjects || []) {
+      const cr = CREDITS_DATA[dept]?.[sem]?.[s] ?? 3;
+      w += (subjectAvg[s] || 0) * cr;
+      c += cr;
+    }
+    moduleAvg[mk] = c > 0 ? w / c : 0;
+  }
+
+  let w = 0, c = 0;
+  for (const s of allSubjects) {
+    const cr = CREDITS_DATA[dept]?.[sem]?.[s] ?? 3;
+    w += (subjectAvg[s] || 0) * cr;
+    c += cr;
+  }
+  const overallAvg = c > 0 ? w / c : 0;
+
+  const subjectStatus = {};
+  for (const mk in mods) {
+    for (const s of mods[mk].subjects || []) {
+      if (subjectAvg[s] >= 10) subjectStatus[s] = "C";
+      else if (subjectAvg[s] >= 7 && moduleAvg[mk] >= 10) subjectStatus[s] = "C";
+      else subjectStatus[s] = "NC";
+    }
+  }
+
+  const moduleStatus = {};
+  const moduleCredits = {};
+  for (const mk in mods) {
+    let allC = true, earned = 0;
+    for (const s of mods[mk].subjects || []) {
+      const cr = CREDITS_DATA[dept]?.[sem]?.[s] ?? 3;
+      if (subjectStatus[s] === "C") earned += cr;
+      else allC = false;
+    }
+    moduleCredits[mk] = earned;
+    moduleStatus[mk] = (moduleAvg[mk] >= 10 && allC) ? "V" : "NV";
+  }
+
+  const hasNV = Object.values(moduleStatus).some(v => v === "NV");
+  const semesterStatus = (overallAvg >= 10 && !hasNV) ? "Validé" : "Non Validé";
+  const hasSR = Object.values(subjectSR).some(v => v);
+
+  return {
+    overallAvg: Math.round(overallAvg * 100) / 100,
+    semesterStatus, moduleAvg, moduleStatus, moduleCredits,
+    subjectAvg, subjectStatus, hasSR, modules: mods
+  };
+}
+
+// ============================================================
+// RESULTS
+// ============================================================
+async function loadResults() {
+  showMsg("resultsMsg", "Chargement...", "info");
+  try {
+    const snap = await get(ref(db, `results/${currentDept}/${currentSem}`));
+    if (!snap.exists()) {
+      document.getElementById("resultsTable").innerHTML = "";
+      document.getElementById("statsBox").style.display = "none";
+      showMsg("resultsMsg", "Aucun résultat", "error");
+      return;
+    }
+    const data = snap.val();
+    const required = getSubjectsForDeptSem(currentDept, currentSem);
+    const results = [];
+    let totalAvg = 0, completeCount = 0, validatedCount = 0;
+
+    for (const sid in data) {
+      const studentData = data[sid];
+      const notes = {};
+      let name = "";
+      for (const k in studentData) {
+        const e = studentData[k];
+        if (e.name && !name) name = e.name;
+        if (e.subject) {
+          if (!notes[e.subject]) notes[e.subject] = {};
+          notes[e.subject][e.type] = e.grade;
+        }
+      }
+      const check = checkCompleteness(notes, required);
+      if (check.complete && required.length > 0) {
+        const calc = calculateResults(notes, currentDept, currentSem);
+        if (calc) {
+          completeCount++;
+          totalAvg += calc.overallAvg;
+          if (calc.semesterStatus === "Validé") validatedCount++;
+          results.push({ id: sid, name, complete: true, calc });
+        }
+      } else {
+        results.push({ id: sid, name, complete: false, missing: check.missing });
+      }
+    }
+    results.sort((a, b) => String(a.id).localeCompare(String(b.id)));
+
+    const statsBox = document.getElementById("statsBox");
+    if (results.length) {
+      const avg = completeCount ? (totalAvg / completeCount).toFixed(2) : 0;
+      const rate = completeCount ? ((validatedCount / completeCount) * 100).toFixed(1) : 0;
+      statsBox.style.display = "block";
+      statsBox.innerHTML = `<strong>Stats :</strong> Total : ${results.length} | Complets : ${completeCount} | Validés : ${validatedCount} | Moy : ${avg} | Réussite : ${rate}%`;
+    } else {
+      statsBox.style.display = "none";
+    }
+
+    let html = `<table><thead><tr>
+      <th>Numéro</th><th>Nom</th><th>Moyenne</th><th>Statut</th><th>Info</th>
+    </tr></thead><tbody>`;
+    for (const s of results) {
+      if (s.complete) {
+        const cls = s.calc.semesterStatus === "Validé" ? "status-valid" : "status-invalid";
+        html += `<tr>
+          <td>${esc(s.id)}</td>
+          <td>${esc(s.name || "-")}</td>
+          <td><strong>${s.calc.overallAvg}</strong></td>
+          <td class="${cls}">${s.calc.semesterStatus}</td>
+          <td>-</td>
+        </tr>`;
+      } else {
+        html += `<tr class="incomplete">
+          <td>${esc(s.id)}</td>
+          <td>${esc(s.name || "-")}</td>
+          <td>Incomplet</td>
+          <td>-</td>
+          <td title="${esc((s.missing || []).map(m => m.subject + ": " + m.missing.join(", ")).join(" | "))}">Données manquantes</td>
+        </tr>`;
+      }
+    }
+    html += "</tbody></table>";
+    document.getElementById("resultsTable").innerHTML = html;
+    showMsg("resultsMsg", `${results.length} étudiants chargés`, "success");
+  } catch (e) {
+    console.error(e);
+    showMsg("resultsMsg", "Erreur: " + e.message, "error");
+  }
+}
+
+// ============================================================
+// IMPORTED SUBJECTS
+// ============================================================
+async function loadImportedSubjects() {
+  try {
+    const snap = await get(ref(db, `results/${currentDept}/${currentSem}`));
+    if (!snap.exists()) {
+      document.getElementById("subjectsTable").innerHTML = "";
+      fillRenameSelects([]);
+      showMsg("subjectsMsg", "Aucune matière importée", "error");
+      return;
+    }
+    const data = snap.val();
+    const map = {};
+    for (const sid in data) {
+      for (const k in data[sid]) {
+        const e = data[sid][k];
+        if (e.subject && e.type) {
+          const key = `${e.subject}||${e.type}`;
+          if (!map[key]) map[key] = { subject: e.subject, type: e.type, count: 0 };
+          map[key].count++;
+        }
+      }
+    }
+    const arr = Object.values(map).sort((a, b) =>
+      a.subject.localeCompare(b.subject) || a.type.localeCompare(b.type)
+    );
+    if (!arr.length) {
+      document.getElementById("subjectsTable").innerHTML = "";
+      fillRenameSelects([]);
+      showMsg("subjectsMsg", "Aucune matière", "error");
+      return;
+    }
+    let html = `<table><thead><tr>
+      <th>Matière</th><th>Type</th><th>Étudiants</th><th>Action</th>
+    </tr></thead><tbody>`;
+    for (const s of arr) {
+      html += `<tr>
+        <td>${esc(displaySubjectName(s.subject))}</td>
+        <td>${esc(s.type)}</td>
+        <td>${s.count}</td>
+        <td><button class="btn btn-danger btn-sm"
+             data-del-sub="${esc(s.subject)}" data-del-type="${esc(s.type)}">Supprimer</button></td>
+      </tr>`;
+    }
+    html += "</tbody></table>";
+    document.getElementById("subjectsTable").innerHTML = html;
+    document.querySelectorAll("[data-del-sub]").forEach(b => {
+      b.addEventListener("click", () =>
+        deleteImportedSubject(b.dataset.delSub, b.dataset.delType)
+      );
+    });
+    fillRenameSelects(arr);
+    showMsg("subjectsMsg", `${arr.length} matières trouvées`, "success");
+  } catch (e) {
+    showMsg("subjectsMsg", "Erreur: " + e.message, "error");
+  }
+}
+
+// ============================================================
+// RENAME SUBJECT
+// ============================================================
+function fillRenameSelects(importedArr) {
+  const oldSel = document.getElementById("renameOld");
+  const newSel = document.getElementById("renameNew");
+  if (!oldSel || !newSel) return;
+
+  const moduleSubjects = getSubjectsForDeptSem(currentDept, currentSem);
+  const importedNames = [...new Set(importedArr.map(x => x.subject))].sort();
+
+  const orphans = importedNames.filter(n => !moduleSubjects.includes(n));
+  const others  = importedNames.filter(n => moduleSubjects.includes(n));
+
+  if (!importedNames.length) {
+    oldSel.innerHTML = '<option value="">Aucune matière importée</option>';
+  } else {
+    oldSel.innerHTML =
+      orphans.map(n => `<option value="${esc(n)}">⚠️ ${esc(displaySubjectName(n))}</option>`).join("") +
+      others.map(n => `<option value="${esc(n)}">${esc(displaySubjectName(n))}</option>`).join("");
+  }
+
+  newSel.innerHTML = moduleSubjects.length
+    ? moduleSubjects.map(s => `<option value="${esc(s)}">${esc(displaySubjectName(s))}</option>`).join("")
+    : '<option value="">Aucun module défini</option>';
+}
+
+async function renameSubject() {
+  const oldName = document.getElementById("renameOld").value;
+  const newName = document.getElementById("renameNew").value;
+  if (!oldName || !newName) { showMsg("renameMsg", "Choisissez l'ancien et le nouveau nom", "error"); return; }
+  if (oldName === newName) { showMsg("renameMsg", "Les deux noms sont identiques", "error"); return; }
+  if (!confirm(`Renommer "${displaySubjectName(oldName)}" en "${displaySubjectName(newName)}" pour tous les étudiants de ${currentDept} ${currentSem} ?`)) return;
+
+  document.getElementById("renameBtn").disabled = true;
+  showMsg("renameMsg", "Traitement...", "info");
+  try {
+    const base = `results/${currentDept}/${currentSem}`;
+    const snap = await get(ref(db, base));
+    if (!snap.exists()) { showMsg("renameMsg", "Aucune donnée", "error"); return; }
+    const data = snap.val();
+
+    const updates = {};
+    let renamed = 0, conflicts = 0;
+    for (const sid in data) {
+      const existing = new Set();
+      for (const k in data[sid]) {
+        if (data[sid][k].subject === newName) existing.add(data[sid][k].type);
+      }
+      for (const k in data[sid]) {
+        const e = data[sid][k];
+        if (e.subject !== oldName) continue;
+        if (existing.has(e.type)) { conflicts++; continue; }
+        updates[`${base}/${sid}/${k}/subject`] = newName;
+        renamed++;
+      }
+    }
+
+    if (!renamed) {
+      showMsg("renameMsg", conflicts ? `Aucune note renommée (${conflicts} déjà présentes sous le nouveau nom)` : "Aucune note à renommer", "error");
+      return;
+    }
+    await update(ref(db), updates);
+    showMsg("renameMsg", `✅ ${renamed} notes renommées` + (conflicts ? ` (${conflicts} ignorées car déjà présentes)` : ""), "success");
+    loadResults();
+    loadImportedSubjects();
+  } catch (e) {
+    console.error(e);
+    showMsg("renameMsg", "Erreur: " + e.message, "error");
+  } finally {
+    document.getElementById("renameBtn").disabled = false;
+  }
+}
+
+async function deleteImportedSubject(subject, type) {
+  if (!confirm(`Supprimer ${displaySubjectName(subject)} (${type}) pour TOUS les étudiants ?`)) return;
+  try {
+    const snap = await get(ref(db, `results/${currentDept}/${currentSem}`));
+    if (!snap.exists()) return;
+    const data = snap.val();
+    let count = 0;
+    const promises = [];
+    for (const sid in data) {
+      for (const k in data[sid]) {
+        const e = data[sid][k];
+        if (e.subject === subject && e.type === type) {
+          promises.push(remove(ref(db, `results/${currentDept}/${currentSem}/${sid}/${k}`)));
+          count++;
+        }
+      }
+    }
+    await Promise.all(promises);
+    showMsg("subjectsMsg", `${count} notes supprimées`, "success");
+    loadResults();
+    loadImportedSubjects();
+  } catch (e) {
+    showMsg("subjectsMsg", "Erreur: " + e.message, "error");
+  }
+}
+
+// ============================================================
+// RESET
+// ============================================================
+async function resetSemester() {
+  if (!confirm(`⚠️ Supprimer TOUTES les données de ${currentDept} ${currentSem} ?`)) return;
+  if (!confirm("Vraiment sûr ?")) return;
+  try {
+    await remove(ref(db, `results/${currentDept}/${currentSem}`));
+    showMsg("resetMsg", "Semestre réinitialisé", "success");
+    loadResults();
+    loadImportedSubjects();
+  } catch (e) {
+    showMsg("resetMsg", "Erreur: " + e.message, "error");
+  }
+}
+
+// ============================================================
+// EXPORT
+// ============================================================
+async function exportExcel() {
+  try {
+    const snap = await get(ref(db, `results/${currentDept}/${currentSem}`));
+    if (!snap.exists()) { alert("Aucune donnée à exporter"); return; }
+    const data = snap.val();
+    const required = getSubjectsForDeptSem(currentDept, currentSem);
+    const rows = [["Numero", "Nom", "Moyenne", "Statut"]];
+    for (const sid in data) {
+      const studentData = data[sid];
+      const notes = {};
+      let name = "";
+      for (const k in studentData) {
+        const e = studentData[k];
+        if (e.name && !name) name = e.name;
+        if (e.subject) {
+          if (!notes[e.subject]) notes[e.subject] = {};
+          notes[e.subject][e.type] = e.grade;
+        }
+      }
+      const check = checkCompleteness(notes, required);
+      if (check.complete && required.length > 0) {
+        const calc = calculateResults(notes, currentDept, currentSem);
+        if (calc) rows.push([sid, name, calc.overallAvg, calc.semesterStatus]);
+      }
+    }
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, `${currentDept}_${currentSem}`);
+    XLSX.writeFile(wb, `resultats_${currentDept}_${currentSem}.xlsx`);
+  } catch (e) {
+    alert("Erreur: " + e.message);
+  }
+}
+
+// ============================================================
+// ANNOUNCEMENTS
+// ============================================================
+async function publishAnnonce() {
+  const texte = document.getElementById("annonceText").value.trim();
+  if (!texte) { showMsg("annonceMsg", "Texte requis", "error"); return; }
+  try {
+    await set(ref(db, "annonces/active"), {
+      texte,
+      expiration: Date.now() + 7 * 24 * 3600 * 1000,
+      date: new Date().toISOString()
+    });
+    showMsg("annonceMsg", "Annonce publiée", "success");
+  } catch (e) {
+    showMsg("annonceMsg", "Erreur: " + e.message, "error");
+  }
+}
+async function deleteAnnonce() {
+  if (!confirm("Supprimer l'annonce ?")) return;
+  try {
+    await remove(ref(db, "annonces/active"));
+    document.getElementById("annonceText").value = "";
+    showMsg("annonceMsg", "Annonce supprimée", "success");
+  } catch (e) {
+    showMsg("annonceMsg", "Erreur: " + e.message, "error");
+  }
+}
+async function loadAnnonce() {
+  try {
+    const snap = await get(ref(db, "annonces/active"));
+    if (snap.exists()) {
+      const a = snap.val();
+      if (a.texte) document.getElementById("annonceText").value = a.texte;
+    }
+  } catch (e) { console.error(e); }
+}
+</script>
+</body>
+</html>
