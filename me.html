@@ -3,392 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESAVweb — Espace Coordinateur (Complet)</title>
+<title>ESAVweb</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #1a2f4a;
-    --navy-dark: #0f1e30;
-    --burgundy: #6b2c3e;
-    --gold: #b8973a;
-    --gold-light: #d4b96a;
-    --parchment: #f4efe4;
-    --cream: #faf7f0;
-    --ink: #2a2a2a;
-    --muted: #5c5c5c;
-    --border: #c9b99a;
-    --shadow: 0 4px 18px rgba(26, 47, 74, 0.12);
+    --kappel: hsl(170, 75%, 41%);
+    --kappel-dark: hsl(170, 75%, 33%);
+    --kappel-15: hsla(170, 75%, 41%, 0.15);
+    --gradient: linear-gradient(-90deg, hsl(151, 58%, 46%) 0%, hsl(170, 75%, 41%) 100%);
+    --yellow: hsl(42, 94%, 55%);
+    --red: hsl(351, 83%, 61%);
+    --red-dark: hsl(351, 70%, 48%);
+    --eerie: hsl(0, 0%, 9%);
+    --isabelline: hsl(36, 33%, 94%);
+    --gray: hsl(0, 0%, 50%);
+    --platinum: hsl(0, 0%, 90%);
+    --shadow-1: 0 6px 15px 0 hsla(0, 0%, 0%, 0.05);
+    --shadow-2: 0 10px 30px hsla(0, 0%, 0%, 0.06);
+    --shadow-3: 0 10px 50px 0 hsla(220, 53%, 22%, 0.1);
+    --ff-head: 'League Spartan', sans-serif;
+    --ff-body: 'Poppins', sans-serif;
+    --radius-3: 3px; --radius-5: 5px; --radius-10: 10px;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--ff-body); background: var(--isabelline); color: var(--eerie); padding: 20px; line-height: 1.6; overflow-x: hidden; }
+  h1 { font-family: var(--ff-head); text-align: center; color: var(--eerie); font-size: 2.4rem; font-weight: 600; line-height: 1; margin-bottom: 24px; }
+  h1::after { content: "."; color: var(--kappel); }
 
-  body {
-    font-family: 'EB Garamond', Georgia, serif;
-    background: var(--parchment);
-    color: var(--ink);
-    padding: 24px 16px;
-    line-height: 1.55;
-    overflow-x: hidden;
-    background-image:
-      linear-gradient(rgba(184,151,58,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(184,151,58,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
+  #loginSection { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  .login-box { background: white; padding: 40px 30px; border-radius: var(--radius-10); box-shadow: var(--shadow-3); max-width: 400px; width: 100%; text-align: center; }
+  .login-box h1 { font-size: 2.2rem; margin-bottom: 6px; }
+  .login-box p { color: var(--gray); font-size: 14px; margin-bottom: 24px; }
+  .login-box input { width: 100%; padding: 12px; background: white; border: 1px solid var(--platinum); border-radius: var(--radius-5); font-size: 15px; margin-bottom: 12px; font-family: inherit; color: var(--eerie); outline: none; transition: .25s ease; }
+  .login-box input:focus { border-color: var(--kappel); }
+  .login-box button { position: relative; overflow: hidden; z-index: 1; width: 100%; padding: 10px 20px; background: var(--kappel); color: white; border: none; border-radius: var(--radius-5); font-family: var(--ff-head); font-size: 18px; cursor: pointer; }
+  .login-box button::before { content: ""; position: absolute; inset: 0; background: var(--gradient); transform: translateX(-100%); transition: transform .5s ease; z-index: -1; }
+  .login-box button:hover::before { transform: translateX(0); }
+  .login-box button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .login-error { color: var(--red-dark); font-size: 13px; margin-top: 10px; min-height: 18px; }
 
-  h1 {
-    font-family: 'Cinzel', serif;
-    text-align: center;
-    color: var(--navy);
-    font-size: 2.1rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    margin-bottom: 8px;
-  }
-  h1::after {
-    content: "";
-    display: block;
-    width: 80px;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    margin: 10px auto 0;
-  }
+  #appSection { display: none; }
+  .user-bar { max-width: 1200px; margin: 0 auto 24px; display: flex; justify-content: space-between; align-items: center; gap: 10px; background: white; padding: 12px 20px; border-radius: var(--radius-5); box-shadow: var(--shadow-1); }
+  .user-bar .email { color: var(--kappel-dark); font-weight: 500; font-size: 14px; word-break: break-all; }
+  .logout-btn { padding: 6px 18px; background: var(--red); color: white; border: none; border-radius: var(--radius-5); cursor: pointer; font-family: var(--ff-head); font-size: 16px; transition: .25s ease; }
+  .logout-btn:hover { background: var(--red-dark); }
 
-  /* ---------- Login ---------- */
-  #loginSection {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-    background: radial-gradient(ellipse at 70% 20%, rgba(26,47,74,0.08), transparent 50%),
-                radial-gradient(ellipse at 20% 80%, rgba(107,44,62,0.07), transparent 45%);
-  }
-  .login-box {
-    background: var(--cream);
-    padding: 42px 34px;
-    border: 2px solid var(--border);
-    box-shadow: var(--shadow), inset 0 0 0 1px rgba(184,151,58,0.15);
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    position: relative;
-  }
-  .login-box::before {
-    content: "";
-    position: absolute;
-    top: 6px; left: 6px; right: 6px; bottom: 6px;
-    border: 1px solid rgba(184,151,58,0.25);
-    pointer-events: none;
-  }
-  .login-box h1 { font-size: 1.9rem; margin-bottom: 4px; }
-  .login-box p {
-    color: var(--muted);
-    font-size: 15px;
-    font-style: italic;
-    margin-bottom: 26px;
-    letter-spacing: 0.03em;
-  }
-  .login-box input {
-    width: 100%;
-    padding: 11px 16px;
-    border: 1.5px solid var(--border);
-    border-radius: 2px;
-    font-size: 15px;
-    margin-bottom: 12px;
-    font-family: inherit;
-    background: white;
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .login-box input:focus {
-    border-color: var(--navy);
-    box-shadow: 0 0 0 2px rgba(26,47,74,0.12);
-  }
-  .login-box button {
-    width: 100%;
-    padding: 12px;
-    background: var(--navy);
-    color: var(--cream);
-    border: none;
-    border-radius: 2px;
-    font-family: 'Cinzel', serif;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    transition: background 0.25s;
-  }
-  .login-box button:hover { background: var(--navy-dark); }
-  .login-box button:disabled { opacity: 0.55; cursor: not-allowed; }
-  .login-error {
-    color: var(--burgundy);
-    font-size: 14px;
-    margin-top: 12px;
-    min-height: 18px;
-  }
+  .tabs { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 24px; }
+  .tab { padding: 8px 24px; background: white; color: var(--eerie); border: 1px solid var(--platinum); border-radius: var(--radius-5); cursor: pointer; font-family: var(--ff-head); font-size: 17px; transition: .25s ease; }
+  .tab:hover { border-color: var(--kappel); color: var(--kappel); }
+  .tab.active { background: var(--kappel); color: white; border-color: var(--kappel); }
 
-  /* ---------- App ---------- */
-  #appSection { display: none; max-width: 1180px; margin: 0 auto; }
+  .card { background: white; border-radius: var(--radius-10); padding: 24px 20px; margin-bottom: 20px; box-shadow: var(--shadow-2); }
+  .card h3 { font-family: var(--ff-head); font-size: 1.6rem; font-weight: 500; line-height: 1; color: var(--eerie); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--platinum); }
+  .card h4 { font-family: var(--ff-head); font-size: 1.2rem; font-weight: 500; margin: 18px 0 10px 0; color: var(--eerie); }
 
-  .user-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    background: var(--cream);
-    padding: 12px 22px;
-    border: 1.5px solid var(--border);
-    margin-bottom: 28px;
-    box-shadow: var(--shadow);
-  }
-  .user-bar .email {
-    color: var(--navy);
-    font-weight: 600;
-    font-size: 15px;
-    word-break: break-all;
-  }
-  .logout-btn {
-    padding: 7px 18px;
-    background: var(--burgundy);
-    color: white;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    font-family: 'Cinzel', serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    transition: background 0.25s;
-  }
-  .logout-btn:hover { background: #4a1f2c; }
-
-  .tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 26px;
-  }
-  .tab {
-    padding: 8px 22px;
-    background: var(--cream);
-    color: var(--navy);
-    border: 1.5px solid var(--border);
-    border-radius: 2px;
-    cursor: pointer;
-    font-family: 'Cinzel', serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    transition: all 0.2s;
-  }
-  .tab:hover {
-    border-color: var(--gold);
-    color: var(--navy-dark);
-  }
-  .tab.active {
-    background: var(--navy);
-    color: var(--cream);
-    border-color: var(--navy);
-  }
-
-  .card {
-    background: var(--cream);
-    border: 1.5px solid var(--border);
-    padding: 22px 20px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow);
-    position: relative;
-  }
-  .card::before {
-    content: "";
-    position: absolute;
-    top: 4px; left: 4px; right: 4px; bottom: 4px;
-    border: 1px solid rgba(184,151,58,0.18);
-    pointer-events: none;
-  }
-  .card h3 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 14px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid rgba(184,151,58,0.35);
-    letter-spacing: 0.03em;
-  }
-  .card h4 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.05rem;
-    margin: 18px 0 10px;
-    color: var(--navy);
-  }
-
-  .form-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
-  }
-  .form-group label {
-    font-weight: 600;
-    width: 110px;
-    color: var(--navy);
-    font-size: 15px;
-  }
-  select, input[type="text"], input[type="file"], textarea {
-    padding: 9px 13px;
-    border: 1.5px solid var(--border);
-    border-radius: 2px;
-    font-size: 15px;
-    flex: 1;
-    min-width: 0;
-    width: 100%;
-    font-family: inherit;
-    background: white;
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  @media (min-width: 500px) {
-    select, input[type="text"], input[type="file"] { min-width: 200px; width: auto; }
-  }
-  select:focus, input[type="text"]:focus, textarea:focus {
-    border-color: var(--navy);
-    box-shadow: 0 0 0 2px rgba(26,47,74,0.1);
-  }
+  .form-group { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+  .form-group label { font-weight: 500; width: 120px; color: var(--eerie); font-size: 14px; }
+  select, input[type="text"], input[type="file"], textarea { padding: 12px; border: 1px solid var(--platinum); border-radius: var(--radius-5); font-size: 14px; flex: 1; min-width: 0; width: 100%; font-family: inherit; background: white; color: var(--eerie); outline: none; transition: .25s ease; }
+  @media (min-width: 500px) { select, input[type="text"], input[type="file"] { min-width: 200px; width: auto; } }
+  select:focus, input[type="text"]:focus, textarea:focus { border-color: var(--kappel); }
   textarea { width: 100%; resize: vertical; }
 
-  .btn {
-    padding: 8px 20px;
-    background: var(--navy);
-    color: var(--cream);
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    font-family: 'Cinzel', serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    margin: 4px;
-    transition: background 0.25s;
-  }
-  .btn:hover { background: var(--navy-dark); }
-  .btn-success { background: #2d5a3d; }
-  .btn-success:hover { background: #1e3d29; }
-  .btn-danger { background: var(--burgundy); }
-  .btn-danger:hover { background: #4a1f2c; }
-  .btn-warning { background: var(--gold); color: var(--navy-dark); }
-  .btn-warning:hover { background: #9a7a28; color: white; }
-  .btn-sm { padding: 4px 12px; font-size: 12px; }
+  .btn { position: relative; overflow: hidden; z-index: 1; padding: 10px 20px; background: var(--kappel); color: white; border: none; border-radius: var(--radius-5); cursor: pointer; font-family: var(--ff-head); font-size: 18px; margin: 5px; }
+  .btn::before { content: ""; position: absolute; inset: 0; background: var(--gradient); transform: translateX(-100%); transition: transform .5s ease; z-index: -1; }
+  .btn:hover::before { transform: translateX(0); }
+  .btn-success { background: var(--kappel); }
+  .btn-danger { background: var(--red); }
+  .btn-danger::before { background: var(--red-dark); }
+  .btn-warning { background: var(--yellow); color: var(--eerie); }
+  .btn-warning::before { background: hsl(42, 94%, 45%); }
+  .btn-sm { padding: 4px 14px; font-size: 14px; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn:disabled::before { display: none; }
 
-  .msg {
-    padding: 10px 14px;
-    border-radius: 2px;
-    margin-top: 10px;
-    display: none;
-    font-size: 14px;
-    border-left: 3px solid transparent;
-  }
-  .msg.success {
-    background: rgba(45,90,61,0.1);
-    color: #1e3d29;
-    border-left-color: #2d5a3d;
-    display: block;
-  }
-  .msg.error {
-    background: rgba(107,44,62,0.1);
-    color: var(--burgundy);
-    border-left-color: var(--burgundy);
-    display: block;
-  }
-  .msg.info {
-    background: rgba(184,151,58,0.12);
-    color: #6b5420;
-    border-left-color: var(--gold);
-    display: block;
-  }
+  .msg { padding: 10px 14px; border-radius: var(--radius-5); margin-top: 10px; display: none; font-size: 14px; }
+  .msg.success { background: var(--kappel-15); color: var(--kappel-dark); display: block; }
+  .msg.error { background: hsla(351, 83%, 61%, 0.14); color: var(--red-dark); display: block; }
+  .msg.info { background: hsla(42, 94%, 55%, 0.2); color: hsl(35, 70%, 28%); display: block; }
 
   #resultsTable, #subjectsTable { overflow-x: auto; }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 14px;
-    font-size: 14px;
-  }
-  th, td {
-    border: 1px solid var(--border);
-    padding: 8px 10px;
-    text-align: center;
-  }
-  th {
-    background: rgba(26,47,74,0.07);
-    font-family: 'Cinzel', serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    letter-spacing: 0.03em;
-  }
+  table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+  th, td { border: 1px solid var(--platinum); padding: 8px; text-align: center; }
+  th { background: var(--isabelline); font-family: var(--ff-head); font-size: 15px; font-weight: 500; }
   td:first-child { text-align: left; }
-  .incomplete { background: rgba(0,0,0,0.02); color: var(--muted); }
-  .status-valid { color: #1e3d29; font-weight: 700; }
-  .status-invalid { color: var(--burgundy); font-weight: 700; }
+  .incomplete { background: hsl(0, 0%, 98%); color: var(--gray); }
+  .status-valid { color: var(--kappel-dark); font-weight: 600; }
+  .status-invalid { color: var(--red-dark); font-weight: 600; }
 
-  .module-item {
-    background: rgba(26,47,74,0.04);
-    border: 1px solid var(--border);
-    padding: 12px 14px;
-    margin-bottom: 10px;
-  }
-  .module-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid rgba(201,185,154,0.5);
-  }
-  .module-subjects { display: flex; flex-wrap: wrap; gap: 6px; }
-  .subject-tag {
-    background: white;
-    padding: 3px 11px;
-    border-radius: 2px;
-    font-size: 13px;
-    border: 1px solid var(--border);
-  }
+  .module-item { background: var(--isabelline); border-radius: var(--radius-5); padding: 14px; margin-bottom: 10px; }
+  .module-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid hsla(0,0%,0%,.08); }
+  .module-subjects { display: flex; flex-wrap: wrap; gap: 8px; }
+  .subject-tag { background: white; padding: 3px 12px; border-radius: var(--radius-3); font-size: 12px; border: 1px solid var(--platinum); }
 
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  @media (max-width: 800px) {
-    .grid-2 { grid-template-columns: 1fr; }
-  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 800px) { .grid-2 { grid-template-columns: 1fr; } }
 
-  .stats-box {
-    background: rgba(26,47,74,0.07);
-    padding: 12px;
-    border: 1px solid var(--border);
-    margin-bottom: 14px;
-    text-align: center;
-    font-size: 14px;
-  }
-
-  .footer-note {
-    text-align: center;
-    margin-top: 30px;
-    font-size: 13px;
-    color: var(--muted);
-    font-style: italic;
-  }
+  .stats-box { background: var(--kappel-15); padding: 12px; border-radius: var(--radius-5); margin-bottom: 15px; text-align: center; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -413,9 +126,6 @@
   </div>
 
   <h1>ESAVweb</h1>
-  <p style="text-align:center; color:var(--muted); font-style:italic; margin-bottom:22px; font-size:15px;">
-    Espace Coordinateur — Gestion des notes et modules (Version complète)
-  </p>
 
   <div class="tabs" id="deptTabs">
     <button class="tab" data-dept="PPV">PPV</button>
@@ -428,7 +138,7 @@
 
   <div class="card">
     <div class="form-group">
-      <label>Semestre :</label>
+      <label>Semestre:</label>
       <select id="semSelect"></select>
       <button class="btn btn-success" id="loadBtn">Charger</button>
     </div>
@@ -438,7 +148,7 @@
     <div class="card">
       <h3>Importer des notes</h3>
       <div class="form-group">
-        <label>Type :</label>
+        <label>Type:</label>
         <select id="importType">
           <option value="Examen">Examen</option>
           <option value="Controle continu">Controle continu</option>
@@ -448,11 +158,11 @@
         </select>
       </div>
       <div class="form-group" id="subjectGroup">
-        <label>Matière :</label>
+        <label>Matière:</label>
         <select id="subjectSelect"></select>
       </div>
       <div class="form-group">
-        <label>Fichier :</label>
+        <label>Fichier:</label>
         <input type="file" id="fileInput" accept=".xlsx,.xls">
       </div>
       <button class="btn btn-success" id="importBtn">Importer</button>
@@ -462,23 +172,23 @@
     <div class="card">
       <h3>Gestion des modules</h3>
       <div class="form-group">
-        <label>Code :</label>
+        <label>Code:</label>
         <input type="text" id="moduleCode" placeholder="Ex: M31">
       </div>
       <div class="form-group">
-        <label>Nom :</label>
+        <label>Nom:</label>
         <input type="text" id="moduleName" placeholder="Ex: Langue et économie">
       </div>
       <div class="form-group">
-        <label>Matières :</label>
+        <label>Matières:</label>
         <input type="text" id="moduleSubjects" placeholder="Matiere1;Matiere2">
       </div>
       <div class="form-group">
-        <label>Crédits :</label>
+        <label>Crédits:</label>
         <input type="text" id="moduleCredits" placeholder="3;4 (optionnel)">
       </div>
-      <button class="btn btn-success" id="addModuleBtn">Ajouter / Modifier</button>
-      <button class="btn btn-warning" id="loadPPVBtn">Charger tous les modules PPV</button>
+      <button class="btn btn-success" id="addModuleBtn">Ajouter/Modifier</button>
+      <button class="btn btn-warning" id="loadPPVBtn">⚡ Charger tous les modules PPV</button>
       <div id="moduleMsg" class="msg"></div>
       <h4>Modules existants</h4>
       <div id="modulesList"></div>
@@ -505,41 +215,39 @@
 
   <div class="card">
     <h3>Corriger le nom d'une matière</h3>
-    <p style="font-size:14px; color:var(--muted); margin-bottom:12px; font-style:italic;">
+    <p style="font-size:13px; color:#666; margin-bottom:12px;">
       Remplace l'ancien nom d'une matière importée par le nom du module, pour tous les étudiants du semestre (TP, CC, Examen... inclus).
     </p>
     <div class="form-group">
-      <label>Ancien nom :</label>
+      <label>Ancien nom:</label>
       <select id="renameOld"></select>
     </div>
     <div class="form-group">
-      <label>Nouveau nom :</label>
+      <label>Nouveau nom:</label>
       <select id="renameNew"></select>
     </div>
     <button class="btn btn-warning" id="renameBtn">Renommer</button>
     <div id="renameMsg" class="msg"></div>
   </div>
 
-  <!-- ===== WINDOW: Importer la structure ===== -->
   <div class="card">
     <h3>Importer la structure (Excel)</h3>
-    <p style="font-size:14px; color:var(--muted); margin-bottom:12px; font-style:italic;">
+    <p style="font-size:13px; color:#666; margin-bottom:12px;">
       Crée d'un coup tous les modules et matières depuis un fichier Excel.
       Colonnes : <strong>Departement | Semestre | Code module | Nom module | Matiere | Credits | TP (Oui/Non)</strong> — une ligne par matière.
       Les modules du fichier sont écrasés ; les autres ne sont pas touchés.
     </p>
     <div class="form-group">
-      <label>Fichier :</label>
+      <label>Fichier:</label>
       <input type="file" id="structFile" accept=".xlsx,.xls">
     </div>
     <button class="btn btn-success" id="importStructBtn">Importer la structure</button>
     <div id="structMsg" class="msg" style="white-space:pre-line;"></div>
   </div>
 
-  <!-- ===== WINDOW: Générer credits.js ===== -->
   <div class="card">
     <h3>Générer credits.js</h3>
-    <p style="font-size:14px; color:var(--muted); margin-bottom:12px; font-style:italic;">
+    <p style="font-size:13px; color:#666; margin-bottom:12px;">
       Lit tous les modules enregistrés (tous les départements et semestres) et télécharge un fichier <strong>credits.js</strong> complet.
       Les crédits déjà présents sont conservés ; les nouvelles matières reçoivent 3 crédits (ou la valeur saisie dans « Crédits »). Modifiez ensuite les valeurs à la main si besoin.
     </p>
@@ -562,8 +270,6 @@
       <div id="annonceMsg" class="msg"></div>
     </div>
   </div>
-
-  <p class="footer-note">ESAVweb — Espace Coordinateur · Version complète · Usage interne</p>
 </div>
 
 <script src="firebase-config.js"></script>
@@ -803,7 +509,7 @@ async function deleteModule(key) {
 }
 
 // ============================================================
-// LOAD ALL PPV MODULES (S3 → S6)
+// ⚡ LOAD ALL PPV MODULES (S3 → S6)
 // ============================================================
 async function loadAllPPVModules() {
   if (!confirm("Charger TOUS les modules PPV (S3→S6) dans Firebase ?\n\nCela va ÉCRASER les modules existants de PPV.")) return;
@@ -878,6 +584,7 @@ function updateSubjectDropdown() {
   let subs = getSubjectsForDeptSem(currentDept, currentSem);
 
   if (type === "Stage") {
+    // Afficher uniquement les matières de stage du semestre (ex: Stage, Stage_fin_etudes)
     subs = subs.filter(s => isStage(s));
     if (subs.length === 0) {
       sel.innerHTML = '<option value="">Aucune matière de stage dans ce semestre</option>';
@@ -1173,7 +880,7 @@ async function loadResults() {
       const avg = completeCount ? (totalAvg / completeCount).toFixed(2) : 0;
       const rate = completeCount ? ((validatedCount / completeCount) * 100).toFixed(1) : 0;
       statsBox.style.display = "block";
-      statsBox.innerHTML = `<strong>Stats :</strong> Total : ${results.length} | Complets : ${completeCount} | Validés : ${validatedCount} | Moy : ${avg} | Réussite : ${rate}%`;
+      statsBox.innerHTML = `<strong>Stats:</strong> Total: ${results.length} | Complets: ${completeCount} | Validés: ${validatedCount} | Moy: ${avg} | Réussite: ${rate}%`;
     } else {
       statsBox.style.display = "none";
     }
@@ -1227,6 +934,7 @@ async function loadImportedSubjects() {
     for (const sid in data) {
       for (const k in data[sid]) {
         const e = data[sid][k];
+        // Les matières de stage sont maintenant affichées aussi
         if (e.subject && e.type) {
           const key = `${e.subject}||${e.type}`;
           if (!map[key]) map[key] = { subject: e.subject, type: e.type, count: 0 };
@@ -1270,7 +978,7 @@ async function loadImportedSubjects() {
 }
 
 // ============================================================
-// RENAME SUBJECT
+// RENAME SUBJECT (corriger les anciens noms)
 // ============================================================
 function fillRenameSelects(importedArr) {
   const oldSel = document.getElementById("renameOld");
@@ -1280,6 +988,7 @@ function fillRenameSelects(importedArr) {
   const moduleSubjects = getSubjectsForDeptSem(currentDept, currentSem);
   const importedNames = [...new Set(importedArr.map(x => x.subject))].sort();
 
+  // Anciens noms = matières importées qui n'existent dans aucun module
   const orphans = importedNames.filter(n => !moduleSubjects.includes(n));
   const others  = importedNames.filter(n => moduleSubjects.includes(n));
 
@@ -1314,6 +1023,7 @@ async function renameSubject() {
     const updates = {};
     let renamed = 0, conflicts = 0;
     for (const sid in data) {
+      // types déjà présents sous le nouveau nom pour cet étudiant
       const existing = new Set();
       for (const k in data[sid]) {
         if (data[sid][k].subject === newName) existing.add(data[sid][k].type);
@@ -1348,16 +1058,16 @@ async function renameSubject() {
 // ============================================================
 function parseStructureRows(rows, deptSems) {
   const errors = [];
-  const modules = {};
+  const modules = {};          // "PPV/S3/M31" -> { name, subjects[], subjectCredits{} }
   const noTp = new Set();
-  const usedIn = {};
+  const usedIn = {};           // "PPV/S3/Matiere" -> code module
   const badKey = /[.$#\[\]\/\u0000-\u001f]/;
   let subjects = 0;
 
-  for (let i = 1; i < rows.length; i++) {
+  for (let i = 1; i < rows.length; i++) {          // ligne 0 = en-têtes
     const r = rows[i] || [];
     const cells = [0,1,2,3,4,5,6].map(k => String(r[k] ?? "").trim());
-    if (cells.every(c => c === "")) continue;
+    if (cells.every(c => c === "")) continue;      // ligne vide
     const line = i + 1;
     const [dept0, sem0, code, mname, subj, credRaw, tpRaw] = cells;
     const dept = dept0.toUpperCase();
@@ -1385,7 +1095,7 @@ function parseStructureRows(rows, deptSems) {
       errors.push(`Ligne ${line} : « ${subj} » est déjà dans le module ${usedIn[sk]}`);
       continue;
     }
-    if (usedIn[sk] === code) continue;
+    if (usedIn[sk] === code) continue;             // doublon dans le même module : ignoré
     usedIn[sk] = code;
 
     modules[mk].subjects.push(subj);
@@ -1500,6 +1210,7 @@ function buildCreditsJs(structure, creditsData, noTp, stageSubs, deptSems) {
         }
       }
 
+      // matières déjà présentes dans l'ancien credits.js mais absentes des modules : on les garde
       const extra = Object.keys(creditsData?.[dept]?.[sem] || {}).filter(s => !seen.has(s));
       if (extra.length) {
         out.push("      // Autres matières (déjà dans l'ancien fichier)");
