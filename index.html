@@ -1,346 +1,744 @@
 <!doctype html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESAVweb</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --kappel: hsl(170, 75%, 41%);
-    --kappel-dark: hsl(170, 75%, 33%);
-    --kappel-15: hsla(170, 75%, 41%, 0.15);
-    --gradient: linear-gradient(-90deg, hsl(151, 58%, 46%) 0%, hsl(170, 75%, 41%) 100%);
-    --yellow: hsl(42, 94%, 55%);
-    --red: hsl(351, 83%, 61%);
-    --red-dark: hsl(351, 70%, 48%);
-    --eerie: hsl(0, 0%, 9%);
-    --isabelline: hsl(36, 33%, 94%);
-    --gray: hsl(0, 0%, 50%);
-    --platinum: hsl(0, 0%, 90%);
-    --shadow-1: 0 6px 15px 0 hsla(0, 0%, 0%, 0.05);
-    --shadow-2: 0 10px 30px hsla(0, 0%, 0%, 0.06);
-    --shadow-3: 0 10px 50px 0 hsla(220, 53%, 22%, 0.1);
-    --ff-head: 'League Spartan', sans-serif;
-    --ff-body: 'Poppins', sans-serif;
-  }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESAVweb-Resultats</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700;800&family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --kappel: hsl(170, 75%, 41%);
+        --kappel-dark: hsl(170, 75%, 33%);
+        --kappel-15: hsla(170, 75%, 41%, 0.15);
+        --gradient: linear-gradient(
+          -90deg,
+          hsl(151, 58%, 46%) 0%,
+          hsl(170, 75%, 41%) 100%
+        );
+        --yellow: hsl(42, 94%, 55%);
+        --red: hsl(351, 83%, 61%);
+        --red-dark: hsl(351, 70%, 48%);
+        --eerie: hsl(0, 0%, 9%);
+        --isabelline: hsl(36, 33%, 94%);
+        --gray: hsl(0, 0%, 50%);
+        --platinum: hsl(0, 0%, 90%);
+        --shadow-1: 0 6px 15px 0 hsla(0, 0%, 0%, 0.05);
+        --shadow-2: 0 10px 30px hsla(0, 0%, 0%, 0.06);
+        --shadow-3: 0 10px 50px 0 hsla(220, 53%, 22%, 0.1);
+        --radius-3: 3px;
+        --radius-5: 5px;
+        --transition-1: 0.25s ease;
+        --transition-2: 0.5s ease;
+        --ff-head: "League Spartan", sans-serif;
+        --ff-body: "Poppins", sans-serif;
+        --logo-height: 44px;
+      }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: var(--ff-body); background: var(--isabelline); color: var(--eerie); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
-  .main-content { flex: 1 0 auto; }
-  .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: var(--ff-body);
+        font-size: 16px;
+        line-height: 1.75;
+        background: var(--isabelline);
+        color: var(--eerie);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+      }
+      .main-content {
+        flex: 1 0 auto;
+      }
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px;
+      }
 
-  /* ---------- Header / hero ---------- */
-  header {
-    background:
-      radial-gradient(circle at 85% 20%, hsla(170, 75%, 41%, 0.18), transparent 40%),
-      radial-gradient(circle at 10% 90%, hsla(42, 94%, 55%, 0.22), transparent 35%),
-      var(--isabelline);
-    padding: 36px 0 24px;
-    text-align: center;
-  }
-  header h1 { font-family: var(--ff-head); font-size: 3rem; font-weight: 800; line-height: 1.1; color: var(--eerie); margin-bottom: 8px; }
-  header h1::after { content: "."; color: var(--kappel); }
-  header p { color: var(--gray); font-size: 0.95rem; }
+      /* ---------- Header / navbar (style eduweb) ---------- */
+      header {
+        background: white;
+        box-shadow: var(--shadow-1);
+      }
+      header .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .brand-logo {
+        height: var(--logo-height);
+        width: auto;
+        display: block;
+      }
+      header h1 {
+        font-family: var(--ff-head);
+        font-size: 23px;
+        font-weight: 600;
+        line-height: 1;
+        color: var(--eerie);
+      }
+      header nav ul {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+      }
+      .nav-link {
+        background: none;
+        border: none;
+        padding-block: 8px;
+        color: var(--eerie);
+        font-family: var(--ff-body);
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition-1);
+      }
+      .nav-link:is(:hover, :focus) {
+        color: var(--kappel);
+      }
 
-  /* ---------- Annonce ---------- */
-  .annonce-container { margin-bottom: 20px; }
-  .annonce-bloc { background: hsla(42, 94%, 55%, 0.18); border-left: 5px solid var(--yellow); padding: 14px 18px; border-radius: 10px; display: flex; gap: 12px; box-shadow: var(--shadow-1); }
-  .annonce-icone { font-size: 22px; }
-  .annonce-texte { font-size: 14px; }
-  .annonce-date { font-size: 12px; color: var(--gray); margin-top: 4px; }
+      /* ---------- Annonce ---------- */
+      .annonce-container {
+        margin-bottom: 20px;
+      }
+      .annonce-bloc {
+        background: hsla(42, 94%, 55%, 0.18);
+        border-left: 5px solid var(--yellow);
+        padding: 14px 18px;
+        border-radius: var(--radius-5);
+        display: flex;
+        gap: 12px;
+        box-shadow: var(--shadow-1);
+      }
+      .annonce-icone {
+        font-size: 22px;
+      }
+      .annonce-texte {
+        font-size: 14px;
+      }
+      .annonce-date {
+        font-size: 12px;
+        color: var(--gray);
+        margin-top: 4px;
+      }
 
-  /* ---------- Card ---------- */
-  .result-card { background: white; border-radius: 10px; padding: 28px 24px; box-shadow: var(--shadow-2); overflow: hidden; }
-  .section-title { font-family: var(--ff-head); font-size: 1.9rem; font-weight: 700; color: var(--eerie); text-align: center; margin-bottom: 20px; }
+      /* ---------- Card ---------- */
+      .result-card {
+        background: white;
+        border-radius: var(--radius-5);
+        padding: 28px 24px;
+        box-shadow: var(--shadow-2);
+        overflow: hidden;
+      }
+      .section-title {
+        font-family: var(--ff-head);
+        font-size: 32px;
+        font-weight: 600;
+        line-height: 1;
+        color: var(--eerie);
+        text-align: center;
+        margin-bottom: 24px;
+      }
 
-  .dept-selector { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 22px; }
-  .dept-btn { padding: 8px 24px; background: white; color: var(--eerie); border: 1.5px solid var(--platinum); border-radius: 500px; cursor: pointer; font-family: var(--ff-head); font-size: 16px; font-weight: 600; transition: .25s ease; }
-  .dept-btn:hover { border-color: var(--kappel); color: var(--kappel-dark); }
-  .dept-btn.active { background: var(--gradient); color: white; border-color: transparent; }
+      .dept-selector {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 22px;
+      }
+      .dept-btn {
+        padding: 8px 20px;
+        background: white;
+        color: var(--eerie);
+        border: 1px solid var(--platinum);
+        border-radius: var(--radius-5);
+        cursor: pointer;
+        font-family: var(--ff-head);
+        font-size: 18px;
+        font-weight: 500;
+        transition: var(--transition-1);
+      }
+      .dept-btn:is(:hover, :focus) {
+        border-color: var(--kappel);
+        color: var(--kappel);
+      }
+      .dept-btn.active {
+        background: var(--kappel);
+        color: white;
+        border-color: var(--kappel);
+      }
 
-  .search-box { display: flex; gap: 10px; max-width: 520px; margin: 0 auto; }
-  .search-box input { flex: 1; min-width: 0; padding: 12px 20px; border: 1.5px solid var(--platinum); border-radius: 500px; font-size: 15px; outline: none; font-family: inherit; transition: .25s ease; }
-  .search-box input:focus { border-color: var(--kappel); box-shadow: 0 0 0 3px var(--kappel-15); }
-  .search-box button { padding: 12px 26px; background: var(--gradient); color: white; border: none; border-radius: 500px; font-family: var(--ff-head); font-size: 17px; font-weight: 700; cursor: pointer; transition: .25s ease; white-space: nowrap; }
-  .search-box button:hover { background: var(--eerie); }
-  .search-box button:disabled { opacity: 0.5; cursor: not-allowed; }
+      .search-box {
+        max-width: 520px;
+        margin: 0 auto;
+      }
+      .search-box input {
+        width: 100%;
+        padding: 12px;
+        background: white;
+        color: var(--eerie);
+        border: 1px solid var(--platinum);
+        border-radius: var(--radius-5);
+        font-family: var(--ff-body);
+        font-size: 16px;
+        outline: none;
+        transition: var(--transition-1);
+      }
+      .search-box input::placeholder {
+        color: var(--gray);
+      }
+      .search-box input:focus {
+        border-color: var(--kappel);
+      }
 
-  /* ---------- States ---------- */
-  .empty-state { text-align: center; padding: 40px 20px; color: var(--gray); }
-  .empty-state h3 { font-family: var(--ff-head); font-size: 1.4rem; color: var(--eerie); margin-bottom: 8px; }
-  .loading { text-align: center; padding: 40px; color: var(--gray); }
-  .spinner { display: inline-block; width: 32px; height: 32px; border: 4px solid var(--kappel-15); border-top-color: var(--kappel); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 10px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .error-state { text-align: center; padding: 30px; color: var(--red-dark); }
+      /* ---------- States ---------- */
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--gray);
+      }
+      .empty-state h3 {
+        font-family: var(--ff-head);
+        font-size: 23px;
+        font-weight: 500;
+        line-height: 1;
+        color: var(--eerie);
+        margin-bottom: 10px;
+      }
+      .loading {
+        text-align: center;
+        padding: 40px;
+        color: var(--gray);
+      }
+      .spinner {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        border: 4px solid var(--kappel-15);
+        border-top-color: var(--kappel);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-bottom: 10px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .error-state {
+        text-align: center;
+        padding: 30px;
+        color: var(--red-dark);
+      }
 
-  /* ---------- Student header ---------- */
-  .student-header { background: var(--kappel-15); padding: 16px 20px; border-radius: 10px; margin: 24px 0 16px; }
-  .student-header h3 { font-family: var(--ff-head); font-size: 1.5rem; font-weight: 700; color: var(--eerie); margin-bottom: 2px; }
-  .student-header p { color: var(--gray); font-size: 13px; }
+      /* ---------- Student header ---------- */
+      .student-header {
+        background: var(--kappel-15);
+        padding: 16px 20px;
+        border-radius: var(--radius-5);
+        margin: 24px 0 16px;
+      }
+      .student-header h3 {
+        font-family: var(--ff-head);
+        font-size: 23px;
+        font-weight: 500;
+        line-height: 1.1;
+        color: var(--eerie);
+        margin-bottom: 4px;
+      }
+      .student-header p {
+        color: var(--gray);
+        font-size: 14px;
+        line-height: 1.6;
+      }
 
-  /* ---------- Table ---------- */
-  .table-scroll { overflow-x: auto; }
-  .releve-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
-  .releve-table th, .releve-table td { border: 1px solid var(--platinum); padding: 7px 8px; text-align: center; }
-  .releve-table th { background: var(--isabelline); font-family: var(--ff-head); font-size: 14px; font-weight: 700; }
-  .releve-table th:first-child, .releve-table td:first-child { min-width: 112px; padding-left: 14px; padding-right: 14px; white-space: nowrap; }
-  .student-info-row td { background: white; font-weight: 600; }
-  .module-row td { background: var(--kappel-15); font-weight: 600; }
-  .subject-row td { background: white; }
-  .moyenne-row td { background: var(--isabelline); font-weight: 700; }
-  .status-C, .status-V { color: var(--kappel-dark); font-weight: 700; }
-  .status-NC, .status-NV { color: var(--red-dark); font-weight: 700; }
+      /* ---------- Table ---------- */
+      .table-scroll {
+        overflow-x: auto;
+      }
+      .releve-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        line-height: 1.5;
+        margin: 10px 0;
+      }
+      .releve-table th,
+      .releve-table td {
+        border: 1px solid var(--platinum);
+        padding: 7px 8px;
+        text-align: center;
+      }
+      .releve-table th {
+        background: var(--isabelline);
+        font-family: var(--ff-head);
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .releve-table th:first-child,
+      .releve-table td:first-child {
+        min-width: 112px;
+        padding-left: 14px;
+        padding-right: 14px;
+        white-space: nowrap;
+      }
+      .student-info-row td {
+        background: white;
+        font-weight: 600;
+      }
+      .module-row td {
+        background: var(--kappel-15);
+        font-weight: 600;
+      }
+      .subject-row td {
+        background: white;
+      }
+      .moyenne-row td {
+        background: var(--isabelline);
+        font-weight: 700;
+      }
+      .status-C,
+      .status-V {
+        color: var(--kappel-dark);
+        font-weight: 700;
+      }
+      .status-NC,
+      .status-NV {
+        color: var(--red-dark);
+        font-weight: 700;
+      }
 
-  .pdf-link { display: block; margin: 16px auto 0; padding: 12px 30px; background: var(--gradient); color: white; border: none; border-radius: 500px; font-family: var(--ff-head); font-size: 17px; font-weight: 700; cursor: pointer; transition: .25s ease; }
-  .pdf-link:hover { background: var(--eerie); }
-  .neutral-message { background: hsla(42, 94%, 55%, 0.18); border-left: 5px solid var(--yellow); padding: 12px 16px; border-radius: 10px; margin-bottom: 12px; font-size: 14px; }
+      /* Bouton principal (comme .btn d'eduweb : fond plein + dégradé qui glisse au survol) */
+      .pdf-link {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        display: block;
+        margin: 16px auto 0;
+        padding: 10px 20px;
+        background: var(--kappel);
+        color: white;
+        border: none;
+        border-radius: var(--radius-5);
+        font-family: var(--ff-head);
+        font-size: 18px;
+        cursor: pointer;
+      }
+      .pdf-link::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: var(--gradient);
+        z-index: -1;
+        border-radius: inherit;
+        transform: translateX(-100%);
+        transition: var(--transition-2);
+      }
+      .pdf-link:is(:hover, :focus)::before {
+        transform: translateX(0);
+      }
+      .neutral-message {
+        background: hsla(42, 94%, 55%, 0.18);
+        border-left: 5px solid var(--yellow);
+        padding: 12px 16px;
+        border-radius: var(--radius-5);
+        margin-bottom: 12px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
 
-  /* ---------- Footer ---------- */
-  footer.footer { flex-shrink: 0; text-align: center; padding: 22px 16px; color: var(--gray); font-size: 13px; margin-top: 30px; background: white; box-shadow: 0 -6px 15px 0 hsla(0, 0%, 0%, 0.04); }
+      /* ---------- Footer ---------- */
+      footer.footer {
+        flex-shrink: 0;
+        text-align: center;
+        padding: 22px 16px;
+        color: var(--gray);
+        font-size: 13px;
+        margin-top: 30px;
+        background: white;
+        box-shadow: 0 -6px 15px 0 hsla(0, 0%, 0%, 0.04);
+      }
 
-  /* ---------- Mobile ---------- */
-  @media (max-width: 600px) {
-    header h1 { font-size: 2.4rem; }
-    .container { padding: 14px; }
-    .result-card { padding: 22px 14px; }
-    .section-title { font-size: 1.6rem; }
-    .search-box button { padding: 12px 18px; }
-    .releve-table { font-size: 11px; }
-    .releve-table th, .releve-table td { padding: 5px 4px; }
-  }
-</style>
-</head>
-<body>
+      /* ---------- Tablette et plus ---------- */
+      @media (min-width: 768px) {
+        .pdf-link {
+          padding: 15px 30px;
+        }
+      }
 
-<header>
-  <div class="container">
-    <h1>ESAVweb</h1>
-  </div>
-</header>
-
-<div class="main-content">
-  <div class="container">
-    <div id="annonceContainer" class="annonce-container"></div>
-
-    <div class="result-card">
-      <h2 class="section-title">Consulter votre résultat</h2>
-
-      <div class="dept-selector" id="deptSelector">
-        <button class="dept-btn" data-dept="PPV">PPV</button>
-        <button class="dept-btn" data-dept="TC">TC</button>
-        <button class="dept-btn" data-dept="GAB">GAB</button>
-        <button class="dept-btn" data-dept="GEM">GEM</button>
-        <button class="dept-btn" data-dept="PSA">PSA</button>
-        <button class="dept-btn" data-dept="STA">STA</button>
+      /* ---------- Mobile ---------- */
+      @media (max-width: 600px) {
+        :root {
+          --logo-height: 38px;
+        }
+        header h1 {
+          font-size: 21px;
+        }
+        .nav-link {
+          font-size: 15px;
+        }
+        .container {
+          padding: 14px;
+        }
+        .result-card {
+          padding: 22px 14px;
+        }
+        .section-title {
+          font-size: 28px;
+        }
+        .dept-btn {
+          font-size: 16px;
+          padding: 6px 16px;
+        }
+        .releve-table {
+          font-size: 11px;
+        }
+        .releve-table th,
+        .releve-table td {
+          padding: 5px 4px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="brand" id="brand">
+          <h1>ESAVweb</h1>
+        </div>
+        <nav>
+          <ul>
+            <li>
+              <!-- TODO : remplacer LIEN par l'adresse de la page d'accueil -->
+              <button
+                type="button"
+                class="nav-link"
+                onclick="window.location.href = 'LIEN'"
+              >
+                Accueil
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
+    </header>
 
-      <div class="search-box">
-        <input type="text" id="studentIdInput" placeholder="Entrez votre numéro d'étudiant...">
-        <button id="searchBtn">Rechercher</button>
-      </div>
+    <div class="main-content">
+      <div class="container">
+        <div id="annonceContainer" class="annonce-container"></div>
 
-      <div id="studentResultContainer" style="display:none;"></div>
-      <div id="noResultMessage" style="display:none;" class="empty-state">
-        <h3>Aucun résultat trouvé</h3>
-        <p>Vérifiez votre numéro d'étudiant et le département sélectionné</p>
+        <div class="result-card">
+          <h2 class="section-title">Consulter votre résultat</h2>
+
+          <div class="dept-selector" id="deptSelector">
+            <button class="dept-btn" data-dept="PPV">PPV</button>
+            <button class="dept-btn" data-dept="TC">TC</button>
+            <button class="dept-btn" data-dept="GAB">GAB</button>
+            <button class="dept-btn" data-dept="GEM">GEM</button>
+            <button class="dept-btn" data-dept="PSA">PSA</button>
+            <button class="dept-btn" data-dept="STA">STA</button>
+          </div>
+
+          <form class="search-box" id="searchForm" action="#" autocomplete="off">
+            <input
+              type="text"
+              id="studentIdInput"
+              enterkeyhint="search"
+              placeholder="Numéro d'étudiant, puis Entrée"
+            />
+          </form>
+
+          <div id="studentResultContainer" style="display: none"></div>
+          <div id="noResultMessage" style="display: none" class="empty-state">
+            <h3>Aucun résultat trouvé</h3>
+            <p>
+              Vérifiez votre numéro d'étudiant et le département sélectionné
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<footer class="footer">
-  <p>© 2026 ESAVweb</p>
-</footer>
+    <footer class="footer">
+      <p>© 2026 ESAVweb</p>
+    </footer>
 
-<script src="firebase-config.js"></script>
-<script src="credits.js"></script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, get, child }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    <script src="images.js"></script>
+    <script>
+      // Logo : affiché à côté du nom seulement si IMAGES.logo est renseigné dans images.js.
+      // Vide ou fichier introuvable => rien n'est affiché (aucun espace réservé).
+      (function () {
+        try {
+          if (typeof IMAGES === "undefined" || !IMAGES.logo) return;
+          var img = new Image();
+          img.className = "brand-logo";
+          img.alt = "ESAVweb";
+          img.onerror = function () {
+            img.remove();
+          };
+          img.src = IMAGES.logo;
+          document.getElementById("brand").prepend(img);
+        } catch (e) {}
+      })();
+    </script>
+    <script src="firebase-config.js"></script>
+    <script src="credits.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        get,
+        child,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-const app = initializeApp(window.FIREBASE_CONFIG);
-const db = getDatabase(app);
+      const app = initializeApp(window.FIREBASE_CONFIG);
+      const db = getDatabase(app);
 
-const DEPT_SEMESTERS = window.DEPT_SEMESTERS;
-const CREDITS_DATA = window.CREDITS_DATA;
-const NO_TP_SUBJECTS_INIT = window.NO_TP_SUBJECTS || [];
-const STAGE_SUBJECTS = window.STAGE_SUBJECTS || ["Stage"];
+      const DEPT_SEMESTERS = window.DEPT_SEMESTERS;
+      const CREDITS_DATA = window.CREDITS_DATA;
+      const NO_TP_SUBJECTS_INIT = window.NO_TP_SUBJECTS || [];
+      const STAGE_SUBJECTS = window.STAGE_SUBJECTS || ["Stage"];
 
-let modulesStructure = {};
-let noTPSubjects = [...NO_TP_SUBJECTS_INIT];
-let selectedDept = "PPV";
-let pdfState = null;
+      let modulesStructure = {};
+      let noTPSubjects = [...NO_TP_SUBJECTS_INIT];
+      let selectedDept = "PPV";
+      let pdfState = null;
 
-// ============================================================
-// HELPERS
-// ============================================================
-function hasTP(subject) { return !noTPSubjects.includes(subject); }
-function isStage(subject) { return STAGE_SUBJECTS.includes(subject); }
-
-function displaySubjectName(subject) {
-  if (!subject) return "";
-  return subject.replace(/_/g, " ").replace(/I_/g, "I.").replace(/et_/g, "et ").replace(/l eau/g, "l'eau");
-}
-
-function esc(s) {
-  return String(s ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
-}
-
-function getCreditsFor(dept, sem, subject) {
-  return CREDITS_DATA[dept]?.[sem]?.[subject] ?? 3;
-}
-
-function getSubjectsForDeptSem(dept, sem) {
-  const mods = modulesStructure[dept]?.[sem] || {};
-  const subs = [];
-  for (const k in mods) {
-    for (const s of mods[k].subjects || []) {
-      if (!subs.includes(s)) subs.push(s);
-    }
-  }
-  return subs;
-}
-
-// ============================================================
-// LOAD STRUCTURES
-// ============================================================
-async function loadStructures() {
-  try {
-    const structSnap = await get(child(ref(db), "structure"));
-    modulesStructure = structSnap.exists() ? structSnap.val() : {};
-
-    const noTPSnap = await get(child(ref(db), "no_tp_subjects"));
-    if (noTPSnap.exists()) {
-      noTPSubjects = [...new Set([...NO_TP_SUBJECTS_INIT, ...Object.values(noTPSnap.val())])];
-    }
-  } catch (e) {
-    console.error("Error loading structures:", e);
-  }
-}
-
-// ============================================================
-// CALCULATIONS
-// ============================================================
-function checkCompleteness(notes, dept, sem) {
-  const required = getSubjectsForDeptSem(dept, sem);
-  const missing = [];
-  for (const s of required) {
-    const n = notes[s] || {};
-    const m = [];
-    if (isStage(s)) {
-      if (n["Stage"] === undefined && n["Examen"] === undefined && n["Controle continu"] === undefined) {
-        m.push("Note de stage");
+      // ============================================================
+      // HELPERS
+      // ============================================================
+      function hasTP(subject) {
+        return !noTPSubjects.includes(subject);
       }
-    } else {
-      if (n["Examen"] === undefined && n["Rattrapage"] === undefined) m.push("Examen");
-      if (n["Controle continu"] === undefined && n["Contrôle continu"] === undefined) m.push("CC");
-      if (hasTP(s) && n["TP"] === undefined) m.push("TP");
-    }
-    if (m.length) missing.push({ subject: s, missing: m });
-  }
-  return { complete: missing.length === 0, missing };
-}
+      function isStage(subject) {
+        return STAGE_SUBJECTS.includes(subject);
+      }
 
-function calculateResults(notes, dept, sem) {
-  const mods = modulesStructure[dept]?.[sem] || {};
-  const allSubjects = getSubjectsForDeptSem(dept, sem);
-  if (!allSubjects.length) return null;
+      function displaySubjectName(subject) {
+        if (!subject) return "";
+        return subject
+          .replace(/_/g, " ")
+          .replace(/I_/g, "I.")
+          .replace(/et_/g, "et ")
+          .replace(/l eau/g, "l'eau");
+      }
 
-  const subjectAvg = {};
-  const subjectSR = {};
+      function esc(s) {
+        return String(s ?? "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      }
 
-  for (const s of allSubjects) {
-    const n = notes[s] || {};
+      function getCreditsFor(dept, sem, subject) {
+        return CREDITS_DATA[dept]?.[sem]?.[subject] ?? 3;
+      }
 
-    if (isStage(s)) {
-      subjectAvg[s] = n["Stage"] ?? n["Examen"] ?? n["Controle continu"] ?? 0;
-      subjectSR[s] = false;
-      continue;
-    }
+      function getSubjectsForDeptSem(dept, sem) {
+        const mods = modulesStructure[dept]?.[sem] || {};
+        const subs = [];
+        for (const k in mods) {
+          for (const s of mods[k].subjects || []) {
+            if (!subs.includes(s)) subs.push(s);
+          }
+        }
+        return subs;
+      }
 
-    const exam = n["Examen"] ?? 0;
-    const cc   = n["Controle continu"] ?? n["Contrôle continu"] ?? 0;
-    const tp   = n["TP"] ?? 0;
-    const ratt = n["Rattrapage"];
+      // ============================================================
+      // LOAD STRUCTURES
+      // ============================================================
+      async function loadStructures() {
+        try {
+          const structSnap = await get(child(ref(db), "structure"));
+          modulesStructure = structSnap.exists() ? structSnap.val() : {};
 
-    const useSR = ratt !== undefined && ratt > exam;
-    subjectSR[s] = useSR;
-    const finalGrade = useSR ? ratt : exam;
+          const noTPSnap = await get(child(ref(db), "no_tp_subjects"));
+          if (noTPSnap.exists()) {
+            noTPSubjects = [
+              ...new Set([
+                ...NO_TP_SUBJECTS_INIT,
+                ...Object.values(noTPSnap.val()),
+              ]),
+            ];
+          }
+        } catch (e) {
+          console.error("Error loading structures:", e);
+        }
+      }
 
-    if (hasTP(s)) {
-      subjectAvg[s] = (tp + cc * 2 + finalGrade * 3) / 6;
-    } else {
-      subjectAvg[s] = (cc * 2 + finalGrade * 3) / 5;
-    }
-  }
+      // ============================================================
+      // CALCULATIONS
+      // ============================================================
+      function checkCompleteness(notes, dept, sem) {
+        const required = getSubjectsForDeptSem(dept, sem);
+        const missing = [];
+        for (const s of required) {
+          const n = notes[s] || {};
+          const m = [];
+          if (isStage(s)) {
+            if (
+              n["Stage"] === undefined &&
+              n["Examen"] === undefined &&
+              n["Controle continu"] === undefined
+            ) {
+              m.push("Note de stage");
+            }
+          } else {
+            if (n["Examen"] === undefined && n["Rattrapage"] === undefined)
+              m.push("Examen");
+            if (
+              n["Controle continu"] === undefined &&
+              n["Contrôle continu"] === undefined
+            )
+              m.push("CC");
+            if (hasTP(s) && n["TP"] === undefined) m.push("TP");
+          }
+          if (m.length) missing.push({ subject: s, missing: m });
+        }
+        return { complete: missing.length === 0, missing };
+      }
 
-  const moduleAvg = {};
-  for (const mk in mods) {
-    let w = 0, c = 0;
-    for (const s of mods[mk].subjects || []) {
-      const cr = getCreditsFor(dept, sem, s);
-      w += (subjectAvg[s] || 0) * cr;
-      c += cr;
-    }
-    moduleAvg[mk] = c > 0 ? w / c : 0;
-  }
+      function calculateResults(notes, dept, sem) {
+        const mods = modulesStructure[dept]?.[sem] || {};
+        const allSubjects = getSubjectsForDeptSem(dept, sem);
+        if (!allSubjects.length) return null;
 
-  let w = 0, c = 0;
-  for (const s of allSubjects) {
-    const cr = getCreditsFor(dept, sem, s);
-    w += (subjectAvg[s] || 0) * cr;
-    c += cr;
-  }
-  const overallAvg = c > 0 ? w / c : 0;
+        const subjectAvg = {};
+        const subjectSR = {};
 
-  const subjectStatus = {};
-  for (const mk in mods) {
-    for (const s of mods[mk].subjects || []) {
-      if (subjectAvg[s] >= 10) subjectStatus[s] = "C";
-      else if (subjectAvg[s] >= 7 && moduleAvg[mk] >= 10) subjectStatus[s] = "C";
-      else subjectStatus[s] = "NC";
-    }
-  }
+        for (const s of allSubjects) {
+          const n = notes[s] || {};
 
-  const moduleStatus = {};
-  const moduleCredits = {};
-  for (const mk in mods) {
-    let allC = true, earned = 0;
-    for (const s of mods[mk].subjects || []) {
-      const cr = getCreditsFor(dept, sem, s);
-      if (subjectStatus[s] === "C") earned += cr;
-      else allC = false;
-    }
-    moduleCredits[mk] = earned;
-    moduleStatus[mk] = (moduleAvg[mk] >= 10 && allC) ? "V" : "NV";
-  }
+          if (isStage(s)) {
+            subjectAvg[s] =
+              n["Stage"] ?? n["Examen"] ?? n["Controle continu"] ?? 0;
+            subjectSR[s] = false;
+            continue;
+          }
 
-  const hasNV = Object.values(moduleStatus).some(v => v === "NV");
-  const semesterStatus = (overallAvg >= 10 && !hasNV) ? "Validé" : "Non Validé";
-  const hasSR = Object.values(subjectSR).some(v => v);
+          const exam = n["Examen"] ?? 0;
+          const cc = n["Controle continu"] ?? n["Contrôle continu"] ?? 0;
+          const tp = n["TP"] ?? 0;
+          const ratt = n["Rattrapage"];
 
-  return {
-    overallAvg: Math.round(overallAvg * 100) / 100,
-    semesterStatus, moduleAvg, moduleStatus, moduleCredits,
-    subjectAvg, subjectStatus, hasSR, modules: mods
-  };
-}
+          const useSR = ratt !== undefined && ratt > exam;
+          subjectSR[s] = useSR;
+          const finalGrade = useSR ? ratt : exam;
 
-// ============================================================
-// BUILD TABLE
-// ============================================================
-function buildResultsHTML(studentId, studentName, notes, results, dept, sem) {
-  const showSR = results.hasSR;
-  const colspanVal = showSR ? 6 : 5;
+          if (hasTP(s)) {
+            subjectAvg[s] = (tp + cc * 2 + finalGrade * 3) / 6;
+          } else {
+            subjectAvg[s] = (cc * 2 + finalGrade * 3) / 5;
+          }
+        }
 
-  let html = `
+        const moduleAvg = {};
+        for (const mk in mods) {
+          let w = 0,
+            c = 0;
+          for (const s of mods[mk].subjects || []) {
+            const cr = getCreditsFor(dept, sem, s);
+            w += (subjectAvg[s] || 0) * cr;
+            c += cr;
+          }
+          moduleAvg[mk] = c > 0 ? w / c : 0;
+        }
+
+        let w = 0,
+          c = 0;
+        for (const s of allSubjects) {
+          const cr = getCreditsFor(dept, sem, s);
+          w += (subjectAvg[s] || 0) * cr;
+          c += cr;
+        }
+        const overallAvg = c > 0 ? w / c : 0;
+
+        const subjectStatus = {};
+        for (const mk in mods) {
+          for (const s of mods[mk].subjects || []) {
+            if (subjectAvg[s] >= 10) subjectStatus[s] = "C";
+            else if (subjectAvg[s] >= 7 && moduleAvg[mk] >= 10)
+              subjectStatus[s] = "C";
+            else subjectStatus[s] = "NC";
+          }
+        }
+
+        const moduleStatus = {};
+        const moduleCredits = {};
+        for (const mk in mods) {
+          let allC = true,
+            earned = 0;
+          for (const s of mods[mk].subjects || []) {
+            const cr = getCreditsFor(dept, sem, s);
+            if (subjectStatus[s] === "C") earned += cr;
+            else allC = false;
+          }
+          moduleCredits[mk] = earned;
+          moduleStatus[mk] = moduleAvg[mk] >= 10 && allC ? "V" : "NV";
+        }
+
+        const hasNV = Object.values(moduleStatus).some((v) => v === "NV");
+        const semesterStatus =
+          overallAvg >= 10 && !hasNV ? "Validé" : "Non Validé";
+        const hasSR = Object.values(subjectSR).some((v) => v);
+
+        return {
+          overallAvg: Math.round(overallAvg * 100) / 100,
+          semesterStatus,
+          moduleAvg,
+          moduleStatus,
+          moduleCredits,
+          subjectAvg,
+          subjectStatus,
+          hasSR,
+          modules: mods,
+        };
+      }
+
+      // ============================================================
+      // BUILD TABLE
+      // ============================================================
+      function buildResultsHTML(
+        studentId,
+        studentName,
+        notes,
+        results,
+        dept,
+        sem,
+      ) {
+        const showSR = results.hasSR;
+        const colspanVal = showSR ? 6 : 5;
+
+        let html = `
     <div style="overflow-x:auto;">
     <table class="releve-table">
       <thead>
@@ -365,11 +763,11 @@ function buildResultsHTML(studentId, studentName, notes, results, dept, sem) {
           <td></td><td></td><td></td>
         </tr>`;
 
-  for (const modKey in results.modules) {
-    const module = results.modules[modKey];
-    const moduleLabel = modKey.replace(/_[A-Z]+$/, "");
+        for (const modKey in results.modules) {
+          const module = results.modules[modKey];
+          const moduleLabel = modKey.replace(/_[A-Z]+$/, "");
 
-    html += `
+          html += `
       <tr class="module-row">
         <td>${esc(moduleLabel)}</td>
         <td style="text-align:left;">${esc(module.name)}</td>
@@ -380,16 +778,25 @@ function buildResultsHTML(studentId, studentName, notes, results, dept, sem) {
         <td class="${results.moduleStatus[modKey] === "V" ? "status-V" : "status-NV"}">${results.moduleStatus[modKey]}</td>
       </tr>`;
 
-    for (const subject of module.subjects || []) {
-      const n = notes[subject] || {};
-      const tpVal = (!isStage(subject) && hasTP(subject) && n["TP"] !== undefined) ? n["TP"].toFixed(2) : "";
-      const ccVal = n["Controle continu"] !== undefined ? n["Controle continu"].toFixed(2)
-                  : n["Contrôle continu"] !== undefined ? n["Contrôle continu"].toFixed(2) : "";
-      const examVal = n["Examen"] !== undefined ? n["Examen"].toFixed(2) : "";
-      const rattVal = n["Rattrapage"] !== undefined ? n["Rattrapage"].toFixed(2) : "";
-      const credit = getCreditsFor(dept, sem, subject);
+          for (const subject of module.subjects || []) {
+            const n = notes[subject] || {};
+            const tpVal =
+              !isStage(subject) && hasTP(subject) && n["TP"] !== undefined
+                ? n["TP"].toFixed(2)
+                : "";
+            const ccVal =
+              n["Controle continu"] !== undefined
+                ? n["Controle continu"].toFixed(2)
+                : n["Contrôle continu"] !== undefined
+                  ? n["Contrôle continu"].toFixed(2)
+                  : "";
+            const examVal =
+              n["Examen"] !== undefined ? n["Examen"].toFixed(2) : "";
+            const rattVal =
+              n["Rattrapage"] !== undefined ? n["Rattrapage"].toFixed(2) : "";
+            const credit = getCreditsFor(dept, sem, subject);
 
-      html += `
+            html += `
         <tr class="subject-row">
           <td></td>
           <td style="text-align:left; padding-left:30px;">${esc(displaySubjectName(subject))}</td>
@@ -401,10 +808,10 @@ function buildResultsHTML(studentId, studentName, notes, results, dept, sem) {
           <td>${credit.toFixed(1)}</td>
           <td class="${results.subjectStatus[subject] === "C" ? "status-C" : "status-NC"}">${results.subjectStatus[subject]}</td>
         </tr>`;
-    }
-  }
+          }
+        }
 
-  html += `
+        html += `
       <tr class="moyenne-row">
         <td colspan="${colspanVal}" style="text-align:right; font-weight:bold;">Moyenne Semestre :</td>
         <td style="font-weight:bold;">${results.overallAvg}</td>
@@ -415,20 +822,23 @@ function buildResultsHTML(studentId, studentName, notes, results, dept, sem) {
     </table>
     </div>`;
 
-  return html;
-}
+        return html;
+      }
 
-// ============================================================
-// PDF
-// ============================================================
-window.generatePDF = function () {
-  if (!pdfState) { alert("Données non disponibles."); return; }
-  const { notes, results, studentId, studentName, dept, sem } = pdfState;
-  const showSR = results.hasSR;
-  const year = new Date().getFullYear();
-  const academicYear = `${year - 1}-${year}`;
+      // ============================================================
+      // PDF
+      // ============================================================
+      window.generatePDF = function () {
+        if (!pdfState) {
+          alert("Données non disponibles.");
+          return;
+        }
+        const { notes, results, studentId, studentName, dept, sem } = pdfState;
+        const showSR = results.hasSR;
+        const year = new Date().getFullYear();
+        const academicYear = `${year - 1}-${year}`;
 
-  let content = `
+        let content = `
     <div style="padding:15mm 10mm 10mm 10mm; font-family:Arial,sans-serif; font-size:11pt;">
       <div style="font-weight:bold; font-size:16pt; margin-bottom:5px;">ESAVweb</div>
       <div style="display:flex; justify-content:space-between; margin-top:8px;">
@@ -462,11 +872,11 @@ window.generatePDF = function () {
             <td style="border:1px solid #000; padding:4px;"></td>
           </tr>`;
 
-  for (const modKey in results.modules) {
-    const module = results.modules[modKey];
-    const moduleLabel = modKey.replace(/_[A-Z]+$/, "");
+        for (const modKey in results.modules) {
+          const module = results.modules[modKey];
+          const moduleLabel = modKey.replace(/_[A-Z]+$/, "");
 
-    content += `
+          content += `
       <tr style="background:#d4edda; font-weight:bold;">
         <td style="border:1px solid #000; padding:3px;">${esc(moduleLabel)}</td>
         <td style="border:1px solid #000; padding:3px;">${esc(module.name)}</td>
@@ -479,16 +889,25 @@ window.generatePDF = function () {
         <td style="border:1px solid #000; padding:3px;">${results.moduleStatus[modKey]}</td>
       </tr>`;
 
-    for (const subject of module.subjects || []) {
-      const n = notes[subject] || {};
-      const tpVal = (!isStage(subject) && hasTP(subject) && n["TP"] !== undefined) ? n["TP"].toFixed(2) : "";
-      const ccVal = n["Controle continu"] !== undefined ? n["Controle continu"].toFixed(2)
-                  : n["Contrôle continu"] !== undefined ? n["Contrôle continu"].toFixed(2) : "";
-      const examVal = n["Examen"] !== undefined ? n["Examen"].toFixed(2) : "";
-      const rattVal = n["Rattrapage"] !== undefined ? n["Rattrapage"].toFixed(2) : "";
-      const credit = getCreditsFor(dept, sem, subject);
+          for (const subject of module.subjects || []) {
+            const n = notes[subject] || {};
+            const tpVal =
+              !isStage(subject) && hasTP(subject) && n["TP"] !== undefined
+                ? n["TP"].toFixed(2)
+                : "";
+            const ccVal =
+              n["Controle continu"] !== undefined
+                ? n["Controle continu"].toFixed(2)
+                : n["Contrôle continu"] !== undefined
+                  ? n["Contrôle continu"].toFixed(2)
+                  : "";
+            const examVal =
+              n["Examen"] !== undefined ? n["Examen"].toFixed(2) : "";
+            const rattVal =
+              n["Rattrapage"] !== undefined ? n["Rattrapage"].toFixed(2) : "";
+            const credit = getCreditsFor(dept, sem, subject);
 
-      content += `
+            content += `
         <tr>
           <td style="border:1px solid #000; padding:2px;"></td>
           <td style="border:1px solid #000; padding:2px; padding-left:20px;">${esc(displaySubjectName(subject))}</td>
@@ -500,11 +919,11 @@ window.generatePDF = function () {
           <td style="border:1px solid #000; padding:2px; text-align:center;">${credit.toFixed(1)}</td>
           <td style="border:1px solid #000; padding:2px; text-align:center;">${results.subjectStatus[subject]}</td>
         </tr>`;
-    }
-  }
+          }
+        }
 
-  const colspanVal = showSR ? 6 : 5;
-  content += `
+        const colspanVal = showSR ? 6 : 5;
+        content += `
       <tr>
         <td colspan="${colspanVal}" style="border:none; padding:6px 4px; text-align:right; font-weight:bold;">Moyenne Semestre :</td>
         <td style="border:none; padding:6px 4px; font-weight:bold; text-align:center;">${results.overallAvg}</td>
@@ -514,162 +933,201 @@ window.generatePDF = function () {
     </tbody></table>
   </div>`;
 
-  const el = document.createElement("div");
-  el.innerHTML = content;
-  document.body.appendChild(el);
+        const el = document.createElement("div");
+        el.innerHTML = content;
+        document.body.appendChild(el);
 
-  html2pdf().set({
-    margin: [0, 5, 5, 5],
-    filename: `Releve_${studentId}_${dept}_${sem}.pdf`,
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2, letterRendering: true, scrollY: 0 },
-    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-  }).from(el).save()
-    .then(() => document.body.removeChild(el))
-    .catch(err => {
-      console.error(err);
-      alert("Erreur PDF");
-      document.body.removeChild(el);
-    });
-};
+        html2pdf()
+          .set({
+            margin: [0, 5, 5, 5],
+            filename: `Releve_${studentId}_${dept}_${sem}.pdf`,
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, letterRendering: true, scrollY: 0 },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+          })
+          .from(el)
+          .save()
+          .then(() => document.body.removeChild(el))
+          .catch((err) => {
+            console.error(err);
+            alert("Erreur PDF");
+            document.body.removeChild(el);
+          });
+      };
 
-// ============================================================
-// SEARCH
-// ============================================================
-async function searchStudentResult() {
-  const studentId = document.getElementById("studentIdInput").value.trim();
-  const container = document.getElementById("studentResultContainer");
-  const noResult = document.getElementById("noResultMessage");
-  const dept = selectedDept;
+      // ============================================================
+      // SEARCH
+      // ============================================================
+      async function searchStudentResult() {
+        const studentId = document
+          .getElementById("studentIdInput")
+          .value.trim();
+        const container = document.getElementById("studentResultContainer");
+        const noResult = document.getElementById("noResultMessage");
+        const dept = selectedDept;
 
-  if (!studentId) { alert("Veuillez entrer votre numéro d'étudiant"); return; }
+        if (!studentId) {
+          alert("Veuillez entrer votre numéro d'étudiant");
+          return;
+        }
 
-  pdfState = null;
-  container.innerHTML = '<div class="loading"><div class="spinner"></div><br>Recherche...</div>';
-  container.style.display = "block";
-  noResult.style.display = "none";
+        pdfState = null;
+        container.innerHTML =
+          '<div class="loading"><div class="spinner"></div><br>Recherche...</div>';
+        container.style.display = "block";
+        noResult.style.display = "none";
 
-  const semesters = DEPT_SEMESTERS[dept] || [];
-  const found = [];
+        const semesters = DEPT_SEMESTERS[dept] || [];
+        const found = [];
 
-  try {
-    for (const sem of semesters) {
-      try {
-        const snap = await get(child(ref(db), `results/${dept}/${sem}/${studentId}`));
-        if (snap.exists()) {
-          const data = snap.val();
-          let studentName = "";
-          const notes = {};
-          for (const key in data) {
-            const e = data[key];
-            if (e.name && !studentName) studentName = e.name;
-            if (e.subject) {
-              if (!notes[e.subject]) notes[e.subject] = {};
-              notes[e.subject][e.type] = e.grade;
+        try {
+          for (const sem of semesters) {
+            try {
+              const snap = await get(
+                child(ref(db), `results/${dept}/${sem}/${studentId}`),
+              );
+              if (snap.exists()) {
+                const data = snap.val();
+                let studentName = "";
+                const notes = {};
+                for (const key in data) {
+                  const e = data[key];
+                  if (e.name && !studentName) studentName = e.name;
+                  if (e.subject) {
+                    if (!notes[e.subject]) notes[e.subject] = {};
+                    notes[e.subject][e.type] = e.grade;
+                  }
+                }
+                found.push({ sem, notes, studentName });
+              }
+            } catch (innerErr) {
+              console.error(`Erreur sem ${sem}:`, innerErr);
             }
           }
-          found.push({ sem, notes, studentName });
-        }
-      } catch (innerErr) {
-        console.error(`Erreur sem ${sem}:`, innerErr);
-      }
-    }
 
-    if (found.length === 0) {
-      container.style.display = "none";
-      noResult.style.display = "block";
-      return;
-    }
+          if (found.length === 0) {
+            container.style.display = "none";
+            noResult.style.display = "block";
+            return;
+          }
 
-    let html = "";
-    for (const f of found) {
-      const check = checkCompleteness(f.notes, dept, f.sem);
-      const required = getSubjectsForDeptSem(dept, f.sem);
+          let html = "";
+          for (const f of found) {
+            const check = checkCompleteness(f.notes, dept, f.sem);
+            const required = getSubjectsForDeptSem(dept, f.sem);
 
-      html += `
+            html += `
         <div class="student-header">
           <h3>${esc(f.studentName || "Étudiant")}</h3>
           <p>Numéro: <strong>${esc(studentId)}</strong> | Département: <strong>${esc(dept)}</strong> | Semestre: <strong>${esc(f.sem)}</strong></p>
         </div>`;
 
-      if (check.complete && required.length > 0) {
-        const results = calculateResults(f.notes, dept, f.sem);
-        if (results) {
-          pdfState = {
-            notes: f.notes, results,
-            studentId, studentName: f.studentName,
-            dept, sem: f.sem
-          };
-          html += buildResultsHTML(studentId, f.studentName, f.notes, results, dept, f.sem);
-          html += `<div style="text-align:center; margin-top:1rem;">
+            if (check.complete && required.length > 0) {
+              const results = calculateResults(f.notes, dept, f.sem);
+              if (results) {
+                pdfState = {
+                  notes: f.notes,
+                  results,
+                  studentId,
+                  studentName: f.studentName,
+                  dept,
+                  sem: f.sem,
+                };
+                html += buildResultsHTML(
+                  studentId,
+                  f.studentName,
+                  f.notes,
+                  results,
+                  dept,
+                  f.sem,
+                );
+                html += `<div style="text-align:center; margin-top:1rem;">
             <button class="pdf-link" onclick="generatePDF()">📄 Télécharger mon relevé PDF</button>
           </div>`;
-        }
-      } else {
-        html += `<div class="neutral-message">⏳ Résultats non finalisés. Notes disponibles :</div>`;
-        const availableSubjects = Object.keys(f.notes).sort();
-        if (availableSubjects.length > 0) {
-          html += `<div class="table-scroll"><table class="releve-table"><thead><tr>
+              }
+            } else {
+              html += `<div class="neutral-message">⏳ Résultats non finalisés. Notes disponibles :</div>`;
+              const availableSubjects = Object.keys(f.notes).sort();
+              if (availableSubjects.length > 0) {
+                html += `<div class="table-scroll"><table class="releve-table"><thead><tr>
             <th>Matière</th><th>TP</th><th>CC</th><th>Examen</th><th>Rattrapage</th>
           </tr></thead><tbody>`;
-          for (const subject of availableSubjects) {
-            const n = f.notes[subject] || {};
-            const tpShow = (!isStage(subject) && hasTP(subject)) ? (n["TP"] ?? "-") : "-";
-            html += `<tr>
+                for (const subject of availableSubjects) {
+                  const n = f.notes[subject] || {};
+                  const tpShow =
+                    !isStage(subject) && hasTP(subject)
+                      ? (n["TP"] ?? "-")
+                      : "-";
+                  html += `<tr>
               <td style="text-align:left; padding-left:20px;">${esc(displaySubjectName(subject))}</td>
               <td>${tpShow}</td>
               <td>${n["Controle continu"] ?? n["Contrôle continu"] ?? "-"}</td>
               <td>${n["Examen"] ?? "-"}</td>
               <td>${n["Rattrapage"] ?? "-"}</td>
             </tr>`;
+                }
+                html += "</tbody></table></div>";
+              }
+            }
+            html +=
+              "<hr style='margin:20px 0; border:none; border-top:1px solid #ddd;'>";
           }
-          html += "</tbody></table></div>";
-        }
-      }
-      html += "<hr style='margin:20px 0; border:none; border-top:1px solid #ddd;'>";
-    }
-    container.innerHTML = html;
-  } catch (error) {
-    console.error("Search error:", error);
-    container.innerHTML = `<div class="error-state">
+          container.innerHTML = html;
+        } catch (error) {
+          console.error("Search error:", error);
+          container.innerHTML = `<div class="error-state">
       <h3>Erreur de connexion</h3>
       <p>${esc(error.message)}</p>
       <button class="pdf-link" onclick="searchStudentResult()">Réessayer</button>
     </div>`;
-  }
-}
+        }
+      }
 
-window.searchStudentResult = searchStudentResult;
+      window.searchStudentResult = searchStudentResult;
 
-// ============================================================
-// DEPT
-// ============================================================
-function selectDept(dept) {
-  selectedDept = dept;
-  document.querySelectorAll(".dept-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.getAttribute("data-dept") === dept);
-  });
-  const container = document.getElementById("studentResultContainer");
-  const noResult = document.getElementById("noResultMessage");
-  container.style.display = "none";
-  container.innerHTML = "";
-  noResult.style.display = "none";
-  document.getElementById("studentIdInput").value = "";
-}
+      // ============================================================
+      // DEPT
+      // ============================================================
+      function selectDept(dept) {
+        selectedDept = dept;
+        document.querySelectorAll(".dept-btn").forEach((btn) => {
+          btn.classList.toggle(
+            "active",
+            btn.getAttribute("data-dept") === dept,
+          );
+        });
+        const container = document.getElementById("studentResultContainer");
+        const noResult = document.getElementById("noResultMessage");
+        container.style.display = "none";
+        container.innerHTML = "";
+        noResult.style.display = "none";
+        document.getElementById("studentIdInput").value = "";
+      }
 
-// ============================================================
-// ANNONCE
-// ============================================================
-async function loadAnnouncement() {
-  try {
-    const snapshot = await get(child(ref(db), "annonces/active"));
-    const container = document.getElementById("annonceContainer");
-    if (!snapshot.exists()) { container.innerHTML = ""; return; }
-    const annonce = snapshot.val();
-    if (!annonce.texte) { container.innerHTML = ""; return; }
-    if (annonce.expiration && Date.now() > annonce.expiration) { container.innerHTML = ""; return; }
-    const expirationDate = new Date(annonce.expiration).toLocaleDateString("fr-FR");
-    container.innerHTML = `
+      // ============================================================
+      // ANNONCE
+      // ============================================================
+      async function loadAnnouncement() {
+        try {
+          const snapshot = await get(child(ref(db), "annonces/active"));
+          const container = document.getElementById("annonceContainer");
+          if (!snapshot.exists()) {
+            container.innerHTML = "";
+            return;
+          }
+          const annonce = snapshot.val();
+          if (!annonce.texte) {
+            container.innerHTML = "";
+            return;
+          }
+          if (annonce.expiration && Date.now() > annonce.expiration) {
+            container.innerHTML = "";
+            return;
+          }
+          const expirationDate = new Date(
+            annonce.expiration,
+          ).toLocaleDateString("fr-FR");
+          container.innerHTML = `
       <div class="annonce-bloc">
         <span class="annonce-icone">📢</span>
         <div>
@@ -677,32 +1135,39 @@ async function loadAnnouncement() {
           <div class="annonce-date">Visible jusqu'au ${expirationDate}</div>
         </div>
       </div>`;
-  } catch (e) { console.error(e); }
-}
+        } catch (e) {
+          console.error(e);
+        }
+      }
 
-// ============================================================
-// EVENTS + INIT
-// ============================================================
-function setupEventListeners() {
-  document.querySelectorAll(".dept-btn").forEach(btn => {
-    btn.addEventListener("click", () => selectDept(btn.getAttribute("data-dept")));
-  });
-  document.getElementById("searchBtn").addEventListener("click", searchStudentResult);
-  document.getElementById("studentIdInput").addEventListener("keypress", e => {
-    if (e.key === "Enter") searchStudentResult();
-  });
-}
+      // ============================================================
+      // EVENTS + INIT
+      // ============================================================
+      function setupEventListeners() {
+        document.querySelectorAll(".dept-btn").forEach((btn) => {
+          btn.addEventListener("click", () =>
+            selectDept(btn.getAttribute("data-dept")),
+          );
+        });
+        document
+          .getElementById("searchForm")
+          .addEventListener("submit", (e) => {
+            e.preventDefault();
+            searchStudentResult();
+          });
+      }
 
-async function init() {
-  await loadStructures();
-  setupEventListeners();
-  await loadAnnouncement();
-  document.querySelectorAll(".dept-btn").forEach(btn => {
-    if (btn.getAttribute("data-dept") === selectedDept) btn.classList.add("active");
-  });
-}
+      async function init() {
+        await loadStructures();
+        setupEventListeners();
+        await loadAnnouncement();
+        document.querySelectorAll(".dept-btn").forEach((btn) => {
+          if (btn.getAttribute("data-dept") === selectedDept)
+            btn.classList.add("active");
+        });
+      }
 
-init();
-</script>
-</body>
+      init();
+    </script>
+  </body>
 </html>
