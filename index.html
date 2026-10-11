@@ -1,431 +1,854 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin — ESAV</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f4f6f8;
-      color: #222;
-      padding: 20px;
-      min-height: 100vh;
-    }
-    .container { max-width: 1000px; margin: 0 auto; }
-    h1 { color: #0a7ea4; margin-bottom: 20px; font-size: 24px; }
-
-    /* ---- Login ---- */
-    .login-box {
-      max-width: 400px;
-      margin: 80px auto;
-      padding: 30px;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-    .login-box h1 { text-align: center; }
-    .login-box input {
-      width: 100%;
-      padding: 12px 14px;
-      margin-bottom: 12px;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .login-box input:focus { border-color: #0a7ea4; }
-    .login-box button {
-      width: 100%;
-      padding: 13px;
-      background: #0a7ea4;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    .login-box button:hover { opacity: 0.9; }
-    .login-box button:disabled { opacity: 0.5; cursor: not-allowed; }
-    #errorMsg {
-      color: #dc3545;
-      font-size: 13px;
-      margin-top: 10px;
-      text-align: center;
-      min-height: 18px;
-    }
-
-    /* ---- Dashboard ---- */
-    .header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .header-bar h1 { margin: 0; }
-    .btn-logout {
-      padding: 9px 16px;
-      background: #dc3545;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 13px;
-    }
-    .btn-logout:hover { opacity: 0.9; }
-
-    .stats {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .stat-box {
-      background: #fff;
-      padding: 14px 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      min-width: 140px;
-    }
-    .stat-box .num {
-      font-size: 24px;
-      font-weight: 700;
-      color: #0a7ea4;
-    }
-    .stat-box .lbl {
-      font-size: 12px;
-      color: #666;
-      margin-top: 2px;
-    }
-
-    .submission-card {
-      background: #fff;
-      border-radius: 14px;
-      padding: 18px;
-      margin-bottom: 14px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-      border-left: 4px solid #ffc107;
-    }
-    .submission-card h3 {
-      margin: 0 0 10px;
-      font-size: 16px;
-      color: #222;
-      word-break: break-word;
-    }
-    .submission-meta {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 4px;
-      line-height: 1.5;
-    }
-    .submission-meta strong { color: #333; }
-    .submission-meta a { color: #0a7ea4; text-decoration: none; }
-    .submission-meta a:hover { text-decoration: underline; }
-
-    .submission-actions {
-      margin-top: 14px;
-      display: flex;
-      gap: 10px;
-    }
-    .btn-approve, .btn-reject {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 14px;
-      transition: opacity 0.2s;
-    }
-    .btn-approve { background: #28a745; color: #fff; }
-    .btn-reject  { background: #dc3545; color: #fff; }
-    .btn-approve:hover, .btn-reject:hover { opacity: 0.9; }
-    .btn-approve:disabled, .btn-reject:disabled {
-      opacity: 0.5; cursor: not-allowed;
-    }
-
-    .empty {
-      text-align: center;
-      color: #888;
-      padding: 60px 20px;
-      font-size: 15px;
-      background: #fff;
-      border-radius: 14px;
-    }
-    .empty .icon { font-size: 48px; margin-bottom: 12px; }
-
-    #appSection { display: none; }
-    #loginSection { display: block; }
-  </style>
-</head>
-<body>
-
-  <!-- ============================================================ -->
-  <!--  Login                                                       -->
-  <!-- ============================================================ -->
-  <div id="loginSection">
-    <div class="login-box">
-      <h1>🔒 Admin</h1>
-      <input type="email" id="email" placeholder="Email" autocomplete="email">
-      <input type="password" id="password" placeholder="Mot de passe" autocomplete="current-password">
-      <button id="loginBtn">Se connecter</button>
-      <div id="errorMsg"></div>
-    </div>
-  </div>
-
-  <!-- ============================================================ -->
-  <!--  Dashboard                                                   -->
-  <!-- ============================================================ -->
-  <div id="appSection">
-    <div class="container">
-      <div class="header-bar">
-        <h1>📋 Contributions en attente</h1>
-        <button class="btn-logout" id="logoutBtn">Déconnexion</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ISET Rosso - Consultation des notes</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>ISET Rosso</h1>
+        <p>Institut Supérieur d'Enseignement Technologique</p>
       </div>
+    </header>
 
-      <div class="stats" id="stats"></div>
+    <div class="main-content">
+      <div class="container">
+        <div id="annonceContainer" class="annonce-container"></div>
 
-      <div id="listContainer">
-        <div class="empty">Chargement...</div>
+        <div class="result-card">
+          <h2 class="section-title">Consulter votre résultat</h2>
+
+          <div class="dept-selector">
+            <button class="dept-btn" data-dept="PPV">PPV</button>
+            <button class="dept-btn" data-dept="TC">TC</button>
+            <button class="dept-btn" data-dept="GAB">GAB</button>
+            <button class="dept-btn" data-dept="GEM">GEM</button>
+            <button class="dept-btn" data-dept="PSA">PSA</button>
+            <button class="dept-btn" data-dept="STA">STA</button>
+          </div>
+
+          <div class="search-box">
+            <input
+              type="text"
+              id="studentIdInput"
+              placeholder="Entrez votre numéro d'étudiant..."
+            />
+            <button id="searchBtn">Rechercher</button>
+          </div>
+
+          <div id="studentResultContainer" style="display: none"></div>
+          <div id="noResultMessage" style="display: none" class="empty-state">
+            <h3>Aucun résultat trouvé</h3>
+            <p>
+              Vérifiez votre numéro d'étudiant et le département sélectionné
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, onValue, remove, set, push }
-      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
-      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    <footer class="footer">
+      <p>© 2026 Institut Supérieur d'Enseignement Technologique de Rosso</p>
+    </footer>
 
-    // ================================================================
-    //  ⚠️ نفس إعدادات main.js
-    // ================================================================
-    const firebaseConfig = {
-      apiKey: "AIzaSyDnrW6WnmbEFpbWzlW9IGglxAafajt2Kyo",
-      authDomain: "iset-b9974.firebaseapp.com",
-      databaseURL: "https://iset-b9974-default-rtdb.firebaseio.com",
-      projectId: "iset-b9974",
-      storageBucket: "iset-b9974.firebasestorage.app",
-      messagingSenderId: "1054170284751",
-      appId: "1:1054170284751:web:8f02232478430d5ae2adba"
-    };
+    <script>
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        get,
+        child,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const auth = getAuth(app);
+      // ============================================================
+      // Firebase Configuration
+      // ============================================================
+      const firebaseConfig = {
+        apiKey: "AIzaSyDnrW6WnmbEFpbWzlW9IGglxAafajt2Kyo",
+        authDomain: "iset-b9974.firebaseapp.com",
+        projectId: "iset-b9974",
+        storageBucket: "iset-b9974.firebasestorage.app",
+        messagingSenderId: "1054170284751",
+        appId: "1:1054170284751:web:8f02232478430d5ae2adba",
+        databaseURL: "https://iset-b9974-default-rtdb.firebaseio.com/",
+      };
 
-    // ================================================================
-    //  عناصر الواجهة
-    // ================================================================
-    const loginSection = document.getElementById('loginSection');
-    const appSection = document.getElementById('appSection');
-    const emailEl = document.getElementById('email');
-    const passwordEl = document.getElementById('password');
-    const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const errorMsg = document.getElementById('errorMsg');
-    const listContainer = document.getElementById('listContainer');
-    const statsEl = document.getElementById('stats');
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
 
-    let unsubscribe = null;
+      // ============================================================
+      // Department and Semester Structure
+      // ============================================================
+      const DEPT_SEMESTERS = {
+        TC: ["S1", "S2"],
+        PPV: ["S3", "S4", "S5", "S6"],
+        GAB: ["S3", "S4", "S5", "S6"],
+        GEM: ["S3", "S4", "S5", "S6"],
+        PSA: ["S3", "S4", "S5", "S6"],
+        STA: ["S3", "S4", "S5", "S6"],
+      };
 
-    // ================================================================
-    //  المصادقة
-    // ================================================================
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        loginSection.style.display = 'none';
-        appSection.style.display = 'block';
-        startListening();
-      } else {
-        loginSection.style.display = 'block';
-        appSection.style.display = 'none';
-        if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+      // Subjects without TP
+      const DEFAULT_NO_TP = [
+        "Anglais",
+        "Anglais_2",
+        "Francais",
+        "Francais_2",
+        "Francais_s3",
+        "Francais_GAB_S3",
+        "Math_et_Statistique",
+        "Economie",
+        "Economie_GAB",
+        "Vulgarisation",
+      ];
+
+      // Dynamic structures loaded from Firebase
+      let MODULES_STRUCTURE = {};
+      let CREDITS_STRUCTURE = {};
+      let NO_TP_SUBJECTS = [...DEFAULT_NO_TP];
+
+      // Current state
+      let selectedDept = "PPV";
+      let pdfState = null;
+
+      // ============================================================
+      // Helper Functions
+      // ============================================================
+      function hasTP(subject) {
+        return !NO_TP_SUBJECTS.includes(subject);
       }
-    });
 
-    loginBtn.addEventListener('click', doLogin);
-    emailEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
-    passwordEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
-
-    async function doLogin() {
-      errorMsg.textContent = '';
-      const email = emailEl.value.trim();
-      const pwd = passwordEl.value;
-      if (!email || !pwd) {
-        errorMsg.textContent = 'Email et mot de passe requis';
-        return;
+      function displaySubjectName(subject) {
+        if (!subject) return "";
+        return subject
+          .replace(/_/g, " ")
+          .replace(/I_/g, "I.")
+          .replace(/et_/g, "et ")
+          .replace(/l eau/g, "l'eau");
       }
-      loginBtn.disabled = true;
-      loginBtn.textContent = 'Connexion...';
-      try {
-        await signInWithEmailAndPassword(auth, email, pwd);
-      } catch (err) {
-        console.error(err);
-        let msg = 'Erreur de connexion';
-        if (err.code === 'auth/invalid-credential' ||
-            err.code === 'auth/wrong-password' ||
-            err.code === 'auth/user-not-found') {
-          msg = 'Email ou mot de passe incorrect';
-        } else if (err.code === 'auth/invalid-email') {
-          msg = 'Email invalide';
-        } else if (err.code === 'auth/too-many-requests') {
-          msg = 'Trop de tentatives. Réessayez plus tard.';
+
+      function escapeHtml(str) {
+        if (!str) return "";
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      // ============================================================
+      // Load Structures from Firebase
+      // ============================================================
+      async function loadStructures() {
+        try {
+          const structSnap = await get(child(ref(db), "structure"));
+          if (structSnap.exists()) {
+            const structData = structSnap.val();
+            MODULES_STRUCTURE = structData;
+
+            // Extract credits
+            CREDITS_STRUCTURE = {};
+            for (let dept in structData) {
+              CREDITS_STRUCTURE[dept] = {};
+              for (let sem in structData[dept]) {
+                CREDITS_STRUCTURE[dept][sem] = {};
+                for (let modKey in structData[dept][sem]) {
+                  const module = structData[dept][sem][modKey];
+                  if (module.subjectCredits) {
+                    Object.assign(
+                      CREDITS_STRUCTURE[dept][sem],
+                      module.subjectCredits,
+                    );
+                  }
+                  if (module.subjects) {
+                    for (let subject of module.subjects) {
+                      if (!CREDITS_STRUCTURE[dept][sem][subject]) {
+                        CREDITS_STRUCTURE[dept][sem][subject] = 3;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          // Load no-TP subjects
+          const noTPSnap = await get(child(ref(db), "no_tp_subjects"));
+          if (noTPSnap.exists()) {
+            NO_TP_SUBJECTS = [
+              ...new Set([...DEFAULT_NO_TP, ...noTPSnap.val()]),
+            ];
+          }
+        } catch (error) {
+          console.error("Error loading structures:", error);
         }
-        errorMsg.textContent = '❌ ' + msg;
-      } finally {
-        loginBtn.disabled = false;
-        loginBtn.textContent = 'Se connecter';
       }
-    }
 
-    logoutBtn.addEventListener('click', () => {
-      if (confirm('Se déconnecter ?')) signOut(auth);
-    });
+      // ============================================================
+      // Get Subjects for Department and Semester
+      // ============================================================
+      function getSubjectsForDeptSem(dept, sem) {
+        const modules = MODULES_STRUCTURE[dept]?.[sem] || {};
+        const subjects = [];
+        for (let modKey in modules) {
+          const module = modules[modKey];
+          if (module.subjects) {
+            for (let subject of module.subjects) {
+              if (!subjects.includes(subject)) {
+                subjects.push(subject);
+              }
+            }
+          }
+        }
+        return subjects;
+      }
 
-    // ================================================================
-    //  قائمة الطلبات
-    // ================================================================
-    function startListening() {
-      const pendingRef = ref(db, 'pending_submissions');
-      unsubscribe = onValue(pendingRef, (snapshot) => {
-        const data = snapshot.val() || {};
-        const items = Object.entries(data).sort(
-          (a, b) => (b[1].submittedAt || 0) - (a[1].submittedAt || 0)
+      // ============================================================
+      // Calculate Results
+      // ============================================================
+      function calculateResults(notes, dept, sem) {
+        const modules = MODULES_STRUCTURE[dept]?.[sem] || {};
+        const allSubjects = getSubjectsForDeptSem(dept, sem);
+
+        if (allSubjects.length === 0) {
+          return null;
+        }
+
+        // Calculate subject averages
+        const subjectAvg = {};
+        const subjectSR = {};
+
+        for (let subject of allSubjects) {
+          const n = notes[subject] || {};
+          const exam = n["Examen"] || 0;
+          const cc = n["Controle continu"] || n["Contrôle continu"] || 0;
+          const tp = n["TP"] || 0;
+          const ratt = n["Rattrapage"];
+
+          const useSR = ratt !== undefined && ratt > exam;
+          subjectSR[subject] = useSR;
+          const finalGrade = useSR ? ratt : exam;
+
+          if (hasTP(subject)) {
+            subjectAvg[subject] = (tp + cc * 2 + finalGrade * 3) / 6;
+          } else {
+            subjectAvg[subject] = (cc * 2 + finalGrade * 3) / 5;
+          }
+        }
+
+        // Calculate module averages
+        const moduleAvg = {};
+        for (let modKey in modules) {
+          const module = modules[modKey];
+          let totalWeighted = 0;
+          let totalCredits = 0;
+
+          for (let subject of module.subjects || []) {
+            const credit = CREDITS_STRUCTURE[dept]?.[sem]?.[subject] || 3;
+            totalWeighted += (subjectAvg[subject] || 0) * credit;
+            totalCredits += credit;
+          }
+          moduleAvg[modKey] =
+            totalCredits > 0 ? totalWeighted / totalCredits : 0;
+        }
+
+        // Calculate overall average
+        let totalWeighted = 0;
+        let totalCredits = 0;
+        for (let subject of allSubjects) {
+          const credit = CREDITS_STRUCTURE[dept]?.[sem]?.[subject] || 3;
+          totalWeighted += (subjectAvg[subject] || 0) * credit;
+          totalCredits += credit;
+        }
+        const overallAvg = totalCredits > 0 ? totalWeighted / totalCredits : 0;
+
+        // Calculate subject status (C/NC)
+        const subjectStatus = {};
+        for (let modKey in modules) {
+          const moduleAvgVal = moduleAvg[modKey];
+          for (let subject of modules[modKey].subjects || []) {
+            if (subjectAvg[subject] >= 10) {
+              subjectStatus[subject] = "C";
+            } else if (subjectAvg[subject] >= 7 && moduleAvgVal >= 10) {
+              subjectStatus[subject] = "C";
+            } else {
+              subjectStatus[subject] = "NC";
+            }
+          }
+        }
+
+        // Calculate module status (V/NV)
+        const moduleStatus = {};
+        const moduleCredits = {};
+        for (let modKey in modules) {
+          let allC = true;
+          let earnedCredits = 0;
+
+          for (let subject of modules[modKey].subjects || []) {
+            const credit = CREDITS_STRUCTURE[dept]?.[sem]?.[subject] || 3;
+            if (subjectStatus[subject] === "C") {
+              earnedCredits += credit;
+            } else {
+              allC = false;
+            }
+          }
+          moduleCredits[modKey] = earnedCredits;
+
+          if (moduleAvg[modKey] >= 10 && allC) {
+            moduleStatus[modKey] = "V";
+          } else {
+            moduleStatus[modKey] = "NV";
+          }
+        }
+
+        // Determine semester status
+        const hasNV = Object.values(moduleStatus).some(
+          (status) => status === "NV",
         );
+        const semesterStatus =
+          overallAvg >= 10 && !hasNV ? "Validé" : "Non Validé";
+        const hasSR = Object.values(subjectSR).some((v) => v === true);
 
-        // Stats
-        statsEl.innerHTML =
-          '<div class="stat-box"><div class="num">' + items.length +
-          '</div><div class="lbl">En attente</div></div>';
+        return {
+          overallAvg: Math.round(overallAvg * 100) / 100,
+          semesterStatus: semesterStatus,
+          moduleAvg: moduleAvg,
+          moduleStatus: moduleStatus,
+          moduleCredits: moduleCredits,
+          subjectAvg: subjectAvg,
+          subjectStatus: subjectStatus,
+          hasSR: hasSR,
+          modules: modules,
+        };
+      }
 
-        if (items.length === 0) {
-          listContainer.innerHTML =
-            '<div class="empty"><div class="icon">✅</div>' +
-            'Aucune contribution en attente.</div>';
+      // ============================================================
+      // Build Results Table HTML
+      // ============================================================
+      function buildResultsHTML(
+        studentId,
+        studentName,
+        notes,
+        results,
+        dept,
+        sem,
+      ) {
+        const showSR = results.hasSR;
+        const colspanVal = showSR ? 6 : 5;
+
+        let html = `
+    <div style="overflow-x:auto;">
+    <table class="releve-table">
+      <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Nom et Prénom</th>
+          <th>TP</th>
+          <th>CC</th>
+          <th>Examen</th>
+          ${showSR ? "<th>SR</th>" : ""}
+          <th>NF°</th>
+          <th>Crédit</th>
+          <th>Obs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="student-info-row">
+          <td>${escapeHtml(studentId)}</td>
+          <td style="text-align:left;">${escapeHtml(studentName)}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          ${showSR ? "<td></td>" : ""}
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+  `;
+
+        for (let modKey in results.modules) {
+          const module = results.modules[modKey];
+          const moduleLabel = modKey.replace(/_[A-Z]+$/, "");
+
+          html += `
+        <tr class="module-row">
+          <td>${escapeHtml(moduleLabel)}</td>
+          <td style="text-align:left;">${escapeHtml(module.name)}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          ${showSR ? "<td></td>" : ""}
+          <td style="font-weight:bold;">${Math.round(results.moduleAvg[modKey] * 100) / 100}</td>
+          <td>${results.moduleCredits[modKey].toFixed(1)}</td>
+          <td class="${results.moduleStatus[modKey] === "V" ? "status-V" : "status-NV"}">${results.moduleStatus[modKey]}</td>
+        </tr>
+    `;
+
+          for (let subject of module.subjects || []) {
+            const n = notes[subject] || {};
+            const tpVal = hasTP(subject)
+              ? n["TP"] !== undefined
+                ? n["TP"].toFixed(2)
+                : ""
+              : "";
+            const ccVal =
+              n["Controle continu"] !== undefined
+                ? n["Controle continu"].toFixed(2)
+                : n["Contrôle continu"] !== undefined
+                  ? n["Contrôle continu"].toFixed(2)
+                  : "";
+            const examVal =
+              n["Examen"] !== undefined ? n["Examen"].toFixed(2) : "";
+            const rattVal =
+              n["Rattrapage"] !== undefined ? n["Rattrapage"].toFixed(2) : "";
+            const credit = CREDITS_STRUCTURE[dept]?.[sem]?.[subject] || 3;
+
+            html += `
+        <tr class="subject-row">
+          <td></td>
+          <td style="text-align:left; padding-left:30px;">${escapeHtml(displaySubjectName(subject))}</td>
+          <td>${tpVal}</td>
+          <td>${ccVal}</td>
+          <td>${examVal}</td>
+          ${showSR ? `<td>${rattVal}</td>` : ""}
+          <td style="font-weight:bold;">${Math.round(results.subjectAvg[subject] * 100) / 100}</td>
+          <td>${credit.toFixed(1)}</td>
+          <td class="${results.subjectStatus[subject] === "C" ? "status-C" : "status-NC"}">${results.subjectStatus[subject]}</td>
+        </tr>
+      `;
+          }
+        }
+
+        html += `
+        <tr class="moyenne-row">
+          <td colspan="${colspanVal}" style="text-align:right; font-weight:bold;">Moyenne Semestre :</td>
+          <td style="font-weight:bold;">${results.overallAvg}</td>
+          <td></td>
+          <td class="${results.semesterStatus === "Validé" ? "status-V" : "status-NV"}" style="font-weight:bold;">${results.semesterStatus}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  `;
+
+        return html;
+      }
+
+      // ============================================================
+      // Generate PDF
+      // ============================================================
+      window.generatePDF = function () {
+        if (!pdfState) {
+          alert("Données non disponibles.");
           return;
         }
 
-        listContainer.innerHTML = '';
-        items.forEach(([id, item]) => {
-          const card = document.createElement('div');
-          card.className = 'submission-card';
+        const { notes, results, studentId, studentName, dept, sem } = pdfState;
+        const showSR = results.hasSR;
+        const currentYear = new Date().getFullYear();
+        const academicYear = `${currentYear - 1}-${currentYear}`;
 
-          const sizeTxt = item.size
-            ? (item.size / 1024 / 1024).toFixed(2) + ' MB'
-            : '—';
+        let content = `
+    <div style="padding:15mm 10mm 10mm 10mm; font-family:Arial,Helvetica,sans-serif; font-size:11pt;">
+      <div style="font-weight:bold; font-size:12pt; margin-bottom:5px;">Institut Supérieur d'Enseignement Technologique de Rosso</div>
+      <div style="display:flex; justify-content:space-between; margin-top:8px;">
+        <span style="font-weight:bold; font-size:14pt;">Résultats du ${escapeHtml(sem)} — ${escapeHtml(dept)}</span>
+        <span>Année Universitaire : ${academicYear}</span>
+      </div>
+      <table style="width:100%; border-collapse:collapse; border:1px solid #000; font-size:10pt; margin-top:10px;">
+        <thead>
+          <tr style="background:#e8f4e8;">
+            <th style="border:1px solid #000; padding:3px; text-align:center;">Numéro</th>
+            <th style="border:1px solid #000; padding:3px; text-align:center;">Nom et Prénom</th>
+            <th style="border:1px solid #000; padding:3px; text-align:center;">TP</th>
+            <th style="border:1px solid #000; padding:3px; text-align:center;">CC</th>
+            <th style="border:1px solid #000; padding:3px; text-align:center;">Examen</th>
+            ${showSR ? '<th style="border:1px solid #000; padding:3px; text-align:center;">SR</th>' : ""}
+            <th style="border:1px solid #000; padding:3px; text-align:center;">NF°</th>
+            <th style="border:1px solid #000; padding:3px; text-align:center;">Crédit</th>
+            <th style="border:1px solid #000; padding:3px; text-align:center;">Obs</th>
+           </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#f0f8ff; font-weight:bold;">
+            <td style="border:1px solid #000; padding:4px; text-align:center;">${escapeHtml(studentId)}</td>
+            <td style="border:1px solid #000; padding:4px; text-align:left;">${escapeHtml(studentName)}</td>
+            <td style="border:1px solid #000; padding:4px;"></td>
+            <td style="border:1px solid #000; padding:4px;"></td>
+            <td style="border:1px solid #000; padding:4px;"></td>
+            ${showSR ? '<td style="border:1px solid #000; padding:4px;"></td>' : ""}
+            <td style="border:1px solid #000; padding:4px;"></td>
+            <td style="border:1px solid #000; padding:4px;"></td>
+            <td style="border:1px solid #000; padding:4px;"></td>
+           </tr>
+  `;
 
-          // بناء المسار المتوقع للنشر
-          const targetPath = item.gemAspect
-            ? 'GEM / ' + item.gemAspect
-            : (item.subject || '—');
+        for (let modKey in results.modules) {
+          const module = results.modules[modKey];
+          const moduleLabel = modKey.replace(/_[A-Z]+$/, "");
 
-          card.innerHTML = `
-            <h3>📄 ${escapeHtml(item.name || '—')}</h3>
-            <div class="submission-meta"><strong>Matière :</strong> ${escapeHtml(item.subjectDisplay || item.subject || '—')}</div>
-            <div class="submission-meta"><strong>Niveau :</strong> ${escapeHtml(item.level || '—')}${item.dept ? ' · ' + escapeHtml(item.dept) : ''}</div>
-            ${item.gemAspect ? '<div class="submission-meta"><strong>Aspect GEM :</strong> ' + escapeHtml(item.gemAspect) + '</div>' : ''}
-            <div class="submission-meta"><strong>Type :</strong> ${escapeHtml(item.type || '—')}</div>
-            <div class="submission-meta"><strong>Taille :</strong> ${sizeTxt}</div>
-            <div class="submission-meta"><strong>Par :</strong> ${escapeHtml(item.submittedBy || 'Anonyme')}</div>
-            <div class="submission-meta"><strong>Publié vers :</strong> <code>files/${escapeHtml(targetPath)}/${escapeHtml(item.type || '')}</code></div>
-            <div class="submission-meta"><strong>Fichier :</strong> <a href="${escapeAttr(item.url)}" target="_blank" rel="noopener">📄 Ouvrir</a></div>
-            <div class="submission-actions">
-              <button class="btn-approve" data-id="${id}">✅ Approuver</button>
-              <button class="btn-reject" data-id="${id}">❌ Rejeter</button>
-            </div>
-          `;
-          listContainer.appendChild(card);
-        });
+          content += `
+          <tr style="background:#d4edda; font-weight:bold;">
+            <td style="border:none; border-top:1px solid #000; border-bottom:1px solid #000; border-left:1px solid #000; padding:2px; text-align:center;">${escapeHtml(moduleLabel)}</td>
+            <td style="border:none; border-top:1px solid #000; border-bottom:1px solid #000; padding:2px; text-align:left;">${escapeHtml(module.name)}</td>
+            <td style="border:none; border-top:1px solid #000; border-bottom:1px solid #000; padding:2px;"></td>
+            <td style="border:none; border-top:1px solid #000; border-bottom:1px solid #000; padding:2px;"></td>
+            <td style="border:none; border-top:1px solid #000; border-bottom:1px solid #000; padding:2px;"></td>
+            ${showSR ? '<td style="border:none; border-top:1px solid #000; border-bottom:1px solid #000; padding:2px;"></td>' : ""}
+            <td style="border:none; border-top:1px solid #000; border-bottom:1px solid #000; padding:2px; font-weight:bold; text-align:center;">${Math.round(results.moduleAvg[modKey] * 100) / 100}</td>
+            <td style="border:none; border-top:1px solid #000; border-bottom:1px solid #000; padding:2px; text-align:center;">${results.moduleCredits[modKey].toFixed(1)}</td>
+            <td style="border:none; border-top:1px solid #000; border-bottom:1px solid #000; border-right:1px solid #000; padding:2px; text-align:center;">${results.moduleStatus[modKey]}</td>
+          </tr>
+    `;
 
-        // ربط الأزرار
-        listContainer.querySelectorAll('.btn-approve').forEach(btn => {
-          btn.addEventListener('click', () => approve(btn.dataset.id, data[btn.dataset.id], btn));
-        });
-        listContainer.querySelectorAll('.btn-reject').forEach(btn => {
-          btn.addEventListener('click', () => reject(btn.dataset.id, btn));
-        });
-      });
-    }
+          for (let subject of module.subjects || []) {
+            const n = notes[subject] || {};
+            const tpVal = hasTP(subject)
+              ? n["TP"] !== undefined
+                ? n["TP"].toFixed(2)
+                : ""
+              : "";
+            const ccVal =
+              n["Controle continu"] !== undefined
+                ? n["Controle continu"].toFixed(2)
+                : n["Contrôle continu"] !== undefined
+                  ? n["Contrôle continu"].toFixed(2)
+                  : "";
+            const examVal =
+              n["Examen"] !== undefined ? n["Examen"].toFixed(2) : "";
+            const rattVal =
+              n["Rattrapage"] !== undefined ? n["Rattrapage"].toFixed(2) : "";
+            const credit = CREDITS_STRUCTURE[dept]?.[sem]?.[subject] || 3;
 
-    // ================================================================
-    //  الموافقة — نشر الملف في files/
-    // ================================================================
-    async function approve(id, item, btn) {
-      if (!item) return;
-      if (!confirm(`Approuver "${item.name}" ?\n\nSera publié dans : files/${item.gemAspect ? 'GEM/' + item.gemAspect : item.subject}/${item.type}`)) return;
-
-      btn.disabled = true;
-      btn.textContent = 'Publication...';
-
-      try {
-        // 1) تحديد المسار — يطابق بنية main.js
-        //    - GEM: files/GEM/{aspect}/{type}
-        //    - عادي: files/{subject}/{type}
-        let basePath;
-        if (item.gemAspect) {
-          basePath = `files/GEM/${item.gemAspect}/${item.type}`;
-        } else {
-          basePath = `files/${item.subject}/${item.type}`;
+            content += `
+          <tr>
+            <td style="border:1px solid #000; padding:1px; text-align:center;"></td>
+            <td style="border:1px solid #000; padding:1px; text-align:left; padding-left:20px;">${escapeHtml(displaySubjectName(subject))}</td>
+            <td style="border:1px solid #000; padding:1px; text-align:center;">${tpVal}</td>
+            <td style="border:1px solid #000; padding:1px; text-align:center;">${ccVal}</td>
+            <td style="border:1px solid #000; padding:1px; text-align:center;">${examVal}</td>
+            ${showSR ? `<td style="border:1px solid #000; padding:1px; text-align:center;">${rattVal}</td>` : ""}
+            <td style="border:1px solid #000; padding:1px; text-align:center; font-weight:bold;">${Math.round(results.subjectAvg[subject] * 100) / 100}</td>
+            <td style="border:1px solid #000; padding:1px; text-align:center;">${credit.toFixed(1)}</td>
+            <td style="border:1px solid #000; padding:1px; text-align:center;">${results.subjectStatus[subject]}</td>
+          </tr>
+      `;
+          }
         }
 
-        // 2) إضافة الملف
-        const newFileRef = push(ref(db, basePath));
-        await set(newFileRef, {
-          name: item.name,
-          url: item.url
+        const colspanVal = showSR ? 6 : 5;
+        content += `
+          <tr>
+            <td colspan="${colspanVal}" style="border:none; padding:6px 4px 2px 4px; text-align:right; font-weight:bold;">Moyenne Semestre :</td>
+            <td style="border:none; padding:6px 4px 2px 4px; font-weight:bold; text-align:center;">${results.overallAvg}</td>
+            <td style="border:none; padding:6px 4px 2px 4px;"></td>
+            <td style="border:none; padding:6px 4px 2px 4px; font-weight:bold; text-align:center;">${results.semesterStatus}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+
+        const el = document.createElement("div");
+        el.innerHTML = content;
+        document.body.appendChild(el);
+
+        html2pdf()
+          .set({
+            margin: [0, 5, 5, 5],
+            filename: `Releve_${studentId}_${dept}_${sem}.pdf`,
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, letterRendering: true, scrollY: 0 },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+          })
+          .from(el)
+          .save()
+          .then(() => document.body.removeChild(el))
+          .catch((err) => {
+            console.error(err);
+            alert("Erreur lors de la génération du PDF.");
+            document.body.removeChild(el);
+          });
+      };
+
+      // ============================================================
+      // Search Student Results
+      // ============================================================
+      window.searchStudentResult = async function () {
+        const studentId = document
+          .getElementById("studentIdInput")
+          .value.trim();
+        const container = document.getElementById("studentResultContainer");
+        const noResult = document.getElementById("noResultMessage");
+        const dept = selectedDept;
+
+        if (!studentId) {
+          alert("Veuillez entrer votre numéro d'étudiant");
+          return;
+        }
+
+        pdfState = null;
+        container.innerHTML = '<div class="loading">Chargement...</div>';
+        container.style.display = "block";
+        noResult.style.display = "none";
+
+        const semesters = DEPT_SEMESTERS[dept] || [];
+        let foundData = null;
+        let foundSem = null;
+
+        try {
+          // Search through all semesters for this department
+          for (let sem of semesters) {
+            const snapshot = await get(
+              child(ref(db), `results/${dept}/${sem}/${studentId}`),
+            );
+            if (snapshot.exists()) {
+              foundData = snapshot.val();
+              foundSem = sem;
+              break;
+            }
+          }
+
+          if (!foundData) {
+            container.style.display = "none";
+            noResult.style.display = "block";
+            return;
+          }
+
+          // Extract name and notes
+          let studentName = "";
+          const notes = {};
+
+          for (let key in foundData) {
+            const entry = foundData[key];
+            if (entry.name && !studentName) {
+              studentName = entry.name;
+            }
+            if (entry.subject) {
+              const subject = entry.subject;
+              if (!notes[subject]) {
+                notes[subject] = {};
+              }
+              notes[subject][entry.type] = entry.grade;
+            }
+          }
+
+          // Get required subjects for this department and semester
+          const requiredSubjects = getSubjectsForDeptSem(dept, foundSem);
+
+          // Check if all required data is present
+          let complete = true;
+          for (let subject of requiredSubjects) {
+            const subjectNotes = notes[subject] || {};
+            if (!subjectNotes["Examen"]) {
+              complete = false;
+              break;
+            }
+            if (
+              !subjectNotes["Controle continu"] &&
+              !subjectNotes["Contrôle continu"]
+            ) {
+              complete = false;
+              break;
+            }
+            if (hasTP(subject) && !subjectNotes["TP"]) {
+              complete = false;
+              break;
+            }
+          }
+
+          let html = `
+      <div class="student-header">
+        <h3>${escapeHtml(studentName || "Étudiant")}</h3>
+        <p>Numéro: ${escapeHtml(studentId)} | Département: ${dept} | Semestre: ${foundSem}</p>
+      </div>
+    `;
+
+          if (complete && requiredSubjects.length > 0) {
+            const results = calculateResults(notes, dept, foundSem);
+            if (results) {
+              pdfState = {
+                notes,
+                results,
+                studentId,
+                studentName,
+                dept,
+                sem: foundSem,
+              };
+              html += buildResultsHTML(
+                studentId,
+                studentName,
+                notes,
+                results,
+                dept,
+                foundSem,
+              );
+              html += `
+          <div style="text-align:center; margin-top:1rem;">
+            <button class="pdf-link" onclick="generatePDF()">Télécharger mon relevé PDF</button>
+          </div>
+        `;
+            } else {
+              html +=
+                '<div class="neutral-message">Impossible de calculer les résultats.</div>';
+            }
+          } else {
+            // Show partial results
+            html +=
+              '<div class="neutral-message">Les résultats ne sont pas encore finalisés. Voici les notes disponibles:</div>';
+
+            // Show available grades
+            for (let subject in notes) {
+              const subjectNotes = notes[subject];
+              html += `
+          <h4 style="margin-top:1rem; color:#2c5f2d;">${escapeHtml(displaySubjectName(subject))}</h4>
+          <table class="releve-table" style="width:100%; margin-bottom:1rem;">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+              for (let type in subjectNotes) {
+                html += `
+            <tr>
+              <td>${escapeHtml(type)}</td>
+              <td>${subjectNotes[type]}</td>
+            </tr>
+          `;
+              }
+              html += "</tbody></table>";
+            }
+          }
+
+          container.innerHTML = html;
+        } catch (error) {
+          console.error("Search error:", error);
+          container.innerHTML = `
+      <div class="error-state">
+        <h3>Erreur de connexion</h3>
+        <p>Veuillez vérifier votre connexion internet et réessayer.</p>
+        <button onclick="searchStudentResult()">Réessayer</button>
+      </div>
+    `;
+          container.style.display = "block";
+          noResult.style.display = "none";
+        }
+      };
+
+      // ============================================================
+      // Select Department
+      // ============================================================
+      function selectDept(dept) {
+        selectedDept = dept;
+        document.querySelectorAll(".dept-btn").forEach((btn) => {
+          if (btn.getAttribute("data-dept") === dept) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
         });
 
-        // 3) حذف الطلب من pending
-        await remove(ref(db, `pending_submissions/${id}`));
-
-        // (الملف يبقى في Google Drive — لا حاجة للحذف)
-      } catch (err) {
-        console.error(err);
-        alert('❌ Erreur lors de la publication : ' + err.message);
-        btn.disabled = false;
-        btn.textContent = '✅ Approuver';
+        // Clear previous results
+        const container = document.getElementById("studentResultContainer");
+        const noResult = document.getElementById("noResultMessage");
+        container.style.display = "none";
+        container.innerHTML = "";
+        noResult.style.display = "none";
+        document.getElementById("studentIdInput").value = "";
       }
-    }
 
-    // ================================================================
-    //  الرفض — حذف الطلب فقط
-    // ================================================================
-    async function reject(id, btn) {
-      if (!confirm('Rejeter cette contribution ?\n\n(Le fichier restera dans Google Drive, vous pourrez le supprimer manuellement.)')) return;
+      // ============================================================
+      // Load Announcement
+      // ============================================================
+      async function loadAnnouncement() {
+        try {
+          const snapshot = await get(child(ref(db), "annonces/active"));
+          const container = document.getElementById("annonceContainer");
 
-      btn.disabled = true;
-      btn.textContent = 'Suppression...';
+          if (!snapshot.exists()) {
+            container.innerHTML = "";
+            return;
+          }
 
-      try {
-        await remove(ref(db, `pending_submissions/${id}`));
-        // الملف يبقى في Drive — يمكن حذفه يدوياً من مجلد ESAV_Submissions
-      } catch (err) {
-        console.error(err);
-        alert('❌ Erreur : ' + err.message);
-        btn.disabled = false;
-        btn.textContent = '❌ Rejeter';
+          const annonce = snapshot.val();
+          if (!annonce.texte) {
+            container.innerHTML = "";
+            return;
+          }
+
+          // Check expiration
+          if (annonce.expiration && Date.now() > annonce.expiration) {
+            container.innerHTML = "";
+            return;
+          }
+
+          const expirationDate = new Date(
+            annonce.expiration,
+          ).toLocaleDateString("fr-FR");
+          container.innerHTML = `
+      <div class="annonce-bloc">
+        <div style="flex:1;">
+          <span class="annonce-icone">📢</span>
+          <span class="annonce-texte"><strong>Annonce :</strong> ${escapeHtml(annonce.texte)}</span>
+          <div class="annonce-date">Visible jusqu'au ${expirationDate}</div>
+        </div>
+      </div>
+    `;
+        } catch (error) {
+          console.error("Error loading announcement:", error);
+        }
       }
-    }
 
-    // ================================================================
-    //  Helpers
-    // ================================================================
-    function escapeHtml(s) {
-      return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-      }[c]));
-    }
-    function escapeAttr(s) { return escapeHtml(s); }
-  </script>
-</body>
+      // ============================================================
+      // Event Listeners and Initialization
+      // ============================================================
+      function setupEventListeners() {
+        // Department buttons
+        document.querySelectorAll(".dept-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const dept = btn.getAttribute("data-dept");
+            selectDept(dept);
+          });
+        });
+
+        // Search button
+        document.getElementById("searchBtn").addEventListener("click", () => {
+          searchStudentResult();
+        });
+
+        // Enter key in input
+        document
+          .getElementById("studentIdInput")
+          .addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+              searchStudentResult();
+            }
+          });
+      }
+
+      async function init() {
+        await loadStructures();
+        setupEventListeners();
+        await loadAnnouncement();
+
+        // Set default active department button
+        document.querySelectorAll(".dept-btn").forEach((btn) => {
+          if (btn.getAttribute("data-dept") === selectedDept) {
+            btn.classList.add("active");
+          }
+        });
+      }
+
+      // Start the application
+      init();
+    </script>
+  </body>
 </html>
