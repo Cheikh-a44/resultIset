@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISET Rosso - Consultation des notes</title>
+<title>ESAVweb</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,6 +87,7 @@
   .releve-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
   .releve-table th, .releve-table td { border: 1px solid var(--platinum); padding: 7px 8px; text-align: center; }
   .releve-table th { background: var(--isabelline); font-family: var(--ff-head); font-size: 14px; font-weight: 700; }
+  .releve-table th:first-child, .releve-table td:first-child { min-width: 112px; padding-left: 14px; padding-right: 14px; white-space: nowrap; }
   .student-info-row td { background: white; font-weight: 600; }
   .module-row td { background: var(--kappel-15); font-weight: 600; }
   .subject-row td { background: white; }
@@ -117,8 +118,7 @@
 
 <header>
   <div class="container">
-    <h1>ISET Rosso</h1>
-    <p>Institut Supérieur d'Enseignement Technologique</p>
+    <h1>ESAVweb</h1>
   </div>
 </header>
 
@@ -153,7 +153,7 @@
 </div>
 
 <footer class="footer">
-  <p>© 2026 Institut Supérieur d'Enseignement Technologique de Rosso</p>
+  <p>© 2026 ESAVweb</p>
 </footer>
 
 <script src="firebase-config.js"></script>
@@ -430,7 +430,7 @@ window.generatePDF = function () {
 
   let content = `
     <div style="padding:15mm 10mm 10mm 10mm; font-family:Arial,sans-serif; font-size:11pt;">
-      <div style="font-weight:bold; font-size:12pt; margin-bottom:5px;">Institut Supérieur d'Enseignement Technologique de Rosso</div>
+      <div style="font-weight:bold; font-size:16pt; margin-bottom:5px;">ESAVweb</div>
       <div style="display:flex; justify-content:space-between; margin-top:8px;">
         <span style="font-weight:bold; font-size:14pt;">Résultats du ${esc(sem)} — ${esc(dept)}</span>
         <span>Année : ${academicYear}</span>
@@ -438,7 +438,7 @@ window.generatePDF = function () {
       <table style="width:100%; border-collapse:collapse; border:1px solid #000; font-size:10pt; margin-top:10px;">
         <thead>
           <tr style="background:#e8f4e8;">
-            <th style="border:1px solid #000; padding:3px;">Numéro</th>
+            <th style="border:1px solid #000; padding:3px 8px; width:26mm; white-space:nowrap;">Numéro</th>
             <th style="border:1px solid #000; padding:3px;">Nom et Prénom</th>
             <th style="border:1px solid #000; padding:3px;">TP</th>
             <th style="border:1px solid #000; padding:3px;">CC</th>
@@ -451,7 +451,7 @@ window.generatePDF = function () {
         </thead>
         <tbody>
           <tr style="background:#f0f8ff; font-weight:bold;">
-            <td style="border:1px solid #000; padding:4px;">${esc(studentId)}</td>
+            <td style="border:1px solid #000; padding:4px 8px; white-space:nowrap;">${esc(studentId)}</td>
             <td style="border:1px solid #000; padding:4px;">${esc(studentName)}</td>
             <td style="border:1px solid #000; padding:4px;"></td>
             <td style="border:1px solid #000; padding:4px;"></td>
