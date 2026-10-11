@@ -232,6 +232,21 @@
   </div>
 
   <div class="card">
+    <h3>Importer la structure (Excel)</h3>
+    <p style="font-size:13px; color:#666; margin-bottom:12px;">
+      Crée d'un coup tous les modules et matières depuis un fichier Excel.
+      Colonnes : <strong>Departement | Semestre | Code module | Nom module | Matiere | Credits | TP (Oui/Non)</strong> — une ligne par matière.
+      Les modules du fichier sont écrasés ; les autres ne sont pas touchés.
+    </p>
+    <div class="form-group">
+      <label>Fichier:</label>
+      <input type="file" id="structFile" accept=".xlsx,.xls">
+    </div>
+    <button class="btn btn-success" id="importStructBtn">Importer la structure</button>
+    <div id="structMsg" class="msg" style="white-space:pre-line;"></div>
+  </div>
+
+  <div class="card">
     <h3>Générer credits.js</h3>
     <p style="font-size:13px; color:#666; margin-bottom:12px;">
       Lit tous les modules enregistrés (tous les départements et semestres) et télécharge un fichier <strong>credits.js</strong> complet.
@@ -284,12 +299,12 @@ let noTPSubjects = [...NO_TP_SUBJECTS_INIT];
 // ============================================================
 // HELPERS
 // ============================================================
-function showMsg(id, text, type = "success") {
+function showMsg(id, text, type = "success", ms = 4000) {
   const el = document.getElementById(id);
   if (!el) return;
   el.textContent = text;
   el.className = `msg ${type}`;
-  setTimeout(() => { if (el) el.className = "msg"; }, 4000);
+  setTimeout(() => { if (el) el.className = "msg"; }, ms);
 }
 function hasTP(subject) { return !noTPSubjects.includes(subject); }
 function isStage(subject) { return STAGE_SUBJECTS.includes(subject); }
@@ -371,7 +386,7 @@ async function loadStructures() {
   modulesStructure = structSnap.exists() ? structSnap.val() : {};
   const noTPSnap = await get(child(ref(db), "no_tp_subjects"));
   if (noTPSnap.exists()) {
-    noTPSubjects = [...new Set([...NO_TP_SUBJECTS_INIT, ...noTPSnap.val()])];
+    noTPSubjects = [...new Set([...NO_TP_SUBJECTS_INIT, ...Object.values(noTPSnap.val())])];
   }
 }
 
@@ -397,6 +412,7 @@ function initUI() {
   document.getElementById("refreshSubjectsBtn").addEventListener("click", loadImportedSubjects);
   document.getElementById("renameBtn").addEventListener("click", renameSubject);
   document.getElementById("genCreditsBtn").addEventListener("click", generateCreditsFile);
+  document.getElementById("importStructBtn").addEventListener("click", importStructure);
   document.getElementById("exportBtn").addEventListener("click", exportExcel);
   document.getElementById("resetBtn").addEventListener("click", resetSemester);
   document.getElementById("publishBtn").addEventListener("click", publishAnnonce);
@@ -1035,6 +1051,123 @@ async function renameSubject() {
     showMsg("renameMsg", "Erreur: " + e.message, "error");
   } finally {
     document.getElementById("renameBtn").disabled = false;
+  }
+}
+
+// ============================================================
+// IMPORT STRUCTURE (Excel)
+// ============================================================
+function parseStructureRows(rows, deptSems) {
+  const errors = [];
+  const modules = {};          // "PPV/S3/M31" -> { name, subjects[], subjectCredits{} }
+  const noTp = new Set();
+  const usedIn = {};           // "PPV/S3/Matiere" -> code module
+  const badKey = /[.$#\[\]\/\u0000-\u001f]/;
+  let subjects = 0;
+
+  for (let i = 1; i < rows.length; i++) {          // ligne 0 = en-têtes
+    const r = rows[i] || [];
+    const cells = [0,1,2,3,4,5,6].map(k => String(r[k] ?? "").trim());
+    if (cells.every(c => c === "")) continue;      // ligne vide
+    const line = i + 1;
+    const [dept0, sem0, code, mname, subj, credRaw, tpRaw] = cells;
+    const dept = dept0.toUpperCase();
+    const sem  = sem0.toUpperCase();
+
+    if (!deptSems[dept]) { errors.push(`Ligne ${line} : département « ${dept0} » inconnu`); continue; }
+    if (!deptSems[dept].includes(sem)) { errors.push(`Ligne ${line} : semestre « ${sem0} » invalide pour ${dept}`); continue; }
+    if (!code) { errors.push(`Ligne ${line} : code module manquant`); continue; }
+    if (badKey.test(code)) { errors.push(`Ligne ${line} : code module « ${code} » contient un caractère interdit`); continue; }
+    if (!subj) { errors.push(`Ligne ${line} : matière manquante`); continue; }
+    if (badKey.test(subj)) { errors.push(`Ligne ${line} : matière « ${subj} » contient un caractère interdit (. $ # [ ] /)`); continue; }
+
+    let cr = 3;
+    if (credRaw !== "") {
+      cr = parseFloat(credRaw.replace(",", "."));
+      if (!isFinite(cr) || cr <= 0) { errors.push(`Ligne ${line} : crédits « ${credRaw} » invalides`); continue; }
+    }
+
+    const mk = `${dept}/${sem}/${code}`;
+    if (!modules[mk]) modules[mk] = { name: mname || code, subjects: [], subjectCredits: {} };
+    else if (mname && modules[mk].name === code) modules[mk].name = mname;
+
+    const sk = `${dept}/${sem}/${subj}`;
+    if (usedIn[sk] && usedIn[sk] !== code) {
+      errors.push(`Ligne ${line} : « ${subj} » est déjà dans le module ${usedIn[sk]}`);
+      continue;
+    }
+    if (usedIn[sk] === code) continue;             // doublon dans le même module : ignoré
+    usedIn[sk] = code;
+
+    modules[mk].subjects.push(subj);
+    modules[mk].subjectCredits[subj] = cr;
+    subjects++;
+
+    if (["non", "no", "n", "0", "false"].includes(tpRaw.toLowerCase())) noTp.add(subj);
+  }
+  return { modules, noTp: [...noTp], errors, subjects };
+}
+
+function readSheetRows(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const wb = XLSX.read(e.target.result, { type: "array" });
+        const sheet = wb.Sheets[wb.SheetNames[0]];
+        resolve(XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" }));
+      } catch (err) { reject(err); }
+    };
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function importStructure() {
+  const file = document.getElementById("structFile").files[0];
+  if (!file) { showMsg("structMsg", "Sélectionnez un fichier", "error"); return; }
+
+  const btn = document.getElementById("importStructBtn");
+  btn.disabled = true;
+  showMsg("structMsg", "Lecture du fichier...", "info");
+  try {
+    const rows = await readSheetRows(file);
+    const { modules, noTp, errors, subjects } = parseStructureRows(rows, DEPT_SEMESTERS);
+
+    if (errors.length) {
+      const shown = errors.slice(0, 6).join("\n");
+      const more = errors.length > 6 ? `\n... et ${errors.length - 6} autre(s)` : "";
+      showMsg("structMsg", `❌ ${errors.length} erreur(s), rien n'a été importé :\n${shown}${more}`, "error", 20000);
+      return;
+    }
+    const keys = Object.keys(modules);
+    if (!keys.length) { showMsg("structMsg", "Aucune ligne valide trouvée", "error"); return; }
+
+    if (!confirm(`Importer ${keys.length} module(s) et ${subjects} matière(s) ?\n\nLes modules du fichier remplaceront ceux qui existent déjà avec le même code.`)) {
+      showMsg("structMsg", "Import annulé", "info");
+      return;
+    }
+
+    showMsg("structMsg", "Envoi vers Firebase...", "info");
+    const updates = {};
+    for (const k of keys) updates[`structure/${k}`] = modules[k];
+    await update(ref(db), updates);
+
+    if (noTp.length) {
+      const snap = await get(ref(db, "no_tp_subjects"));
+      const existing = snap.exists() ? Object.values(snap.val()) : [];
+      await set(ref(db, "no_tp_subjects"), [...new Set([...existing, ...noTp])]);
+    }
+
+    document.getElementById("structFile").value = "";
+    await loadStructures();
+    refreshAll();
+    showMsg("structMsg", `✅ ${keys.length} modules, ${subjects} matières importés` + (noTp.length ? ` (${noTp.length} sans TP)` : ""), "success", 10000);
+  } catch (e) {
+    console.error(e);
+    showMsg("structMsg", "Erreur: " + e.message, "error", 10000);
+  } finally {
+    btn.disabled = false;
   }
 }
 
