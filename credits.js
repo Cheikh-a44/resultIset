@@ -1,62 +1,70 @@
 // ============================================================
 // credits.js — ISET Rosso
-// ============================================================
-// قائمة كاملة بالمواد و Crédits لكل قسم و فصل
-// ⚠️ عدّل الأرقام بحرية
-// ⚠️ أضف المواد الناقصة في الأقسام الفارغة
+// Source: Emplois du département.pdf (PPV S3→S6)
 // ============================================================
 
 window.CREDITS_DATA = {
+  TC: { S1: {}, S2: {} },
 
-  // ============================================================
-  // TC - Tronc Commun (السنة الأولى)
-  // ⚠️ لا أعرف مواد TC — الرجاء إضافتها
-  // ============================================================
-  TC: {
-    S1: {
-      // "Nom_Matiere": 3,
-    },
-    S2: {
-      // "Nom_Matiere": 3,
-    }
-  },
-
-  // ============================================================
-  // PPV - Productions Végétales
-  // ============================================================
   PPV: {
+    // ----------------------------------------------------------
+    // S3 — 30 Crédits
+    // ----------------------------------------------------------
     S3: {
-      "Francais_s3": 3,
-      "Economie": 3,
-      "I_Agronomie": 4,
-      "I_Horticulture": 4,
-      "Pesticides_agricoles": 4,
-      "Entomologie_et_Nemato": 4,
-      "Science_des_sols": 4,
-      "Science_des_plantes": 4
+      "Francais": 3,
+      "Introduction_economie_gestion": 3,
+      "Principes_generaux_agronomie": 4,
+      "Principes_generaux_horticulture": 4,
+      "Entomologie_Nematologie_ravageurs": 4,
+      "Agro_pesticides_phytopharmacie": 4,
+      "Introduction_science_du_sol": 4,
+      "Introduction_sciences_des_plantes": 4
     },
+
+    // ----------------------------------------------------------
+    // S4 — 30 Crédits
+    // ----------------------------------------------------------
     S4: {
-      "Vulgarisation": 3,
-      "Technique_de_propagation": 4,
-      "Technique_d_irrigation_et_BEC": 3,
-      "Ecophysiologie_et_Biochimie": 4,
-      "Fertilite_du_sol": 3,
-      "Methodes_de_diagnostic": 3,
-      "Malherbologie": 3
+      "Techniques_communication_vulgarisation": 3,
+      "Technique_propagation_production_semences": 4,
+      "Besoin_en_eau_des_cultures": 4,
+      "Ecophysiologie_vegetale_Biochimie": 3,
+      "Fertilite_sols_Nutrition_plantes": 3,
+      "Methodes_diagnostic_phytoprotection": 3,
+      "Malherbologie": 3,
+      "Stage": 7
     },
+
+    // ----------------------------------------------------------
+    // S5 — 38 Crédits
+    // ----------------------------------------------------------
     S5: {
-      // ⚠️ لا أعرف مواد PPV S5 — الرجاء إضافتها
-      // "Nom_Matiere": 3,
+      "Droit_Sante_Securite_environnement": 3,
+      "Techniques_gestion_entreprenariat": 3,
+      "Production_vegetale_2": 4,
+      "Arboriculture": 4,
+      "Conduite_calibration_equipements_agricoles": 4,
+      "Phytopathologie_1": 4,
+      "Projet": 4,
+      "Gestion_conservation_sol_eau": 4,
+      "Ennemis_cultures_lutte_integree": 4,
+      "Introduction_paysage_cultures_ornementales": 4
     },
+
+    // ----------------------------------------------------------
+    // S6 — 38 Crédits
+    // ----------------------------------------------------------
     S6: {
-      // ⚠️ لا أعرف مواد PPV S6 — الرجاء إضافتها
-      // "Nom_Matiere": 3,
+      "Redaction_edition_rapports": 3,
+      "Amelioration_genetique_biotechnologie": 3,
+      "Agroenvironnement_agriculture_precision": 3,
+      "Stage_fin_etudes": 17,
+      "Adaptation_changement_climatique": 4,
+      "Phytopathologie_2": 4,
+      "Amenagement_paysager_poste_recolte": 4
     }
   },
 
-  // ============================================================
-  // GAB - Génie Agricole et Biologique
-  // ============================================================
   GAB: {
     S3: {
       "Francais_GAB_S3": 3,
@@ -69,84 +77,31 @@ window.CREDITS_DATA = {
       "Mecanique_de_fluides": 4,
       "Chimie_de_leau": 4
     },
-    S4: {
-      // ⚠️ لا أعرف مواد GAB S4 — الرجاء إضافتها
-      // "Nom_Matiere": 3,
-    },
-    S5: {
-      // ⚠️ لا أعرف مواد GAB S5
-    },
-    S6: {
-      // ⚠️ لا أعرف مواد GAB S6
-    }
+    S4: {}, S5: {}, S6: {}
   },
 
-  // ============================================================
-  // GEM - Génie Électromécanique
-  // ⚠️ لا أعرف أي مادة — الرجاء إضافتها
-  // ============================================================
-  GEM: {
-    S3: {},
-    S4: {},
-    S5: {},
-    S6: {}
-  },
-
-  // ============================================================
-  // PSA - Production et Santé Animales
-  // ⚠️ لا أعرف أي مادة
-  // ============================================================
-  PSA: {
-    S3: {},
-    S4: {},
-    S5: {},
-    S6: {}
-  },
-
-  // ============================================================
-  // STA - Sciences et Techniques Agroalimentaires
-  // ⚠️ لا أعرف أي مادة
-  // ============================================================
-  STA: {
-    S3: {},
-    S4: {},
-    S5: {},
-    S6: {}
-  }
+  GEM: { S3: {}, S4: {}, S5: {}, S6: {} },
+  PSA: { S3: {}, S4: {}, S5: {}, S6: {} },
+  STA: { S3: {}, S4: {}, S5: {}, S6: {} }
 };
 
-// ============================================================
-// المواد التي ليس لها TP
-// ⚠️ عدّل هذه القائمة حسب نظامك
-// ============================================================
 window.NO_TP_SUBJECTS = [
-  // Français
   "Francais", "Francais_2", "Francais_s3", "Francais_GAB_S3",
-
-  // Anglais
   "Anglais", "Anglais_2",
-
-  // Mathématiques et Statistiques
   "Math_et_Statistique",
-
-  // Économie
   "Economie", "Economie_GAB",
-
-  // Vulgarisation (حسب نظامك — إن كانت لها TP، احذفها من هنا)
-  "Vulgarisation"
+  "Introduction_economie_gestion",
+  "Droit_Sante_Securite_environnement",
+  "Techniques_gestion_entreprenariat",
+  "Vulgarisation",
+  "Techniques_communication_vulgarisation",
+  "Redaction_edition_rapports"
 ];
 
-// ============================================================
-// المواد التي تعتبر Stage
-// ============================================================
 window.STAGE_SUBJECTS = [
-  "Stage",
-  "Stage_fin_etude"
+  "Stage", "Stage_fin_etude", "Stage_fin_etudes", "Projet_fin_etudes"
 ];
 
-// ============================================================
-// DEPT_SEMESTERS — الأقسام والفصول
-// ============================================================
 window.DEPT_SEMESTERS = {
   TC:  ["S1", "S2"],
   PPV: ["S3", "S4", "S5", "S6"],
@@ -156,6 +111,12 @@ window.DEPT_SEMESTERS = {
   STA: ["S3", "S4", "S5", "S6"]
 };
 
-console.log("✅ credits.js chargé");
-console.log("  Départements:", Object.keys(window.CREDITS_DATA).join(", "));
-console.log("  Matières sans TP:", window.NO_TP_SUBJECTS.length);
+// Vérification
+(function () {
+  const expected = { S3: 30, S4: 30, S5: 38, S6: 38 };
+  console.log("✅ credits.js chargé");
+  for (const sem in expected) {
+    const sum = Object.values(window.CREDITS_DATA.PPV[sem] || {}).reduce((a, b) => a + b, 0);
+    console.log(`  PPV ${sem}: ${sum} / ${expected[sem]} ${sum === expected[sem] ? "✅" : "❌"}`);
+  }
+})();
