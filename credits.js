@@ -54,9 +54,9 @@ window.CREDITS_DATA = {
       "Techniques_communication_vulgarisation": 3,
       // M42 — Production végétale 1
       "Technique_propagation_production_semences": 4,
-      "Besoin_en_eau_des_cultures": 4,
+      "Besoin_en_eau_des_cultures": 3,
       // M43 — Ecophysiologie et Nutrition des plantes
-      "Ecophysiologie_vegetale_Biochimie": 3,
+      "Ecophysiologie_vegetale_Biochimie": 4,
       "Fertilite_sols_Nutrition_plantes": 3,
       // M44 — Méthodes de diagnostic
       "Methodes_diagnostic_phytoprotection": 3,
