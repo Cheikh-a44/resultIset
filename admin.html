@@ -728,7 +728,7 @@ function calculateResults(notes, dept, sem) {
   for (const mk in mods) {
     for (const s of mods[mk].subjects || []) {
       if (subjectAvg[s] >= 10) subjectStatus[s] = "C";
-      else if (subjectAvg[s] >= 7 && moduleAvg[mk] >= 10) subjectStatus[s] = "C";
+      else if (subjectAvg[s] >= 7 && (moduleAvg[mk] >= 10 || (moduleAvg[mk] >= 9 && overallAvg >= 10))) subjectStatus[s] = "C";
       else subjectStatus[s] = "NC";
     }
   }
@@ -743,7 +743,7 @@ function calculateResults(notes, dept, sem) {
       else allC = false;
     }
     moduleCredits[mk] = earned;
-    moduleStatus[mk] = (moduleAvg[mk] >= 10 && allC) ? "V" : "NV";
+    moduleStatus[mk] = ((moduleAvg[mk] >= 10 || (moduleAvg[mk] >= 9 && overallAvg >= 10)) && allC) ? "V" : "NV";
   }
 
   const hasNV = Object.values(moduleStatus).some(v => v === "NV");
