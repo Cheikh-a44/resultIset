@@ -88,6 +88,9 @@
         width: auto;
         display: block;
       }
+      header h1 .dot {
+        color: var(--kappel);
+      }
       header h1 {
         font-family: var(--ff-head);
         font-size: 23px;
@@ -424,7 +427,7 @@
     <header>
       <div class="container">
         <div class="brand" id="brand">
-          <h1>ESAVweb</h1>
+          <h1>ESAVweb<span class="dot">.</span></h1>
         </div>
         <nav>
           <ul>
@@ -686,7 +689,7 @@
         for (const mk in mods) {
           for (const s of mods[mk].subjects || []) {
             if (subjectAvg[s] >= 10) subjectStatus[s] = "C";
-            else if (subjectAvg[s] >= 7 && moduleAvg[mk] >= 10)
+            else if (subjectAvg[s] >= 7 && (moduleAvg[mk] >= 10 || (moduleAvg[mk] >= 9 && overallAvg >= 10)))
               subjectStatus[s] = "C";
             else subjectStatus[s] = "NC";
           }
@@ -703,7 +706,7 @@
             else allC = false;
           }
           moduleCredits[mk] = earned;
-          moduleStatus[mk] = moduleAvg[mk] >= 10 && allC ? "V" : "NV";
+          moduleStatus[mk] = ((moduleAvg[mk] >= 10 || (moduleAvg[mk] >= 9 && overallAvg >= 10)) && allC) ? "V" : "NV";
         }
 
         const hasNV = Object.values(moduleStatus).some((v) => v === "NV");
